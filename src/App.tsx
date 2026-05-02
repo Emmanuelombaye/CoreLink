@@ -1,13 +1,11 @@
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { 
   LayoutDashboard, 
-  Globe, 
   Users, 
   DollarSign, 
   Zap, 
   Activity,
   FileText,
-  CreditCard,
   Lock,
   Coins,
   Wallet,
@@ -15,24 +13,22 @@ import {
   X,
   Bell,
   ArrowUpRight,
-  Search,
   ShieldCheck,
   Gift,
   Award,
   RefreshCcw,
-  Plus,
   Shield,
   Download,
-  Terminal,
-  Server,
-  Database,
   Share2,
   Rocket,
   GraduationCap,
   HeartHandshake,
   Component,
   Map,
-  Crown
+  Crown,
+  Network,
+  Pickaxe,
+  Hexagon
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "./lib/utils";
@@ -55,14 +51,6 @@ const REVENUE_DATA = [
   { name: "May", value: 5800, growth: 1700 },
   { name: "Jun", value: 7500, growth: 2200 },
   { name: "Jul", value: 8900, growth: 2600 },
-];
-
-const NODE_TRAFFIC = [
-  { name: "Nairobi", value: 85, color: "#86FF00" },
-  { name: "New York", value: 72, color: "#8B5CF6" },
-  { name: "Dubai", value: 94, color: "#FFC107" },
-  { name: "London", value: 64, color: "#3B82F6" },
-  { name: "Tokyo", value: 58, color: "#EF4444" },
 ];
 
 const TICKER_DATA = [
@@ -128,7 +116,7 @@ function MarqueeTicker() {
 // --- Main App ---
 
 export default function App() {
-  const [activeView, setActiveView] = useState<"dashboard" | "marketplace" | "nodes" | "assets" | "financials" | "security" | "academy" | "foundation" | "projects" | "roadmap" | "royalty">("dashboard");
+  const [activeView, setActiveView] = useState<"dashboard" | "programs" | "network" | "mining" | "assets" | "financials" | "security" | "academy" | "foundation" | "projects" | "roadmap" | "royalty">("dashboard");
   const [region, setRegion] = useState("Global");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -184,13 +172,13 @@ export default function App() {
         </div>
 
         <nav className="flex-1 px-4 space-y-1.5 mt-4 overflow-y-auto overflow-x-hidden custom-scrollbar pb-10">
-          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Core Network</div>
+          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Smart Contract Core</div>
           {[
             { icon: LayoutDashboard, label: "Intelligence Hub", id: "dashboard" },
-            { icon: Globe, label: "Partner Discovery", id: "marketplace" },
-            { icon: RefreshCcw, label: "Node Infrastructure", id: "nodes" },
-            { icon: Crown, label: "Royalty Program", id: "royalty" },
-            { icon: CreditCard, label: "Financial Flux", id: "financials" },
+            { icon: Hexagon, label: "Matrix Programs", id: "programs" },
+            { icon: Network, label: "My Network Tree", id: "network" },
+            { icon: Crown, label: "NFT Royalties", id: "royalty" },
+            { icon: Wallet, label: "Smart Wallet", id: "financials" },
           ].map((item, i) => (
             <button key={`core-${i}`} onClick={() => item.id && setActiveView(item.id as any)} className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group relative", activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.01]")}>
               {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-meta-emerald/10 to-transparent rounded-2xl border-l-2 border-meta-emerald" />}
@@ -199,8 +187,9 @@ export default function App() {
             </button>
           ))}
 
-          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-8">Ecosystem</div>
+          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-8">Decentralized Ecosystem</div>
           {[
+            { icon: Pickaxe, label: "MPS Coin Mining", id: "mining" },
             { icon: Component, label: "Projects Hub", id: "projects" },
             { icon: Map, label: "Global Roadmap", id: "roadmap" },
             { icon: GraduationCap, label: "Meta Academy", id: "academy" },
@@ -270,10 +259,10 @@ export default function App() {
                 <motion.div key="dashboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-12 pb-20 max-w-[1600px] mx-auto">
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
                      {[
-                       { label: "Active Revenue", value: `$${(liveStats.revenue / 1000).toFixed(1)}k`, icon: DollarSign, color: "text-meta-gold", trend: "+12.4%", glow: "rgba(255, 193, 7, 0.15)" },
-                       { label: "Node Latency", value: "14.2ms", icon: Activity, color: "text-meta-emerald", trend: "-2.1ms", glow: "rgba(134, 255, 0, 0.15)" },
-                       { label: "Partner Reach", value: liveStats.referrals.toLocaleString(), icon: Users, color: "text-meta-violet", trend: "+84", glow: "rgba(139, 92, 246, 0.15)" },
-                       { label: "Vault Security", value: "Elite Tier", icon: Lock, color: "text-white", trend: "Stable", glow: "rgba(255, 255, 255, 0.1)" },
+                       { label: "Total Matrix Earnings", value: `$${(liveStats.revenue / 1000).toFixed(1)}k`, icon: DollarSign, color: "text-meta-gold", trend: "+12.4%", glow: "rgba(255, 193, 7, 0.15)" },
+                       { label: "Spillover Bonus", value: "$4,280", icon: Activity, color: "text-meta-emerald", trend: "Active", glow: "rgba(134, 255, 0, 0.15)" },
+                       { label: "Direct Referrals", value: liveStats.referrals.toLocaleString(), icon: Users, color: "text-meta-violet", trend: "+84", glow: "rgba(139, 92, 246, 0.15)" },
+                       { label: "Auto-Pool Status", value: "Cycle 12", icon: RefreshCcw, color: "text-meta-blue", trend: "Filling", glow: "rgba(0, 122, 255, 0.15)" },
                      ].map((stat, i) => (
                        <TiltCard key={i} glowColor={stat.glow} className="p-8 group cursor-none overflow-hidden h-full">
                           <div className="flex justify-between items-start mb-8 relative z-10">
@@ -295,8 +284,8 @@ export default function App() {
                      <TiltCard className="lg:col-span-2 p-10 flex flex-col min-h-[550px] cursor-none overflow-hidden border-white/[0.08]">
                         <div className="flex items-center justify-between mb-12 gap-8 flex-wrap relative z-10">
                            <div className="min-w-0">
-                              <h3 className="text-3xl font-black text-white tracking-tighter mb-1">Intelligence Matrix <span className="text-meta-emerald">v4.2</span></h3>
-                              <p className="text-sm text-slate-500 font-bold max-w-md">Synchronized multi-touch attribution tracking across all global regions.</p>
+                              <h3 className="text-3xl font-black text-white tracking-tighter mb-1">Matrix Growth <span className="text-meta-emerald">v4.2</span></h3>
+                              <p className="text-sm text-slate-500 font-bold max-w-md">Synchronized multi-level attribution tracking across global smart contracts.</p>
                            </div>
                            <div className="flex gap-3 shrink-0">
                               <button className="h-11 px-6 rounded-2xl bg-meta-emerald text-black text-[11px] font-black uppercase tracking-widest cursor-none hover:scale-105 transition-transform shadow-2xl">Live Growth</button>
@@ -325,34 +314,38 @@ export default function App() {
 
                      <TiltCard className="p-10 flex flex-col space-y-10 cursor-none bg-gradient-to-br from-[#001A33]/30 to-black overflow-hidden">
                         <div className="flex items-center justify-between relative z-10">
-                           <h3 className="text-xl font-black text-white tracking-tight">Node Synchronization</h3>
+                           <h3 className="text-xl font-black text-white tracking-tight">Global Matrix Cycles</h3>
                            <div className="flex items-center gap-2">
                              <span className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
                              <span className="text-[10px] font-black text-meta-emerald uppercase tracking-widest">Active</span>
                            </div>
                         </div>
                         <div className="space-y-10 flex-1 relative z-10">
-                           {NODE_TRAFFIC.map((node, i) => (
+                           {[
+                              { name: "Power Matrix (X3)", value: 85, color: "#86FF00" },
+                              { name: "X-Power Matrix (X4)", value: 72, color: "#8B5CF6" },
+                              { name: "Global Auto-Pool", value: 94, color: "#FFC107" }
+                           ].map((matrix, i) => (
                              <div key={i} className="space-y-4 group cursor-none">
                                 <div className="flex justify-between items-end gap-2">
                                    <div className="flex items-center gap-4 min-w-0">
-                                      <div className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: node.color, boxShadow: `0 0 15px ${node.color}` }} />
-                                      <span className="text-sm font-black text-slate-200 group-hover:text-white transition-colors truncate">{node.name} Node</span>
+                                      <div className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: matrix.color, boxShadow: `0 0 15px ${matrix.color}` }} />
+                                      <span className="text-sm font-black text-slate-200 group-hover:text-white transition-colors truncate">{matrix.name}</span>
                                    </div>
-                                   <span className="text-xs font-black text-slate-500 tabular-nums">{node.value}% Sync</span>
+                                   <span className="text-xs font-black text-slate-500 tabular-nums">{matrix.value}% Filled</span>
                                 </div>
                                 <div className="h-2 w-full bg-white/[0.04] rounded-full overflow-hidden border border-white/5">
-                                   <motion.div initial={{ width: 0 }} animate={{ width: `${node.value}%` }} transition={{ duration: 2, delay: i * 0.1, ease: "easeOut" }} className="h-full rounded-full" style={{ backgroundColor: node.color, boxShadow: `0 0 10px ${node.color}50` }} />
+                                   <motion.div initial={{ width: 0 }} animate={{ width: `${matrix.value}%` }} transition={{ duration: 2, delay: i * 0.1, ease: "easeOut" }} className="h-full rounded-full" style={{ backgroundColor: matrix.color, boxShadow: `0 0 10px ${matrix.color}50` }} />
                                 </div>
                              </div>
                            ))}
                         </div>
                         <div className="p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 flex items-center justify-between gap-6 relative z-10 group hover:bg-white/[0.05] transition-colors">
                            <div className="flex items-center gap-4 min-w-0">
-                              <ShieldCheck className="h-6 w-6 text-meta-emerald shrink-0" />
+                              <Component className="h-6 w-6 text-meta-emerald shrink-0" />
                               <div className="min-w-0">
-                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Audit Status</p>
-                                <p className="text-sm font-black text-white truncate">Global L4 Protocol Secure</p>
+                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Smart Contract</p>
+                                <p className="text-sm font-black text-white truncate">Verified on BSC (BEP20)</p>
                               </div>
                            </div>
                            <ArrowUpRight className="h-5 w-5 text-slate-700 group-hover:text-meta-emerald transition-colors shrink-0" />
@@ -426,57 +419,43 @@ export default function App() {
                 </motion.div>
               )}
 
-              {activeView === "marketplace" && (
-                <motion.div key="marketplace" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
+              {activeView === "programs" && (
+                <motion.div key="programs" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
                    <div className="flex items-center justify-between gap-10 flex-wrap mb-4">
                       <div className="min-w-0">
-                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Partner <span className="text-meta-emerald">Discovery</span></h3>
-                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Browse, analyze, and recruit elite nodes from the global decentralized network.</p>
-                      </div>
-                      <div className="flex gap-5 items-center shrink-0">
-                         <div className="relative hidden md:block">
-                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
-                            <input type="text" placeholder="Search elite programs..." className="h-16 w-80 pl-14 pr-8 rounded-[2rem] bg-white/[0.04] border border-white/10 outline-none text-sm font-bold focus:border-meta-emerald/40 transition-all cursor-none" />
-                         </div>
-                         <button className="h-16 px-10 rounded-[2rem] bg-meta-gold text-black font-black text-sm flex items-center gap-3 hover:scale-105 transition-all cursor-none shadow-2xl">
-                            <Plus className="h-5 w-5" /> Launch Program
-                         </button>
+                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Matrix <span className="text-meta-emerald">Programs</span></h3>
+                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Deploy smart contracts to earn through direct referrals, spillover, and global cycles.</p>
                       </div>
                    </div>
 
-                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                   <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                       {[
-                        { title: "Meta-Health Protocol", tier: "DIAMOND", earnings: "12.4%", partners: "4.2k", color: "from-meta-emerald", glow: "rgba(134, 255, 0, 0.3)" },
-                        { title: "Global Nexus Hub", tier: "PLATINUM", earnings: "8.1%", partners: "12.8k", color: "from-meta-gold", glow: "rgba(255, 193, 7, 0.3)" },
-                        { title: "Cyber-Fintech v2", tier: "ELITE", earnings: "15.0%", partners: "1.1k", color: "from-meta-violet", glow: "rgba(139, 92, 246, 0.3)" },
-                        { title: "Quantum Infrastructure", tier: "ALPHA", earnings: "22.4%", partners: "420", color: "from-meta-blue", glow: "rgba(0, 26, 51, 0.3)" },
+                        { title: "Millionaire Matrix", tier: "Power Matrix (X3/X4)", features: ["Global matrix cycles", "NFT royalty tiers", "Direct bonuses"], color: "from-meta-emerald", glow: "rgba(134, 255, 0, 0.3)" },
+                        { title: "Billionaire Matrix", tier: "X-Power Auto-Pool", features: ["Global expansion pools", "Higher-tier bonuses", "Massive spillover"], color: "from-meta-gold", glow: "rgba(255, 193, 7, 0.3)" },
+                        { title: "Trillionaire Matrix", tier: "2X Advanced Structure", features: ["Advanced spillover", "Maximum yield", "Elite NFT status"], color: "from-meta-violet", glow: "rgba(139, 92, 246, 0.3)" },
                       ].map((p, i) => (
-                        <TiltCard key={i} glowColor={p.glow} className="p-8 group border-white/[0.08] hover:border-white/20 transition-all duration-700 cursor-none flex flex-col h-[520px] clip-card">
+                        <TiltCard key={i} glowColor={p.glow} className="p-8 group border-white/[0.08] hover:border-white/20 transition-all duration-700 cursor-none flex flex-col clip-card">
                            <div className={cn("h-48 w-full rounded-[2.5rem] bg-gradient-to-br mb-10 flex items-center justify-center relative overflow-hidden shrink-0", p.color, "to-black/90")}>
                               <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-                              <Zap className="h-20 w-20 text-white/40 group-hover:scale-125 group-hover:rotate-12 group-hover:text-white transition-all duration-1000" />
+                              <Hexagon className="h-20 w-20 text-white/40 group-hover:scale-125 group-hover:rotate-12 group-hover:text-white transition-all duration-1000" />
                            </div>
                            <div className="flex justify-between items-center mb-4 relative z-10 px-2">
-                              <span className="text-[11px] font-black text-meta-emerald uppercase tracking-[0.3em]">{p.tier} TIER</span>
+                              <span className="text-[11px] font-black text-meta-emerald uppercase tracking-[0.3em]">{p.tier}</span>
                               <Award className="h-5 w-5 text-meta-gold" />
                            </div>
-                           <h4 className="text-2xl font-black text-white mb-auto leading-[1.1] tracking-tight break-words hyphens-auto px-2 group-hover:text-meta-emerald transition-colors">
+                           <h4 className="text-3xl font-black text-white mb-6 leading-[1.1] tracking-tight break-words hyphens-auto px-2 group-hover:text-meta-emerald transition-colors">
                               {p.title}
                            </h4>
-                           <div className="grid grid-cols-2 gap-4 mt-8 relative z-10">
-                              <div className="p-5 rounded-[2rem] bg-white/[0.04] flex flex-col items-center justify-center min-w-0 border border-white/[0.05] group-hover:bg-white/[0.08] transition-colors">
-                                 <p className="text-[9px] font-black text-slate-500 uppercase text-center truncate w-full mb-1">Avg Earn</p>
-                                 <p className="text-xl font-black text-meta-emerald tabular-nums">{p.earnings}</p>
-                              </div>
-                              <div className="p-5 rounded-[2rem] bg-white/[0.04] flex flex-col items-center justify-center min-w-0 border border-white/[0.05] group-hover:bg-white/[0.08] transition-colors">
-                                 <p className="text-[9px] font-black text-slate-500 uppercase text-center truncate w-full mb-1">Nodes</p>
-                                 <p className="text-xl font-black text-white tabular-nums">{p.partners}</p>
-                              </div>
+                           <div className="space-y-3 px-2 mb-10 flex-1 relative z-10">
+                              {p.features.map((feat, j) => (
+                                <div key={j} className="flex items-center gap-3">
+                                   <div className="h-2 w-2 rounded-full bg-meta-emerald" />
+                                   <span className="text-sm font-bold text-slate-400">{feat}</span>
+                                </div>
+                              ))}
                            </div>
-                           <button className="w-full h-16 mt-10 bg-white text-black font-black text-xs hover:bg-meta-emerald transition-all cursor-none flex items-center justify-center gap-3 shrink-0 shadow-2xl relative z-10 overflow-hidden group/btn clip-button">
-                              <span className="relative z-10">APPLY TO NODE</span>
-                              <ArrowUpRight className="h-5 w-5 relative z-10 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
-                              <div className="absolute inset-0 bg-meta-emerald translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500" />
+                           <button className="w-full h-16 bg-white text-black font-black text-xs hover:bg-meta-emerald transition-all cursor-none flex items-center justify-center gap-3 shrink-0 shadow-2xl relative z-10 overflow-hidden group/btn clip-button">
+                              <span className="relative z-10">DEPLOY SMART CONTRACT</span>
                            </button>
                         </TiltCard>
                       ))}
@@ -484,53 +463,69 @@ export default function App() {
                 </motion.div>
               )}
 
-              {activeView === "nodes" && (
-                <motion.div key="nodes" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
-                   <div className="flex items-center justify-between gap-8 flex-wrap mb-4">
+              {activeView === "network" && (
+                <motion.div key="network" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
+                   <div className="flex items-center justify-between gap-10 flex-wrap mb-4">
                       <div className="min-w-0">
-                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Node <span className="text-meta-emerald">Infrastructure</span></h3>
-                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Monitor and deploy global decentralized computing clusters with zero-latency synchronization.</p>
+                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Genealogy <span className="text-meta-violet">Tree</span></h3>
+                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Track your downline structure, spillover placements, and team volume.</p>
                       </div>
-                      <button className="h-16 px-10 rounded-[2rem] bg-meta-emerald text-black font-black text-sm flex items-center gap-3 hover:scale-105 transition-all cursor-none shadow-2xl">
-                         <Plus className="h-5 w-5" /> Deploy New Hub
-                      </button>
                    </div>
+                   
+                   <TiltCard className="p-16 border-white/[0.08] min-h-[600px] flex flex-col items-center justify-center bg-gradient-to-b from-[#001A33]/20 to-black clip-card relative overflow-hidden">
+                      <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+                      <Network className="h-24 w-24 text-meta-violet mb-8 opacity-20" />
+                      <h4 className="text-3xl font-black text-white mb-4">Network Tree Initialization</h4>
+                      <p className="text-lg text-slate-500 max-w-md text-center mb-8">Your smart contract matrix is fully synchronized. Render engine is currently mapping your multi-level downline.</p>
+                      
+                      <div className="flex gap-4">
+                        <div className="px-6 py-4 rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] text-center min-w-[150px]">
+                           <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Direct Partners</p>
+                           <p className="text-2xl font-black text-meta-emerald">84</p>
+                        </div>
+                        <div className="px-6 py-4 rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] text-center min-w-[150px]">
+                           <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Total Team Size</p>
+                           <p className="text-2xl font-black text-meta-violet">1,284</p>
+                        </div>
+                      </div>
+                   </TiltCard>
+                </motion.div>
+              )}
 
-                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                      {[
-                        { name: "Hub-Kenya-01", status: "Active", uptime: "99.99%", load: "42%", icon: Server, color: "text-meta-emerald" },
-                        { name: "Hub-UAE-DXB", status: "Active", uptime: "100.0%", load: "78%", icon: Database, color: "text-meta-gold" },
-                        { name: "Hub-USA-NYC", status: "Provisioning", uptime: "---", load: "0%", icon: Terminal, color: "text-meta-violet" },
-                      ].map((node, i) => (
-                        <TiltCard key={i} className="p-10 cursor-none flex flex-col h-full border-white/[0.08]">
-                           <div className="flex items-center gap-6 mb-10">
-                              <div className="h-16 w-16 rounded-[2rem] bg-white/[0.05] flex items-center justify-center text-meta-emerald group-hover:scale-110 transition-transform duration-500 shadow-inner">
-                                 <node.icon className={cn("h-8 w-8", node.color)} />
-                              </div>
-                              <div className="min-w-0">
-                                 <h4 className="text-2xl font-black text-white truncate mb-1">{node.name}</h4>
-                                 <span className={cn("text-[11px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-white/[0.05] border border-white/5", node.status === 'Active' ? "text-meta-emerald" : "text-meta-gold")}>{node.status}</span>
-                              </div>
-                           </div>
-                           <div className="space-y-6 flex-1">
-                              <div className="flex justify-between items-center py-4 border-b border-white/[0.03]">
-                                 <span className="text-sm text-slate-500 font-bold">Protocol Uptime</span>
-                                 <span className="text-sm font-black text-white tabular-nums">{node.uptime}</span>
-                              </div>
-                              <div className="flex justify-between items-center pt-2">
-                                 <span className="text-sm text-slate-500 font-bold">Network Load</span>
-                                 <span className="text-sm font-black text-white tabular-nums">{node.load}</span>
-                              </div>
-                              <div className="h-2.5 w-full bg-white/[0.04] rounded-full overflow-hidden border border-white/5">
-                                 <motion.div initial={{ width: 0 }} animate={{ width: node.load }} transition={{ duration: 1.5, delay: 0.5 }} className="h-full bg-meta-emerald shadow-[0_0_15px_var(--color-meta-emerald)]" />
-                              </div>
-                           </div>
-                           <button className="w-full h-14 mt-10 rounded-2xl border border-white/10 text-white font-black text-xs hover:bg-white/5 transition-all cursor-none uppercase tracking-widest">Connect Terminal</button>
-                        </TiltCard>
-                      ))}
+              {activeView === "mining" && (
+                <motion.div key="mining" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
+                   <div className="flex items-center justify-between gap-10 flex-wrap mb-4">
+                      <div className="min-w-0">
+                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">MPS Coin <span className="text-meta-gold">Mining</span></h3>
+                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Earn native MPS utility tokens through proof-of-network and smart contract participation.</p>
+                      </div>
+                   </div>
+                   
+                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                      <TiltCard className="lg:col-span-1 p-10 border-white/[0.08] flex flex-col items-center text-center clip-card">
+                         <div className="h-32 w-32 rounded-full bg-meta-gold/10 flex items-center justify-center border-4 border-meta-gold mb-8 relative">
+                           <Pickaxe className="h-12 w-12 text-meta-gold" />
+                           <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute inset-[-10px] border-t-2 border-r-2 border-meta-gold rounded-full" />
+                         </div>
+                         <h4 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em] mb-2">Current Hashrate</h4>
+                         <p className="text-4xl font-black text-white mb-8">42.8 <span className="text-xl text-meta-gold">GH/s</span></p>
+                         <button className="w-full h-14 bg-meta-gold text-black font-black uppercase tracking-widest text-xs clip-button hover:bg-white transition-colors">Boost Mining Power</button>
+                      </TiltCard>
+
+                      <TiltCard className="lg:col-span-2 p-10 border-white/[0.08] clip-card flex flex-col justify-between">
+                         <div>
+                            <h4 className="text-2xl font-black text-white mb-2">Total MPS Mined</h4>
+                            <p className="text-sm font-bold text-slate-400">Tokens are automatically transferred to your connected BEP20 wallet.</p>
+                         </div>
+                         <p className="text-7xl font-black text-meta-emerald tabular-nums drop-shadow-2xl my-10">8,425.10 <span className="text-3xl text-white opacity-50">MPS</span></p>
+                         <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500 border-t border-white/[0.05] pt-6">
+                            <Activity className="h-4 w-4" /> Next block reward in 12m 45s
+                         </div>
+                      </TiltCard>
                    </div>
                 </motion.div>
               )}
+
 
               {activeView === "assets" && (
                 <motion.div key="assets" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
@@ -629,8 +624,8 @@ export default function App() {
                 <motion.div key="royalty" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
                    <div className="flex items-center justify-between gap-10 flex-wrap mb-8">
                       <div className="min-w-0">
-                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Royalty <span className="text-meta-gold">Program</span></h3>
-                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Earn monthly ecosystem bonuses based on your network activity and node volume.</p>
+                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">NFT Royalty <span className="text-meta-gold">Program</span></h3>
+                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Earn monthly ecosystem bonuses based on your smart contract network activity and NFT status.</p>
                       </div>
                    </div>
                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
