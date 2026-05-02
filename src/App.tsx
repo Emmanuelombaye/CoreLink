@@ -6,7 +6,6 @@ import {
   Zap, 
   Activity,
   FileText,
-  Lock,
   Coins,
   Wallet,
   Menu,
@@ -27,8 +26,19 @@ import {
   Map,
   Crown,
   Network,
+  Hexagon,
   Pickaxe,
-  Hexagon
+  Bot,
+  Smartphone,
+  DownloadCloud,
+  Share,
+  Trophy,
+  BarChart3,
+  Fingerprint,
+  Languages,
+  Link2,
+  Eye,
+  QrCode
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "./lib/utils";
@@ -116,10 +126,11 @@ function MarqueeTicker() {
 // --- Main App ---
 
 export default function App() {
-  const [activeView, setActiveView] = useState<"dashboard" | "programs" | "network" | "mining" | "assets" | "financials" | "security" | "academy" | "foundation" | "projects" | "roadmap" | "royalty">("dashboard");
+  const [activeView, setActiveView] = useState<"dashboard" | "programs" | "network" | "mining" | "assets" | "financials" | "security" | "academy" | "foundation" | "projects" | "roadmap" | "royalty" | "bi" | "leaderboard">("dashboard");
   const [region, setRegion] = useState("Global");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [liveStats, setLiveStats] = useState({ referrals: 1284, revenue: 84250, conversion: 12.4, systemLoad: 24 });
   
   // Custom Cursor
@@ -177,8 +188,9 @@ export default function App() {
             { icon: LayoutDashboard, label: "Intelligence Hub", id: "dashboard" },
             { icon: Hexagon, label: "Matrix Programs", id: "programs" },
             { icon: Network, label: "My Network Tree", id: "network" },
+            { icon: Trophy, label: "Global Leaderboards", id: "leaderboard" },
             { icon: Crown, label: "NFT Royalties", id: "royalty" },
-            { icon: Wallet, label: "Smart Wallet", id: "financials" },
+            { icon: Wallet, label: "Global Wallet", id: "financials" },
           ].map((item, i) => (
             <button key={`core-${i}`} onClick={() => item.id && setActiveView(item.id as any)} className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group relative", activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.01]")}>
               {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-meta-emerald/10 to-transparent rounded-2xl border-l-2 border-meta-emerald" />}
@@ -187,15 +199,16 @@ export default function App() {
             </button>
           ))}
 
-          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-8">Decentralized Ecosystem</div>
+          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-8">Enterprise & Ecosystem</div>
           {[
+            { icon: BarChart3, label: "Business Intelligence", id: "bi" },
             { icon: Pickaxe, label: "MPS Coin Mining", id: "mining" },
             { icon: Component, label: "Projects Hub", id: "projects" },
             { icon: Map, label: "Global Roadmap", id: "roadmap" },
             { icon: GraduationCap, label: "Meta Academy", id: "academy" },
             { icon: HeartHandshake, label: "Foundation", id: "foundation" },
             { icon: FileText, label: "Asset Vault", id: "assets" },
-            { icon: ShieldCheck, label: "Security Audit", id: "security" },
+            { icon: ShieldCheck, label: "Security & Audits", id: "security" },
           ].map((item, i) => (
             <button key={`eco-${i}`} onClick={() => item.id && setActiveView(item.id as any)} className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group relative", activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.01]")}>
               {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-meta-emerald/10 to-transparent rounded-2xl border-l-2 border-meta-emerald" />}
@@ -240,6 +253,11 @@ export default function App() {
                     {r}
                   </button>
                 ))}
+              </div>
+              <div className="relative">
+                 <button className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:border-meta-emerald/40 transition-all cursor-none relative group mr-4">
+                    <Languages className="h-5 w-5 text-slate-300 group-hover:text-white transition-colors" />
+                 </button>
               </div>
               <div className="relative">
                  <button onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:border-meta-emerald/40 transition-all cursor-none relative group">
@@ -288,8 +306,12 @@ export default function App() {
                               <p className="text-sm text-slate-500 font-bold max-w-md">Synchronized multi-level attribution tracking across global smart contracts.</p>
                            </div>
                            <div className="flex gap-3 shrink-0">
-                              <button className="h-11 px-6 rounded-2xl bg-meta-emerald text-black text-[11px] font-black uppercase tracking-widest cursor-none hover:scale-105 transition-transform shadow-2xl">Live Growth</button>
-                              <button className="h-11 px-6 rounded-2xl bg-white/5 text-slate-300 text-[11px] font-black uppercase tracking-widest cursor-none hover:bg-white/10 transition-colors">Export</button>
+                              <button className="h-11 px-6 rounded-2xl bg-meta-emerald text-black text-[11px] font-black uppercase tracking-widest cursor-none hover:scale-105 transition-transform shadow-2xl flex items-center gap-2">
+                                <Bot className="h-4 w-4" /> AI Forecast
+                              </button>
+                              <button className="h-11 px-6 rounded-2xl bg-white/5 text-slate-300 text-[11px] font-black uppercase tracking-widest cursor-none hover:bg-white/10 transition-colors flex items-center gap-2">
+                                <DownloadCloud className="h-4 w-4" /> Export CSV
+                              </button>
                            </div>
                         </div>
                         <div className="flex-1 w-full min-h-[350px] relative z-10">
@@ -354,28 +376,27 @@ export default function App() {
                   </motion.div>
 
                   <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="grid grid-cols-1 lg:grid-cols-4 gap-10">
-                     <TiltCard className="lg:col-span-1 p-10 space-y-8 cursor-none border-white/[0.08]">
-                        <div className="flex items-center justify-between mb-4">
-                           <h3 className="text-sm font-black uppercase tracking-[0.3em] text-meta-emerald">Live Signals</h3>
-                           <Activity className="h-5 w-5 text-meta-emerald animate-pulse" />
+                     <TiltCard className="lg:col-span-1 p-10 space-y-8 cursor-none border-white/[0.08] clip-card relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-b from-meta-emerald/10 to-transparent opacity-50" />
+                        <div className="relative z-10 flex items-center justify-between mb-4 border-b border-white/10 pb-4">
+                           <h3 className="text-sm font-black uppercase tracking-[0.3em] text-meta-emerald flex items-center gap-2">
+                              <Bot className="h-5 w-5" /> AI Growth Agent
+                           </h3>
                         </div>
-                        <div className="space-y-5">
-                           {[
-                             { user: "ID_284", val: "+$12.42", type: "success", time: "Just now" },
-                             { user: "ID_912", val: "Node Sync", type: "info", time: "1m ago" },
-                             { user: "ID_042", val: "L3 Verified", type: "success", time: "3m ago" },
-                             { user: "ID_771", val: "+$84.10", type: "success", time: "12m ago" },
-                           ].map((sig, i) => (
-                             <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors group">
-                                <div className="flex flex-col gap-1">
-                                  <span className="text-[10px] font-mono text-slate-500 group-hover:text-slate-300 transition-colors uppercase">{sig.user}</span>
-                                  <span className="text-[9px] font-black text-slate-700 uppercase tracking-widest">{sig.time}</span>
-                                </div>
-                                <span className={cn("text-xs font-black uppercase tracking-tight", sig.type === 'success' ? "text-meta-emerald" : "text-meta-gold")}>{sig.val}</span>
-                             </div>
-                           ))}
+                        <div className="relative z-10 space-y-5">
+                           <div className="p-4 rounded-2xl bg-meta-emerald/5 border border-meta-emerald/20">
+                              <p className="text-[10px] font-black text-meta-emerald uppercase tracking-widest mb-2">Earnings Prediction</p>
+                              <p className="text-xl font-black text-white">+$1,450.00 <span className="text-xs text-slate-400 font-normal tracking-normal">expected in 72h</span></p>
+                           </div>
+                           <div className="p-4 rounded-2xl bg-meta-gold/5 border border-meta-gold/20">
+                              <p className="text-[10px] font-black text-meta-gold uppercase tracking-widest mb-2">Optimization Tip</p>
+                              <p className="text-sm text-slate-300 font-medium">Focus networking efforts on <span className="font-bold text-white">UAE Region</span>. Matrix X4 pools are filling 42% faster.</p>
+                           </div>
+                           <div className="p-4 rounded-2xl bg-red-500/5 border border-red-500/20">
+                              <p className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-2">Risk Detection</p>
+                              <p className="text-sm text-slate-300 font-medium">0 anomalies detected. Anti-bot systems active.</p>
+                           </div>
                         </div>
-                        <button className="w-full text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] hover:text-meta-emerald transition-colors py-2">Full Signal Log</button>
                      </TiltCard>
 
                      <div className="lg:col-span-3 glass-card p-14 bg-gradient-to-br from-[#001A33]/40 to-black overflow-hidden relative group border-white/[0.08] clip-card">
@@ -466,29 +487,51 @@ export default function App() {
               {activeView === "network" && (
                 <motion.div key="network" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
                    <div className="flex items-center justify-between gap-10 flex-wrap mb-4">
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                          <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Genealogy <span className="text-meta-violet">Tree</span></h3>
                          <p className="text-xl text-slate-500 font-bold max-w-2xl">Track your downline structure, spillover placements, and team volume.</p>
                       </div>
-                   </div>
-                   
-                   <TiltCard className="p-16 border-white/[0.08] min-h-[600px] flex flex-col items-center justify-center bg-gradient-to-b from-[#001A33]/20 to-black clip-card relative overflow-hidden">
-                      <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-                      <Network className="h-24 w-24 text-meta-violet mb-8 opacity-20" />
-                      <h4 className="text-3xl font-black text-white mb-4">Network Tree Initialization</h4>
-                      <p className="text-lg text-slate-500 max-w-md text-center mb-8">Your smart contract matrix is fully synchronized. Render engine is currently mapping your multi-level downline.</p>
-                      
-                      <div className="flex gap-4">
-                        <div className="px-6 py-4 rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] text-center min-w-[150px]">
-                           <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Direct Partners</p>
-                           <p className="text-2xl font-black text-meta-emerald">84</p>
-                        </div>
-                        <div className="px-6 py-4 rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] text-center min-w-[150px]">
-                           <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Total Team Size</p>
-                           <p className="text-2xl font-black text-meta-violet">1,284</p>
-                        </div>
+                      <div className="flex items-center gap-4">
+                         <button className="h-12 px-6 rounded-2xl bg-white/5 border border-white/10 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:bg-white/10">
+                            <Eye className="h-4 w-4" /> Heatmap View
+                         </button>
                       </div>
-                   </TiltCard>
+                   </div>
+
+                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                      <TiltCard className="lg:col-span-2 p-16 border-white/[0.08] min-h-[500px] flex flex-col items-center justify-center bg-gradient-to-b from-[#001A33]/20 to-black clip-card relative overflow-hidden">
+                         <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+                         <Network className="h-24 w-24 text-meta-violet mb-8 opacity-20" />
+                         <h4 className="text-3xl font-black text-white mb-4">Network Tree Initialization</h4>
+                         <p className="text-lg text-slate-500 max-w-md text-center mb-8">Your smart contract matrix is fully synchronized. Render engine is currently mapping your multi-level downline.</p>
+                         
+                         <div className="flex gap-4">
+                           <div className="px-6 py-4 rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] text-center min-w-[150px]">
+                              <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Direct Partners</p>
+                              <p className="text-2xl font-black text-meta-emerald">84</p>
+                           </div>
+                           <div className="px-6 py-4 rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] text-center min-w-[150px]">
+                              <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Total Team Size</p>
+                              <p className="text-2xl font-black text-meta-violet">1,284</p>
+                           </div>
+                         </div>
+                      </TiltCard>
+
+                      <TiltCard className="lg:col-span-1 p-10 border-white/[0.08] clip-card flex flex-col items-center text-center">
+                         <h4 className="text-xl font-black text-white mb-6">Viral Growth Engine</h4>
+                         <div className="p-6 bg-white/5 border border-white/10 rounded-2xl w-full mb-6">
+                            <QrCode className="h-32 w-32 mx-auto text-meta-emerald mb-4" />
+                            <p className="text-xs text-slate-400 font-bold mb-2">Your Unique Referral Link</p>
+                            <div className="flex items-center gap-2 bg-black/50 rounded-lg p-2 border border-white/10">
+                               <span className="text-[10px] text-slate-500 truncate flex-1">corelink.elite/ref=84291A</span>
+                               <Link2 className="h-4 w-4 text-meta-emerald shrink-0 cursor-pointer" />
+                            </div>
+                         </div>
+                         <button className="w-full h-14 bg-gradient-to-r from-meta-violet to-meta-blue text-white font-black uppercase tracking-widest text-xs clip-button flex items-center justify-center gap-2">
+                            <Share className="h-4 w-4" /> Share on Socials
+                         </button>
+                      </TiltCard>
+                   </div>
                 </motion.div>
               )}
 
@@ -558,63 +601,156 @@ export default function App() {
               )}
 
               {activeView === "financials" && (
-                <motion.div key="financials" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1200px] mx-auto pb-20">
-                   <h3 className="text-5xl font-black text-white tracking-tighter mb-8">Financial <span className="text-meta-gold">Flux</span></h3>
-                   <TiltCard className="p-20 flex flex-col items-center justify-center space-y-10 text-center border-meta-gold/20 min-h-[600px] bg-gradient-to-br from-meta-gold/[0.03] to-black">
-                      <div className="relative">
-                        <div className="h-32 w-32 rounded-full bg-meta-gold/10 flex items-center justify-center text-meta-gold animate-pulse shadow-[0_0_50px_rgba(255,193,7,0.2)]">
-                           <DollarSign className="h-16 w-16" />
-                        </div>
-                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute inset-[-20px] border border-dashed border-meta-gold/20 rounded-full" />
+                <motion.div key="financials" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
+                   <div className="flex items-center justify-between gap-10 flex-wrap mb-8">
+                      <div className="min-w-0">
+                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Global <span className="text-meta-gold">Payment System</span></h3>
+                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Enterprise-grade multi-wallet support with instant Web3, Fiat, and Mobile Money withdrawals.</p>
                       </div>
-                      <div className="space-y-4 max-w-xl">
-                        <h4 className="text-4xl font-black text-white tracking-tight">Vault Synchronization in Progress</h4>
-                        <p className="text-lg text-slate-500 font-medium leading-relaxed">Your decentralized financial distribution data is being synchronized with the global L4 Security Protocol. Please stand by for full audit integrity.</p>
-                      </div>
-                      <button className="h-16 px-12 rounded-[2rem] bg-meta-gold text-black font-black uppercase tracking-widest text-xs hover:scale-105 transition-all cursor-none shadow-2xl">
-                         Refresh Secure Vault
-                      </button>
-                   </TiltCard>
+                   </div>
+
+                   <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                      <TiltCard className="p-10 border-white/[0.08] clip-card flex flex-col bg-gradient-to-br from-meta-gold/[0.05] to-transparent">
+                         <Wallet className="h-12 w-12 text-meta-gold mb-6" />
+                         <h4 className="text-2xl font-black text-white mb-2">Web3 Wallets</h4>
+                         <p className="text-sm text-slate-400 font-medium mb-8">Instant BEP20/ERC20 payouts directly to your non-custodial wallets.</p>
+                         <div className="space-y-3 flex-1">
+                            <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/10">
+                               <span className="text-xs font-bold text-white">MetaMask</span>
+                               <span className="text-[9px] font-black text-meta-emerald uppercase">Connected</span>
+                            </div>
+                            <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/10 opacity-50">
+                               <span className="text-xs font-bold text-white">Trust Wallet</span>
+                               <span className="text-[9px] font-black text-slate-500 uppercase">Connect</span>
+                            </div>
+                         </div>
+                         <button className="w-full h-12 mt-6 bg-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-meta-gold hover:text-black transition-colors rounded-xl">Withdraw Crypto</button>
+                      </TiltCard>
+
+                      <TiltCard className="p-10 border-white/[0.08] clip-card flex flex-col bg-gradient-to-br from-meta-blue/[0.05] to-transparent">
+                         <DollarSign className="h-12 w-12 text-meta-blue mb-6" />
+                         <h4 className="text-2xl font-black text-white mb-2">Fiat Gateways</h4>
+                         <p className="text-sm text-slate-400 font-medium mb-8">Bank transfers and card payments powered by Stripe & PayPal.</p>
+                         <div className="space-y-3 flex-1">
+                            <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/10">
+                               <span className="text-xs font-bold text-white">Bank Wire (USD)</span>
+                               <span className="text-[9px] font-black text-slate-500 uppercase">Fee: 1.5%</span>
+                            </div>
+                            <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/10">
+                               <span className="text-xs font-bold text-white">Credit Card</span>
+                               <span className="text-[9px] font-black text-slate-500 uppercase">Fee: 2.9%</span>
+                            </div>
+                         </div>
+                         <button className="w-full h-12 mt-6 bg-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-meta-blue hover:text-black transition-colors rounded-xl">Withdraw Fiat</button>
+                      </TiltCard>
+
+                      <TiltCard className="p-10 border-white/[0.08] clip-card flex flex-col bg-gradient-to-br from-meta-emerald/[0.05] to-transparent">
+                         <Smartphone className="h-12 w-12 text-meta-emerald mb-6" />
+                         <h4 className="text-2xl font-black text-white mb-2">Mobile Money</h4>
+                         <p className="text-sm text-slate-400 font-medium mb-8">Direct integration with African mobile money networks.</p>
+                         <div className="space-y-3 flex-1">
+                            <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/10">
+                               <span className="text-xs font-bold text-white">M-Pesa (Kenya)</span>
+                               <span className="text-[9px] font-black text-meta-emerald uppercase">Instant</span>
+                            </div>
+                            <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/10">
+                               <span className="text-xs font-bold text-white">Airtel Money</span>
+                               <span className="text-[9px] font-black text-slate-500 uppercase">Processing...</span>
+                            </div>
+                         </div>
+                         <button className="w-full h-12 mt-6 bg-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-meta-emerald hover:text-black transition-colors rounded-xl">Withdraw Mobile</button>
+                      </TiltCard>
+                   </div>
                 </motion.div>
               )}
 
               {activeView === "security" && (
                 <motion.div key="security" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
-                   <h3 className="text-5xl font-black text-white tracking-tighter mb-8">Security <span className="text-meta-emerald">Audit</span></h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                      <TiltCard className="p-12 space-y-10 border-meta-emerald/20 bg-meta-emerald/[0.01] flex flex-col h-full">
-                         <div className="flex items-center gap-6">
-                            <div className="h-20 w-20 rounded-[2.5rem] bg-meta-emerald/5 flex items-center justify-center text-meta-emerald shadow-inner">
-                               <Shield className="h-10 w-10" />
-                            </div>
-                            <div>
-                               <h4 className="text-3xl font-black text-white">Firewall Active</h4>
-                               <span className="text-[10px] font-black text-meta-emerald uppercase tracking-[0.3em]">Quantum-Resistant</span>
-                            </div>
-                         </div>
-                         <p className="text-xl text-slate-400 font-medium leading-relaxed flex-1">
-                            L4-grade encryption is currently protecting all node-to-node communications. Our decentralized firewall has successfully deflected 1,284 unauthorized access attempts in the last 24 hours.
-                         </p>
-                         <div className="flex items-center gap-4 text-meta-emerald font-black text-xs uppercase tracking-widest border-t border-white/[0.05] pt-8">
-                            <Activity className="h-4 w-4" /> Monitoring Real-time Traffic...
+                   <h3 className="text-5xl font-black text-white tracking-tighter mb-8">Enterprise <span className="text-meta-emerald">Security Audit</span></h3>
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                      <TiltCard className="p-10 border-meta-emerald/20 bg-meta-emerald/[0.02] flex flex-col clip-card">
+                         <Shield className="h-12 w-12 text-meta-emerald mb-6" />
+                         <h4 className="text-2xl font-black text-white mb-2">Two-Factor Auth</h4>
+                         <p className="text-sm text-slate-400 font-medium mb-6">Account secured via Authenticator App and Email verification.</p>
+                         <div className="mt-auto p-4 bg-meta-emerald/10 border border-meta-emerald/20 rounded-xl flex items-center justify-between">
+                            <span className="text-xs font-black text-white uppercase tracking-widest">Status</span>
+                            <span className="text-xs font-black text-meta-emerald uppercase">Enabled</span>
                          </div>
                       </TiltCard>
-                      <TiltCard className="p-12 space-y-10 border-meta-gold/20 bg-meta-gold/[0.01] flex flex-col h-full">
-                         <div className="flex items-center gap-6">
-                            <div className="h-20 w-20 rounded-[2.5rem] bg-meta-gold/5 flex items-center justify-center text-meta-gold shadow-inner">
-                               <Lock className="h-10 w-10" />
-                            </div>
-                            <div>
-                               <h4 className="text-3xl font-black text-white">Access Control</h4>
-                               <span className="text-[10px] font-black text-meta-gold uppercase tracking-[0.3em]">Multi-Sig Enabled</span>
-                            </div>
+                      <TiltCard className="p-10 border-white/[0.08] flex flex-col clip-card">
+                         <Fingerprint className="h-12 w-12 text-slate-400 mb-6" />
+                         <h4 className="text-2xl font-black text-white mb-2">Device Tracking</h4>
+                         <p className="text-sm text-slate-400 font-medium mb-6">Anti-multi-account and bot detection systems actively monitoring logins.</p>
+                         <div className="mt-auto space-y-2">
+                            <div className="flex justify-between text-xs text-slate-500"><span>IP: 192.168.1.1 (Nairobi)</span> <span className="text-meta-emerald">Current</span></div>
+                            <div className="flex justify-between text-xs text-slate-500"><span>IP: 45.32.X.X (Dubai)</span> <span>2d ago</span></div>
                          </div>
-                         <p className="text-xl text-slate-400 font-medium leading-relaxed flex-1">
-                            CoreLink uses multi-signature authorization for all high-value transactions. Your hardware port is currently secured via biometric-linked session keys. All systems are operational.
-                         </p>
-                         <div className="flex items-center gap-4 text-meta-gold font-black text-xs uppercase tracking-widest border-t border-white/[0.05] pt-8">
-                            <ShieldCheck className="h-4 w-4" /> Port 8080 Secured
+                      </TiltCard>
+                      <TiltCard className="p-10 border-meta-gold/20 bg-meta-gold/[0.02] flex flex-col clip-card">
+                         <FileText className="h-12 w-12 text-meta-gold mb-6" />
+                         <h4 className="text-2xl font-black text-white mb-2">Smart Contract Audits</h4>
+                         <p className="text-sm text-slate-400 font-medium mb-6">Publicly visible, read-only blockchain transaction logs and CertiK audits.</p>
+                         <button className="mt-auto w-full h-12 bg-white/5 border border-meta-gold/30 text-meta-gold font-black text-[10px] uppercase tracking-widest hover:bg-meta-gold hover:text-black transition-colors rounded-xl flex items-center justify-center gap-2">
+                            <Eye className="h-4 w-4" /> View Public Logs
+                         </button>
+                      </TiltCard>
+                   </div>
+                </motion.div>
+              )}
+
+              {activeView === "bi" && (
+                <motion.div key="bi" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
+                   <div className="flex items-center justify-between gap-10 flex-wrap mb-4">
+                      <div className="min-w-0">
+                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Business <span className="text-meta-blue">Intelligence</span></h3>
+                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Enterprise analytics, user growth forecasting, and revenue breakdown for platform admins.</p>
+                      </div>
+                      <div className="inline-block px-4 py-2 bg-meta-blue/10 border border-meta-blue/20 rounded-full text-meta-blue font-black text-[10px] uppercase tracking-widest">
+                         Admin Privileges Active
+                      </div>
+                   </div>
+
+                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                      <TiltCard className="lg:col-span-2 p-10 border-white/[0.08] clip-card flex flex-col min-h-[400px]">
+                         <div className="flex justify-between items-center mb-8">
+                            <h4 className="text-2xl font-black text-white">Global Conversion Funnel</h4>
+                            <select className="bg-white/5 border border-white/10 text-xs font-bold text-white p-2 rounded-lg outline-none">
+                               <option>Last 30 Days</option>
+                               <option>Year to Date</option>
+                            </select>
                          </div>
+                         <div className="flex-1 flex items-end justify-between gap-4 px-10">
+                            {[
+                               { step: "Visits", val: 85, h: "h-[100%]", color: "bg-slate-700" },
+                               { step: "Signups", val: 42, h: "h-[50%]", color: "bg-meta-blue" },
+                               { step: "Activations", val: 28, h: "h-[35%]", color: "bg-meta-violet" },
+                               { step: "Upgrades", val: 12, h: "h-[15%]", color: "bg-meta-gold" },
+                            ].map((bar, i) => (
+                               <div key={i} className="flex flex-col items-center gap-4 w-full group">
+                                  <div className="w-full h-[250px] flex items-end bg-white/[0.02] rounded-t-xl">
+                                     <div className={cn("w-full rounded-t-xl transition-all duration-1000 group-hover:opacity-80", bar.h, bar.color)} />
+                                  </div>
+                                  <div className="text-center">
+                                     <p className="text-lg font-black text-white">{bar.val}k</p>
+                                     <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">{bar.step}</p>
+                                  </div>
+                               </div>
+                            ))}
+                         </div>
+                      </TiltCard>
+
+                      <TiltCard className="lg:col-span-1 p-10 border-white/[0.08] clip-card flex flex-col gap-6">
+                         <div className="p-6 bg-white/5 border border-white/10 rounded-2xl">
+                            <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Forecasted Monthly Churn</p>
+                            <p className="text-3xl font-black text-meta-emerald">1.2% <span className="text-xs text-slate-400 font-normal">(-0.4% from last month)</span></p>
+                         </div>
+                         <div className="p-6 bg-white/5 border border-white/10 rounded-2xl">
+                            <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Top Performing Region</p>
+                            <p className="text-3xl font-black text-white">UAE <span className="text-sm text-meta-emerald font-black">+$842k Rev</span></p>
+                         </div>
+                         <button className="w-full h-14 mt-auto bg-white/10 text-white font-black uppercase tracking-widest text-xs rounded-xl hover:bg-white/20 transition-colors flex items-center justify-center gap-2">
+                            <DownloadCloud className="h-4 w-4" /> Download Investor Report
+                         </button>
                       </TiltCard>
                    </div>
                 </motion.div>
@@ -776,6 +912,43 @@ export default function App() {
            </>
          )}
       </AnimatePresence>
+
+      {/* --- AI Chat Assistant Widget --- */}
+      <div className="fixed bottom-10 right-10 z-[100] flex flex-col items-end">
+         <AnimatePresence>
+            {isAIAssistantOpen && (
+               <motion.div initial={{ opacity: 0, y: 20, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.9 }} className="w-[350px] h-[450px] bg-black/90 backdrop-blur-2xl border border-white/10 rounded-3xl mb-4 p-6 shadow-2xl flex flex-col">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+                     <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-meta-emerald/20 flex items-center justify-center text-meta-emerald">
+                           <Bot className="h-5 w-5" />
+                        </div>
+                        <div>
+                           <h4 className="text-sm font-black text-white">CoreLink AI</h4>
+                           <p className="text-[10px] text-meta-emerald uppercase tracking-widest">Online</p>
+                        </div>
+                     </div>
+                     <button onClick={() => setIsAIAssistantOpen(false)} className="text-slate-500 hover:text-white transition-colors"><X className="h-5 w-5" /></button>
+                  </div>
+                  <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                     <div className="p-3 bg-white/[0.05] rounded-2xl rounded-tl-sm w-[85%] text-sm text-slate-300">
+                        Hello! I noticed your matrix auto-pool is 94% full. I suggest following up with your latest direct referral to trigger the cycle.
+                     </div>
+                  </div>
+                  <div className="mt-4 relative">
+                     <input type="text" placeholder="Ask AI for optimization tips..." className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-white placeholder:text-slate-600 outline-none focus:border-meta-emerald/50 transition-colors" />
+                     <button className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 bg-meta-emerald rounded-lg flex items-center justify-center text-black">
+                        <ArrowUpRight className="h-4 w-4" />
+                     </button>
+                  </div>
+               </motion.div>
+            )}
+         </AnimatePresence>
+         <button onClick={() => setIsAIAssistantOpen(!isAIAssistantOpen)} className="h-16 w-16 bg-gradient-to-br from-meta-emerald to-meta-blue rounded-full shadow-[0_0_30px_rgba(134,255,0,0.3)] flex items-center justify-center hover:scale-110 transition-transform cursor-none relative group">
+            <Bot className="h-7 w-7 text-black group-hover:animate-pulse" />
+            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full border-2 border-black" />
+         </button>
+      </div>
     </div>
   );
 }
