@@ -168,7 +168,7 @@ export default function App() {
              <Zap className="h-6 w-6 text-black fill-black" />
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-black tracking-tighter leading-none">META-PRO<span className="text-meta-emerald">.</span></span>
+            <span className="text-xl font-black tracking-tighter leading-none">CORELINK<span className="text-meta-emerald">.</span></span>
             <span className="text-[10px] text-meta-emerald font-black uppercase mt-1">Intl. Authority</span>
           </div>
         </div>
@@ -353,7 +353,7 @@ export default function App() {
                         <div className="relative z-10 space-y-8">
                            <div className="space-y-4">
                               <h3 className="text-5xl font-black text-white tracking-tighter leading-none">
-                                 The World's Most <br /> <span className="text-meta-emerald meta-text-glow">Advanced Protocol</span>.
+                                 The World's Most <br /> <span className="text-meta-emerald meta-text-glow">Advanced CoreLink</span>.
                               </h3>
                               <p className="text-slate-400 max-w-lg text-lg font-medium">
                                  We've integrated features from Binance, Uniswap, and PartnerStack into a single, high-fidelity experience. Yours is top-notch.
@@ -377,7 +377,7 @@ export default function App() {
                 <motion.div key="marketplace" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12">
                    <div className="flex items-center justify-between">
                       <div>
-                         <h3 className="text-4xl font-black text-meta-emerald">Meta-Partner Discovery</h3>
+                         <h3 className="text-4xl font-black text-meta-emerald">CoreLink Discovery</h3>
                          <p className="text-lg text-slate-500 font-bold mt-2">Browse and recruit elite nodes from the global network</p>
                       </div>
                       <div className="flex gap-4">
