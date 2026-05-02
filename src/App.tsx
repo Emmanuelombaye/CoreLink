@@ -27,7 +27,12 @@ import {
   Server,
   Database,
   Share2,
-  Rocket
+  Rocket,
+  GraduationCap,
+  HeartHandshake,
+  Component,
+  Map,
+  Crown
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "./lib/utils";
@@ -123,7 +128,7 @@ function MarqueeTicker() {
 // --- Main App ---
 
 export default function App() {
-  const [activeView, setActiveView] = useState<"dashboard" | "marketplace" | "nodes" | "assets" | "financials" | "security">("dashboard");
+  const [activeView, setActiveView] = useState<"dashboard" | "marketplace" | "nodes" | "assets" | "financials" | "security" | "academy" | "foundation" | "projects" | "roadmap" | "royalty">("dashboard");
   const [region, setRegion] = useState("Global");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -178,16 +183,32 @@ export default function App() {
           </div>
         </div>
 
-        <nav className="flex-1 px-4 space-y-1.5 mt-4 overflow-y-auto overflow-x-hidden custom-scrollbar">
+        <nav className="flex-1 px-4 space-y-1.5 mt-4 overflow-y-auto overflow-x-hidden custom-scrollbar pb-10">
+          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Core Network</div>
           {[
             { icon: LayoutDashboard, label: "Intelligence Hub", id: "dashboard" },
             { icon: Globe, label: "Partner Discovery", id: "marketplace" },
             { icon: RefreshCcw, label: "Node Infrastructure", id: "nodes" },
-            { icon: FileText, label: "Asset Vault", id: "assets" },
+            { icon: Crown, label: "Royalty Program", id: "royalty" },
             { icon: CreditCard, label: "Financial Flux", id: "financials" },
+          ].map((item, i) => (
+            <button key={`core-${i}`} onClick={() => item.id && setActiveView(item.id as any)} className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group relative", activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.01]")}>
+              {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-meta-emerald/10 to-transparent rounded-2xl border-l-2 border-meta-emerald" />}
+              <item.icon className={cn("h-5 w-5 relative z-10", activeView === item.id ? "text-meta-emerald" : "group-hover:text-meta-emerald")} />
+              <span className="text-sm font-bold relative z-10 whitespace-nowrap">{item.label}</span>
+            </button>
+          ))}
+
+          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-8">Ecosystem</div>
+          {[
+            { icon: Component, label: "Projects Hub", id: "projects" },
+            { icon: Map, label: "Global Roadmap", id: "roadmap" },
+            { icon: GraduationCap, label: "Meta Academy", id: "academy" },
+            { icon: HeartHandshake, label: "Foundation", id: "foundation" },
+            { icon: FileText, label: "Asset Vault", id: "assets" },
             { icon: ShieldCheck, label: "Security Audit", id: "security" },
           ].map((item, i) => (
-            <button key={i} onClick={() => item.id && setActiveView(item.id as any)} className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group relative", activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.01]")}>
+            <button key={`eco-${i}`} onClick={() => item.id && setActiveView(item.id as any)} className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group relative", activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.01]")}>
               {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-meta-emerald/10 to-transparent rounded-2xl border-l-2 border-meta-emerald" />}
               <item.icon className={cn("h-5 w-5 relative z-10", activeView === item.id ? "text-meta-emerald" : "group-hover:text-meta-emerald")} />
               <span className="text-sm font-bold relative z-10 whitespace-nowrap">{item.label}</span>
@@ -600,6 +621,121 @@ export default function App() {
                             <ShieldCheck className="h-4 w-4" /> Port 8080 Secured
                          </div>
                       </TiltCard>
+                   </div>
+                </motion.div>
+              )}
+
+              {activeView === "royalty" && (
+                <motion.div key="royalty" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
+                   <div className="flex items-center justify-between gap-10 flex-wrap mb-8">
+                      <div className="min-w-0">
+                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Royalty <span className="text-meta-gold">Program</span></h3>
+                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Earn monthly ecosystem bonuses based on your network activity and node volume.</p>
+                      </div>
+                   </div>
+                   <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                      {[
+                        { title: "Activator", level: "Lvl 1", bonus: "10%", color: "text-slate-400" },
+                        { title: "Supervisor", level: "Lvl 2", bonus: "11%", color: "text-blue-400" },
+                        { title: "Manager", level: "Lvl 3", bonus: "12%", color: "text-purple-400" },
+                        { title: "Pro-Manager", level: "Lvl 4", bonus: "13%", color: "text-pink-400" },
+                        { title: "Pacesetter", level: "Lvl 5", bonus: "14%", color: "text-orange-400" },
+                        { title: "Ambassador", level: "Lvl 6", bonus: "15%", color: "text-meta-gold" },
+                        { title: "Millionaire", level: "Lvl 7", bonus: "25%", color: "text-meta-emerald" },
+                      ].map((tier, i) => (
+                         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} viewport={{ once: true }}>
+                           <TiltCard key={i} className="p-8 border-white/[0.08] flex flex-col items-center justify-center text-center clip-card bg-gradient-to-br from-white/[0.02] to-black">
+                              <Crown className={cn("h-16 w-16 mb-6", tier.color)} />
+                              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-2">{tier.level}</span>
+                              <h4 className="text-2xl font-black text-white mb-4">{tier.title}</h4>
+                              <div className="w-full h-12 rounded-[1rem] bg-white/[0.03] flex items-center justify-center gap-2 border border-white/[0.05]">
+                                 <span className="text-xs font-black text-slate-400 uppercase">Pool Bonus:</span>
+                                 <span className={cn("text-lg font-black", tier.color)}>{tier.bonus}</span>
+                              </div>
+                           </TiltCard>
+                         </motion.div>
+                      ))}
+                   </div>
+                </motion.div>
+              )}
+
+              {activeView === "academy" && (
+                <motion.div key="academy" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
+                   <h3 className="text-5xl font-black text-white tracking-tighter mb-8">Meta <span className="text-meta-emerald">Academy</span></h3>
+                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {["Metaverse Basics", "Web 3.0 Architecture", "Yield Farming", "Initial Game Offerings (IGO)", "Advanced Staking", "NFT Ecosystems"].map((course, i) => (
+                        <TiltCard key={i} className="p-8 border-white/[0.08] flex flex-col justify-between min-h-[300px] clip-card hover:border-meta-emerald/50 transition-colors">
+                           <GraduationCap className="h-12 w-12 text-meta-emerald mb-4" />
+                           <div>
+                              <h4 className="text-2xl font-black text-white leading-tight mb-2">{course}</h4>
+                              <p className="text-sm text-slate-500 font-medium">Master the fundamentals of the decentralized web and maximize your network potential.</p>
+                           </div>
+                           <button className="mt-8 text-xs font-black text-meta-emerald uppercase tracking-widest flex items-center gap-2">Start Course <ArrowUpRight className="h-4 w-4" /></button>
+                        </TiltCard>
+                      ))}
+                   </div>
+                </motion.div>
+              )}
+
+              {activeView === "projects" && (
+                <motion.div key="projects" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
+                   <h3 className="text-5xl font-black text-white tracking-tighter mb-8">Projects <span className="text-meta-blue">Hub</span></h3>
+                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {["Core Coin & Token", "Gaming NFTs", "Decentralized DAPP", "Core Blockchain", "C-USD Stablecoin", "Blastaroo Lottery"].map((proj, i) => (
+                        <TiltCard key={i} className="p-8 border-white/[0.08] flex flex-col justify-between min-h-[300px] clip-card hover:border-meta-blue/50 transition-colors">
+                           <Component className="h-12 w-12 text-meta-blue mb-4" />
+                           <div>
+                              <h4 className="text-2xl font-black text-white leading-tight mb-2">{proj}</h4>
+                              <p className="text-sm text-slate-500 font-medium">Explore the native utilities and infrastructure powering the CoreLink Elite ecosystem.</p>
+                           </div>
+                           <button className="mt-8 text-xs font-black text-meta-blue uppercase tracking-widest flex items-center gap-2">Explore Protocol <ArrowUpRight className="h-4 w-4" /></button>
+                        </TiltCard>
+                      ))}
+                   </div>
+                </motion.div>
+              )}
+
+              {activeView === "foundation" && (
+                <motion.div key="foundation" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1200px] mx-auto pb-20 text-center">
+                   <h3 className="text-5xl font-black text-white tracking-tighter mb-8">CoreLink <span className="text-pink-500">Foundation</span></h3>
+                   <TiltCard className="p-16 border-pink-500/20 bg-gradient-to-br from-pink-500/[0.02] to-black min-h-[500px] flex flex-col items-center justify-center clip-card">
+                      <HeartHandshake className="h-24 w-24 text-pink-500 mb-8 animate-pulse" />
+                      <h4 className="text-3xl font-black text-white mb-6 max-w-2xl">Empowering Global Communities Through Decentralized Technology</h4>
+                      <p className="text-lg text-slate-400 font-medium leading-relaxed max-w-3xl mb-12">
+                         The Foundation is our commitment to giving back. We allocate a percentage of all ecosystem royalties to fund education, clean water, and tech access in developing nations.
+                      </p>
+                      <button className="h-14 px-10 bg-pink-500 text-white font-black text-xs uppercase tracking-widest clip-button hover:bg-pink-400 transition-colors">
+                         View Impact Report
+                      </button>
+                   </TiltCard>
+                </motion.div>
+              )}
+
+              {activeView === "roadmap" && (
+                <motion.div key="roadmap" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1200px] mx-auto pb-20">
+                   <h3 className="text-5xl font-black text-white tracking-tighter mb-12">Global <span className="text-meta-violet">Roadmap</span></h3>
+                   <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-white/10 before:to-transparent">
+                      {[
+                        { phase: "Phase 1: Genesis", desc: "Launch of the core protocol, partner matrix, and initial intelligence hub features.", status: "Completed" },
+                        { phase: "Phase 2: Expansion", desc: "Deployment of the Royalty Program, global node infrastructure, and M-USD.", status: "Completed" },
+                        { phase: "Phase 3: Metaverse", desc: "Integration of 3D gaming NFTs and fully immersive academy experiences.", status: "In Progress" },
+                        { phase: "Phase 4: Independence", desc: "Launch of the native CoreLink Blockchain and fully decentralized governance.", status: "Upcoming" },
+                      ].map((item, i) => (
+                        <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#000] bg-white/[0.05] group-hover:bg-meta-violet text-slate-500 group-hover:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 transition-colors z-10">
+                            <Map className="h-4 w-4" />
+                          </div>
+                          <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-[2rem] bg-white/[0.02] border border-white/[0.05] group-hover:border-meta-violet/30 transition-colors clip-card">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-black text-white text-xl">{item.phase}</h4>
+                              <span className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full", item.status === 'Completed' ? "bg-meta-emerald/10 text-meta-emerald" : item.status === 'In Progress' ? "bg-meta-gold/10 text-meta-gold" : "bg-white/5 text-slate-500")}>
+                                {item.status}
+                              </span>
+                            </div>
+                            <p className="text-sm text-slate-400 font-medium leading-relaxed">{item.desc}</p>
+                          </div>
+                        </div>
+                      ))}
                    </div>
                 </motion.div>
               )}
