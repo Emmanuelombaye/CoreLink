@@ -237,7 +237,7 @@ export default function App() {
                     <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500 shadow-[0_0_10px_red]" />
                  </button>
               </div>
-              <button className="h-12 px-6 rounded-2xl bg-gradient-to-r from-meta-violet to-meta-blue text-white font-black text-sm flex items-center gap-2 shadow-xl hover:scale-105 transition-all cursor-none border border-white/10">
+              <button className="h-12 px-8 bg-gradient-to-r from-meta-violet to-meta-blue text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-none clip-button border-none shadow-[0_10px_30px_rgba(139,92,246,0.3)]">
                  <Wallet className="h-4 w-4" /> Connect Port
               </button>
            </div>
@@ -270,7 +270,7 @@ export default function App() {
                      ))}
                   </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                  <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                      <TiltCard className="lg:col-span-2 p-10 flex flex-col min-h-[550px] cursor-none overflow-hidden border-white/[0.08]">
                         <div className="flex items-center justify-between mb-12 gap-8 flex-wrap relative z-10">
                            <div className="min-w-0">
@@ -337,9 +337,9 @@ export default function App() {
                            <ArrowUpRight className="h-5 w-5 text-slate-700 group-hover:text-meta-emerald transition-colors shrink-0" />
                         </div>
                      </TiltCard>
-                  </div>
+                  </motion.div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
+                  <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="grid grid-cols-1 lg:grid-cols-4 gap-10">
                      <TiltCard className="lg:col-span-1 p-10 space-y-8 cursor-none border-white/[0.08]">
                         <div className="flex items-center justify-between mb-4">
                            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-meta-emerald">Live Signals</h3>
@@ -364,27 +364,44 @@ export default function App() {
                         <button className="w-full text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] hover:text-meta-emerald transition-colors py-2">Full Signal Log</button>
                      </TiltCard>
 
-                     <div className="lg:col-span-3 glass-card p-14 bg-gradient-to-br from-[#001A33]/20 to-black overflow-hidden relative group border-white/[0.08]">
-                        <div className="relative z-10 space-y-12">
+                     <div className="lg:col-span-3 glass-card p-14 bg-gradient-to-br from-[#001A33]/40 to-black overflow-hidden relative group border-white/[0.08] clip-card">
+                        <div className="relative z-20 space-y-12 max-w-xl">
                            <div className="space-y-6">
-                              <h3 className="text-6xl font-black text-white tracking-tighter leading-[0.9] max-w-2xl">
-                                 The Apex of <br /> <span className="text-meta-emerald meta-text-glow">Network Intelligence</span>.
+                              <div className="inline-block px-4 py-2 bg-meta-emerald/10 border border-meta-emerald/20 rounded-full text-meta-emerald font-black text-[10px] uppercase tracking-widest mb-4">
+                                🌌 Next-Gen Affiliate Hub
+                              </div>
+                              <h3 className="text-6xl font-black text-white tracking-tighter leading-[0.9] drop-shadow-2xl">
+                                 The Apex of <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-meta-emerald to-meta-gold">Intelligence</span>.
                               </h3>
-                              <p className="text-slate-400 max-w-xl text-xl font-medium leading-relaxed">
-                                 Welcome to CoreLink Elite. We've integrated the world's most sophisticated protocols into a single, flawless interface. Your network, evolved.
+                              <p className="text-slate-300 text-xl font-medium leading-relaxed">
+                                 Welcome to CoreLink Elite. We've integrated the world's most sophisticated protocols into a single, flawless interface.
                               </p>
                            </div>
                            <div className="flex gap-6 flex-wrap">
-                              <button className="meta-button-primary cursor-none h-16 px-10 text-sm">ACTIVATE ELITE STATUS</button>
-                              <button className="h-16 px-10 rounded-2xl border border-white/10 text-white font-black hover:bg-white/5 hover:border-white/20 transition-all cursor-none flex items-center gap-3 group">
+                              <button className="bg-meta-emerald text-black font-black uppercase tracking-widest cursor-none h-16 px-10 text-sm hover:bg-white transition-colors clip-button">ACTIVATE ELITE</button>
+                              <button className="h-16 px-10 bg-white/5 border border-white/10 text-white font-black hover:bg-white/10 transition-all cursor-none flex items-center gap-3 group clip-button">
                                  <Share2 className="h-5 w-5 group-hover:text-meta-emerald transition-colors" /> RECRUIT PARTNERS
                               </button>
                            </div>
                         </div>
-                        <div className="absolute top-[-30%] right-[-15%] h-[700px] w-[700px] bg-meta-emerald/10 rounded-full blur-[150px] group-hover:scale-125 transition-transform duration-[3s]" />
-                        <Rocket className="absolute bottom-[-50px] right-20 h-80 w-80 text-meta-emerald/5 -rotate-45 group-hover:translate-x-20 group-hover:-translate-y-20 transition-transform duration-[4s] ease-out" />
+
+                        {/* --- Image Generation Prompts & Placeholders --- */}
+                        {/* Prompt 1: "3D Pixar-style cartoon astronaut character with neon green accents, flying with a jetpack, high-quality render, transparent background." */}
+                        <div className="absolute right-[5%] top-[10%] w-[400px] h-[400px] bg-white/[0.02] border border-dashed border-meta-emerald/30 rounded-[3rem] animate-float-slow flex flex-col items-center justify-center p-6 text-center z-10 backdrop-blur-sm">
+                           <Rocket className="h-12 w-12 text-meta-emerald/50 mb-4" />
+                           <p className="text-xs font-bold text-meta-emerald/70">Place 3D Mascot Image Here</p>
+                           <p className="text-[9px] text-slate-500 mt-2">See code comments for prompt</p>
+                        </div>
+                        
+                        {/* Prompt 2: "Floating 3D gold coins and glowing green gems, Pixar-style render, depth of field, transparent background." */}
+                        <div className="absolute right-[25%] bottom-[10%] w-[200px] h-[200px] bg-white/[0.02] border border-dashed border-meta-gold/30 rounded-full animate-float-fast flex flex-col items-center justify-center p-4 text-center z-10 backdrop-blur-sm delay-500">
+                           <Coins className="h-8 w-8 text-meta-gold/50 mb-2" />
+                           <p className="text-[10px] font-bold text-meta-gold/70">3D Coins</p>
+                        </div>
+
+                        <div className="absolute top-[-30%] right-[-15%] h-[800px] w-[800px] bg-meta-emerald/20 rounded-full blur-[120px] group-hover:scale-110 transition-transform duration-[3s] -z-10" />
                      </div>
-                  </div>
+                  </motion.div>
                 </motion.div>
               )}
 
@@ -413,7 +430,7 @@ export default function App() {
                         { title: "Cyber-Fintech v2", tier: "ELITE", earnings: "15.0%", partners: "1.1k", color: "from-meta-violet", glow: "rgba(139, 92, 246, 0.3)" },
                         { title: "Quantum Infrastructure", tier: "ALPHA", earnings: "22.4%", partners: "420", color: "from-meta-blue", glow: "rgba(0, 26, 51, 0.3)" },
                       ].map((p, i) => (
-                        <TiltCard key={i} glowColor={p.glow} className="p-8 group border-white/[0.08] hover:border-white/20 transition-all duration-700 cursor-none flex flex-col h-[520px]">
+                        <TiltCard key={i} glowColor={p.glow} className="p-8 group border-white/[0.08] hover:border-white/20 transition-all duration-700 cursor-none flex flex-col h-[520px] clip-card">
                            <div className={cn("h-48 w-full rounded-[2.5rem] bg-gradient-to-br mb-10 flex items-center justify-center relative overflow-hidden shrink-0", p.color, "to-black/90")}>
                               <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
                               <Zap className="h-20 w-20 text-white/40 group-hover:scale-125 group-hover:rotate-12 group-hover:text-white transition-all duration-1000" />
@@ -435,7 +452,7 @@ export default function App() {
                                  <p className="text-xl font-black text-white tabular-nums">{p.partners}</p>
                               </div>
                            </div>
-                           <button className="w-full h-16 mt-10 rounded-[2rem] bg-white text-black font-black text-xs hover:scale-[1.02] active:scale-[0.98] transition-all cursor-none flex items-center justify-center gap-3 shrink-0 shadow-2xl relative z-10 overflow-hidden group/btn">
+                           <button className="w-full h-16 mt-10 bg-white text-black font-black text-xs hover:bg-meta-emerald transition-all cursor-none flex items-center justify-center gap-3 shrink-0 shadow-2xl relative z-10 overflow-hidden group/btn clip-button">
                               <span className="relative z-10">APPLY TO NODE</span>
                               <ArrowUpRight className="h-5 w-5 relative z-10 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                               <div className="absolute inset-0 bg-meta-emerald translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500" />
