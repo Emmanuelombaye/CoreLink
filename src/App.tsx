@@ -468,33 +468,6 @@ function NodeCard({ node, isRoot = false, onClick, selected }: { node: TreeNode;
   );
 }
 
-// @ts-ignore
-function TreeLevel({ nodes, onClick, selected }: { nodes: TreeNode[]; onClick: (n: TreeNode) => void; selected: string | null }) {
-  return (
-    <div className="flex justify-center gap-6 flex-wrap">
-      {nodes.map(node => (
-        <div key={node.id} className="flex flex-col items-center gap-4">
-          <NodeCard node={node} onClick={onClick} selected={selected} />
-          {node.children.length > 0 && (
-            <>
-              <div className="w-px h-6 bg-white/10" />
-              <div className="flex gap-4 relative">
-                <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
-                {node.children.map(child => (
-                  <div key={child.id} className="flex flex-col items-center gap-4">
-                    <div className="w-px h-4 bg-white/10" />
-                    <NodeCard node={child} onClick={onClick} selected={selected} />
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function NetworkView() {
   const [selected, setSelected] = useState<TreeNode | null>(null);
   const [copied, setCopied] = useState(false);
@@ -950,12 +923,13 @@ function PayoutCountdown() {
 
 // --- Stat Card with count-up ---
 function StatCard({ stat, index }: { stat: { label: string; value: string; icon: React.ElementType; color: string; trend: string; glow: string; sub: string }; index: number }) {
-  const raw = parseFloat(String(stat.value).replace(/[$k,%,]/g, ""));
+  const [stableValue] = useState(stat.value); // freeze on mount — prevents re-counting on live updates
+  const raw = parseFloat(String(stableValue).replace(/[$k,%,]/g, ""));
   const counted = useCountUp(isNaN(raw) ? 0 : raw, 1200 + index * 200);
-  const display = stat.value.includes("k") ? `$${counted.toFixed(2)}k`
-    : stat.value.includes("%") ? `${counted}%`
-    : stat.value.includes(",") ? counted.toLocaleString()
-    : stat.value;
+  const display = stableValue.includes("k") ? `$${counted.toFixed(2)}k`
+    : stableValue.includes("%") ? `${counted}%`
+    : stableValue.includes(",") ? counted.toLocaleString()
+    : stat.value; // show live value after count-up completes
   return (
     <motion.div
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -2227,8 +2201,6 @@ export default function App() {
                    </TiltCard>
                 </motion.div>
               )}
-
-              {activeView === "leaderboard" && <LeaderboardView />}
 
               {activeView === "roadmap" && (
                 <motion.div key="roadmap" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1200px] mx-auto pb-20">

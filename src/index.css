@@ -226,6 +226,11 @@
   border-radius: 9999px;
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(134, 255, 0, 0.3);
 }
