@@ -1227,6 +1227,32 @@ export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, title: "Payout Processed",    desc: "Your commission of $1,240.00 was successfully sent to your vault.",          time: "2m ago",  icon: Gift,        color: "text-meta-emerald", fresh: true  },
+    { id: 2, title: "Security Upgrade",    desc: "L4 Security Protocol has been deployed to the Nairobi Node.",                time: "1h ago",  icon: ShieldCheck, color: "text-meta-gold",   fresh: false },
+    { id: 3, title: "New Elite Partner",   desc: "Alexander M. has achieved Meta-Elite status in your network.",              time: "4h ago",  icon: Award,       color: "text-meta-violet", fresh: false },
+    { id: 4, title: "Market Volatility",   desc: "High traffic detected in UAE region. System load at 84%.",                  time: "12h ago", icon: Activity,    color: "text-red-500",     fresh: false },
+  ]);
+
+  const LIVE_ALERT_POOL = [
+    { title: "Cycle Completed",     desc: "Your X3 Level 3 slot just cycled. $80 sent to your wallet.",                icon: RefreshCcw,  color: "text-meta-emerald" },
+    { title: "New Direct Referral", desc: "A new partner joined under your link from Nigeria.",                         icon: Users,       color: "text-meta-violet" },
+    { title: "Spillover Received",  desc: "You received a spillover placement in X4 Level 2 from your upline.",         icon: ArrowUpRight, color: "text-meta-blue" },
+    { title: "Royalty Bonus",       desc: "Monthly NFT royalty of $420 has been credited to your account.",             icon: Crown,       color: "text-meta-gold" },
+    { title: "Level Unlocked",      desc: "X3 Level 4 is now available. Activate for $80 to unlock higher rewards.",    icon: Zap,         color: "text-meta-gold" },
+    { title: "MPS Block Reward",    desc: "Block #1,483 mined. +0.0042 MPS added to your wallet.",                      icon: Pickaxe,     color: "text-meta-emerald" },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const alert = LIVE_ALERT_POOL[Math.floor(Math.random() * LIVE_ALERT_POOL.length)];
+      setNotifications(prev => [
+        { ...alert, id: Date.now(), time: "just now", fresh: true },
+        ...prev.slice(0, 7).map(n => ({ ...n, fresh: false })),
+      ]);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
   const [liveStats, setLiveStats] = useState({ referrals: 1284, revenue: 84250, conversion: 12.4, systemLoad: 24 });
   
   // Custom Cursor
@@ -1358,7 +1384,11 @@ export default function App() {
               <div className="relative">
                  <button onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:border-meta-emerald/40 transition-all cursor-none relative group">
                     <Bell className="h-5 w-5 text-slate-300 group-hover:text-white transition-colors" />
-                    <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500 shadow-[0_0_10px_red]" />
+                    {notifications.length > 0 && (
+                      <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 shadow-[0_0_10px_red] text-[9px] font-black text-white flex items-center justify-center">
+                        {notifications.filter(n => n.fresh).length || notifications.length}
+                      </span>
+                    )}
                  </button>
               </div>
               <button className="h-12 px-8 bg-gradient-to-r from-meta-violet to-meta-blue text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-none clip-button border-none shadow-[0_10px_30px_rgba(139,92,246,0.3)]">
@@ -1826,25 +1856,25 @@ export default function App() {
                     </button>
                  </div>
                  <div className="flex-1 space-y-8 overflow-y-auto pr-4 custom-scrollbar">
-                    {[
-                      { title: "Payout Processed", desc: "Your commission of $1,240.00 was successfully sent to your vault.", time: "2m ago", icon: Gift, color: "text-meta-emerald" },
-                      { title: "Security Upgrade", desc: "L4 Security Protocol has been deployed to the Nairobi Node.", time: "1h ago", icon: ShieldCheck, color: "text-meta-gold" },
-                      { title: "New Elite Partner", desc: "Alexander M. has achieved Meta-Elite status in your network.", time: "4h ago", icon: Award, color: "text-meta-violet" },
-                      { title: "Market Volatility", desc: "High traffic detected in UAE region. System load at 84%.", time: "12h ago", icon: Activity, color: "text-red-500" },
-                    ].map((n, i) => (
-                      <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} key={i} className="p-8 rounded-[2.5rem] bg-white/[0.03] border border-white/5 hover:border-white/10 transition-all group cursor-none">
+                    {notifications.map((n, i) => (
+                      <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} key={n.id} className={cn("p-8 rounded-[2.5rem] border transition-all group cursor-none", n.fresh ? "bg-meta-emerald/5 border-meta-emerald/20" : "bg-white/[0.03] border-white/5 hover:border-white/10")}>
                          <div className="flex items-center gap-5 mb-4">
                             <div className={cn("h-12 w-12 rounded-2xl bg-white/[0.04] flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-inner", n.color)}>
                                <n.icon className="h-6 w-6" />
                             </div>
-                            <p className="text-lg font-black text-white">{n.title}</p>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="text-lg font-black text-white">{n.title}</p>
+                                {n.fresh && <span className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-meta-emerald text-black">New</span>}
+                              </div>
+                            </div>
                          </div>
                          <p className="text-sm text-slate-500 font-medium leading-relaxed mb-6">{n.desc}</p>
                          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-600 group-hover:text-meta-emerald transition-colors">{n.time}</p>
                       </motion.div>
                     ))}
                  </div>
-                 <button className="w-full h-16 mt-10 rounded-[2rem] bg-white/5 border border-white/10 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-white/10 transition-colors cursor-none shrink-0">
+                 <button onClick={() => setNotifications([])} className="w-full h-16 mt-10 rounded-[2rem] bg-white/5 border border-white/10 text-[11px] font-black uppercase tracking-[0.3em] hover:bg-white/10 transition-colors cursor-none shrink-0">
                     Dismiss All Alerts
                  </button>
               </motion.div>
