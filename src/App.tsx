@@ -1163,6 +1163,130 @@ function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue:
           </button>
         </div>
       </div>
+
+      {/* Section: My Active Levels Summary */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-black text-white tracking-tighter">My Active <span className="text-meta-emerald">Matrix Levels</span></h3>
+          <button className="text-[10px] font-black text-meta-emerald uppercase tracking-widest flex items-center gap-1 hover:text-white transition-colors cursor-none">
+            View All Levels <ArrowUpRight className="h-3 w-3" />
+          </button>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {[
+            { prog: "X3", lvl: 1, cycles: 142, reward: 20,   color: "border-meta-emerald/40 bg-meta-emerald/[0.04]", textColor: "text-meta-emerald" },
+            { prog: "X3", lvl: 2, cycles: 98,  reward: 40,   color: "border-meta-emerald/40 bg-meta-emerald/[0.04]", textColor: "text-meta-emerald" },
+            { prog: "X3", lvl: 3, cycles: 74,  reward: 80,   color: "border-meta-emerald/40 bg-meta-emerald/[0.04]", textColor: "text-meta-emerald" },
+            { prog: "X4", lvl: 1, cycles: 88,  reward: 20,   color: "border-meta-violet/40 bg-meta-violet/[0.04]",   textColor: "text-meta-violet" },
+            { prog: "X4", lvl: 2, cycles: 61,  reward: 40,   color: "border-meta-violet/40 bg-meta-violet/[0.04]",   textColor: "text-meta-violet" },
+            { prog: "X4", lvl: 3, cycles: 44,  reward: 80,   color: "border-meta-violet/40 bg-meta-violet/[0.04]",   textColor: "text-meta-violet" },
+          ].map((l, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+              <TiltCard className={`p-5 border ${l.color} text-center cursor-none`}>
+                <span className={`text-[9px] font-black uppercase tracking-widest ${l.textColor}`}>{l.prog} · Lvl {l.lvl}</span>
+                <p className="text-2xl font-black text-white mt-2 tabular-nums">{l.cycles}</p>
+                <p className="text-[9px] font-bold text-slate-600 uppercase mt-1">Cycles</p>
+                <div className="mt-3 pt-3 border-t border-white/[0.05]">
+                  <p className={`text-sm font-black ${l.textColor}`}>${l.reward}</p>
+                  <p className="text-[8px] font-bold text-slate-600 uppercase">Per Cycle</p>
+                </div>
+              </TiltCard>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Section: Top Partners + Recent Transactions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        {/* Top Partners */}
+        <TiltCard className="p-8 border-white/[0.08]">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-black text-white">Top <span className="text-meta-gold">Partners</span></h3>
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">This Month</span>
+          </div>
+          <div className="space-y-3">
+            {[
+              { name: "Alexander M.", flag: "🇦🇪", level: "Billionaire", earned: 42100, change: "+$1,200", up: true },
+              { name: "James K.",     flag: "🇺🇸", level: "Billionaire", earned: 38600, change: "+$980",   up: true },
+              { name: "Anna P.",      flag: "🇩🇪", level: "Millionaire", earned: 21800, change: "+$640",   up: true },
+              { name: "Fatima A.",    flag: "🇸🇦", level: "Millionaire", earned: 11200, change: "-$120",   up: false },
+              { name: "David N.",     flag: "🇰🇪", level: "Activator",  earned: 2100,  change: "+$210",   up: true },
+            ].map((p, i) => (
+              <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+                className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/[0.03] transition-colors cursor-none group">
+                <span className="text-xl shrink-0">{p.flag}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-black text-white group-hover:text-meta-emerald transition-colors">{p.name}</p>
+                  <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">{p.level}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-xs font-black text-white tabular-nums">${p.earned.toLocaleString()}</p>
+                  <p className={`text-[10px] font-black tabular-nums ${p.up ? "text-meta-emerald" : "text-red-400"}`}>{p.change}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </TiltCard>
+
+        {/* Recent Transactions */}
+        <TiltCard className="p-8 border-white/[0.08]">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-black text-white">Recent <span className="text-meta-violet">Transactions</span></h3>
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
+              <span className="text-[10px] font-black text-meta-emerald uppercase tracking-widest">Live</span>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {[
+              { type: "Cycle Reward",    amount: "+$80",    time: "2m ago",  icon: RefreshCcw, color: "text-meta-emerald", bg: "bg-meta-emerald/10" },
+              { type: "Direct Bonus",   amount: "+$50",    time: "14m ago", icon: Users,      color: "text-meta-violet", bg: "bg-meta-violet/10" },
+              { type: "NFT Royalty",    amount: "+$420",   time: "1h ago",  icon: Crown,      color: "text-meta-gold",   bg: "bg-meta-gold/10" },
+              { type: "Spillover",      amount: "+$25",    time: "3h ago",  icon: ArrowUpRight,color: "text-meta-blue",  bg: "bg-meta-blue/10" },
+              { type: "MPS Reward",     amount: "+0.042",  time: "6h ago",  icon: Pickaxe,    color: "text-meta-gold",   bg: "bg-meta-gold/10" },
+            ].map((tx, i) => (
+              <motion.div key={i} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+                className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/[0.03] transition-colors cursor-none group">
+                <div className={`h-9 w-9 rounded-xl ${tx.bg} flex items-center justify-center shrink-0 ${tx.color}`}>
+                  <tx.icon className="h-4 w-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-black text-white">{tx.type}</p>
+                  <p className="text-[9px] font-bold text-slate-600">{tx.time}</p>
+                </div>
+                <p className={`text-sm font-black tabular-nums shrink-0 ${tx.color}`}>{tx.amount}</p>
+              </motion.div>
+            ))}
+          </div>
+        </TiltCard>
+      </div>
+
+      {/* Section: Global Network Stats Banner */}
+      <TiltCard className="p-10 border-white/[0.06] bg-gradient-to-r from-meta-violet/[0.05] via-transparent to-meta-emerald/[0.05] overflow-hidden relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-meta-violet/[0.03] to-meta-emerald/[0.03] pointer-events-none" />
+        <div className="relative z-10">
+          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-2">Global Network Intelligence</p>
+          <h3 className="text-3xl font-black text-white tracking-tighter mb-8">CoreLink <span className="text-meta-emerald">Ecosystem</span> at a Glance</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6">
+            {[
+              { label: "Total Members",    value: "19,887",  color: "text-meta-emerald" },
+              { label: "Active Today",     value: "4,241",   color: "text-meta-gold" },
+              { label: "Cycles Today",     value: "1,482",   color: "text-meta-violet" },
+              { label: "Total Paid Out",   value: "$8.4M",   color: "text-meta-emerald" },
+              { label: "Countries",        value: "84",      color: "text-meta-blue" },
+              { label: "Smart Contracts",  value: "24",      color: "text-meta-gold" },
+              { label: "Uptime",           value: "99.98%",  color: "text-meta-emerald" },
+              { label: "Avg ROI",          value: "840%",    color: "text-meta-violet" },
+            ].map((s, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="text-center">
+                <p className={`text-xl font-black tabular-nums ${s.color}`}>{s.value}</p>
+                <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mt-1">{s.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </TiltCard>
     </motion.div>
   );
 }
