@@ -186,6 +186,132 @@ const BADGES = [
   { id: 8, name: "Diamond Miner",     desc: "Mine 10,000+ MPS tokens",            icon: "⛏️", earned: false, color: "border-white/10 bg-white/[0.02]" },
 ];
 
+// --- Wallet Connect Modal ---
+const WALLETS = [
+  { name: "MetaMask",       icon: "🦊", desc: "Browser extension wallet",        color: "border-orange-400/30 hover:border-orange-400/60",  badge: "Popular" },
+  { name: "WalletConnect",  icon: "🔗", desc: "Scan with any mobile wallet",     color: "border-meta-blue/30 hover:border-meta-blue/60",    badge: "Universal" },
+  { name: "Trust Wallet",   icon: "🛡️", desc: "Mobile-first crypto wallet",      color: "border-meta-violet/30 hover:border-meta-violet/60", badge: "Mobile" },
+  { name: "Coinbase Wallet",icon: "🔵", desc: "Secure self-custody wallet",      color: "border-meta-blue/30 hover:border-meta-blue/60",    badge: "" },
+  { name: "Binance Web3",   icon: "🟡", desc: "Native BNB Chain wallet",         color: "border-meta-gold/30 hover:border-meta-gold/60",    badge: "BEP20" },
+  { name: "OKX Wallet",     icon: "⚫", desc: "Multi-chain DeFi wallet",         color: "border-white/10 hover:border-white/30",            badge: "" },
+];
+
+function WalletConnectModal({ onClose }: { onClose: () => void }) {
+  const [connecting, setConnecting] = useState<string | null>(null);
+  const [connected, setConnected] = useState<string | null>(null);
+
+  const handleConnect = (name: string) => {
+    setConnecting(name);
+    setTimeout(() => {
+      setConnecting(null);
+      setConnected(name);
+      setTimeout(() => { onClose(); }, 1200);
+    }, 1800);
+  };
+
+  return (
+    <>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        onClick={onClose} className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-md" />
+      <motion.div initial={{ opacity: 0, scale: 0.92, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.92, y: 20 }} transition={{ type: "spring", damping: 28, stiffness: 350 }}
+        className="fixed inset-0 z-[201] flex items-center justify-center p-6 pointer-events-none">
+        <div className="w-full max-w-md bg-black/95 border border-white/[0.08] rounded-[2.5rem] p-8 shadow-[0_40px_120px_rgba(0,0,0,0.9)] pointer-events-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h3 className="text-2xl font-black text-white tracking-tighter">Connect <span className="text-meta-emerald">Wallet</span></h3>
+              <p className="text-[11px] font-bold text-slate-500 mt-1">Choose your preferred Web3 wallet</p>
+            </div>
+            <button onClick={onClose} className="h-10 w-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-none">
+              <X className="h-4 w-4 text-slate-400" />
+            </button>
+          </div>
+
+          {/* Wallet Grid */}
+          <div className="space-y-3">
+            {WALLETS.map((w, i) => (
+              <motion.button key={w.name} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.05 }} onClick={() => handleConnect(w.name)}
+                disabled={!!connecting || !!connected}
+                className={cn(
+                  "w-full flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 cursor-none group",
+                  connected === w.name ? "bg-meta-emerald/10 border-meta-emerald" :
+                  connecting === w.name ? "bg-white/[0.05] border-white/20" :
+                  `bg-white/[0.02] ${w.color}`
+                )}>
+                <span className="text-2xl shrink-0">{w.icon}</span>
+                <div className="flex-1 text-left min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-black text-white">{w.name}</p>
+                    {w.badge && <span className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-meta-gold/10 text-meta-gold border border-meta-gold/20">{w.badge}</span>}
+                  </div>
+                  <p className="text-[10px] font-bold text-slate-600">{w.desc}</p>
+                </div>
+                <div className="shrink-0">
+                  {connected === w.name ? (
+                    <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-meta-emerald text-lg">✓</motion.span>
+                  ) : connecting === w.name ? (
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="h-5 w-5 border-2 border-meta-emerald border-t-transparent rounded-full" />
+                  ) : (
+                    <ArrowUpRight className="h-4 w-4 text-slate-600 group-hover:text-white transition-colors" />
+                  )}
+                </div>
+              </motion.button>
+            ))}
+          </div>
+
+          <p className="text-center text-[10px] font-bold text-slate-600 mt-6">
+            By connecting you agree to our <span className="text-meta-emerald cursor-none">Terms of Service</span>
+          </p>
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
+// --- Language Switcher Modal ---
+const LANGUAGES = [
+  { code: "EN", name: "English",    flag: "🇬🇧", active: true  },
+  { code: "FR", name: "Français",   flag: "🇫🇷", active: false },
+  { code: "AR", name: "العربية",    flag: "🇸🇦", active: false },
+  { code: "RU", name: "Русский",    flag: "🇷🇺", active: false },
+  { code: "ZH", name: "中文",        flag: "🇨🇳", active: false },
+  { code: "PT", name: "Português",  flag: "🇧🇷", active: false },
+  { code: "ES", name: "Español",    flag: "🇪🇸", active: false },
+  { code: "SW", name: "Kiswahili",  flag: "🇰🇪", active: false },
+];
+
+function LanguageModal({ onClose, onSelect, current }: { onClose: () => void; onSelect: (code: string) => void; current: string }) {
+  return (
+    <>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        onClick={onClose} className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-md" />
+      <motion.div initial={{ opacity: 0, scale: 0.92, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.92, y: -10 }} transition={{ type: "spring", damping: 28, stiffness: 350 }}
+        className="fixed top-28 right-10 z-[201] w-64 bg-black/95 border border-white/[0.08] rounded-3xl p-4 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
+        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2 mb-3">Select Language</p>
+        <div className="space-y-1">
+          {LANGUAGES.map((lang, i) => (
+            <motion.button key={lang.code} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.04 }} onClick={() => { onSelect(lang.code); onClose(); }}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all cursor-none",
+                current === lang.code ? "bg-meta-emerald/10 border border-meta-emerald/30" : "hover:bg-white/[0.04] border border-transparent"
+              )}>
+              <span className="text-lg">{lang.flag}</span>
+              <span className="text-sm font-black text-white flex-1 text-left">{lang.name}</span>
+              <span className={cn("text-[9px] font-black uppercase tracking-widest", current === lang.code ? "text-meta-emerald" : "text-slate-600")}>{lang.code}</span>
+              {current === lang.code && <span className="text-meta-emerald text-xs">✓</span>}
+            </motion.button>
+          ))}
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
 // --- Leaderboard View ---
 const LEADERBOARD_DATA = [
   { rank: 1,  name: "Alexander M.",  wallet: "0xA1B...F92", flag: "🇦🇪", country: "UAE",          level: "Trillionaire", earned: 284500, cycles: 142, referrals: 312, change: 12400,  up: true  },
@@ -1583,6 +1709,9 @@ export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  const [isLangModalOpen, setIsLangModalOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState("EN");
   const [notifications, setNotifications] = useState([
     { id: 1, title: "Payout Processed",    desc: "Your commission of $1,240.00 was successfully sent to your vault.",          time: "2m ago",  icon: Gift,        color: "text-meta-emerald", fresh: true  },
     { id: 2, title: "Security Upgrade",    desc: "L4 Security Protocol has been deployed to the Nairobi Node.",                time: "1h ago",  icon: ShieldCheck, color: "text-meta-gold",   fresh: false },
@@ -1794,8 +1923,8 @@ export default function App() {
                 </div>
               </div>
               <div className="relative">
-                 <button className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:border-meta-emerald/40 transition-all cursor-none relative group mr-4">
-                    <Languages className="h-5 w-5 text-slate-300 group-hover:text-white transition-colors" />
+                 <button onClick={() => setIsLangModalOpen(!isLangModalOpen)} className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:border-meta-emerald/40 transition-all cursor-none relative group mr-4">
+                    <span className="text-[10px] font-black text-white">{currentLang}</span>
                  </button>
               </div>
               <div className="relative">
@@ -1808,7 +1937,7 @@ export default function App() {
                     )}
                  </button>
               </div>
-              <button className="h-12 px-8 bg-gradient-to-r from-meta-violet to-meta-blue text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-none clip-button border-none shadow-[0_10px_30px_rgba(139,92,246,0.3)]">
+              <button onClick={() => setIsWalletModalOpen(true)} className="h-12 px-8 bg-gradient-to-r from-meta-violet to-meta-blue text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-none clip-button border-none shadow-[0_10px_30px_rgba(139,92,246,0.3)]">
                  <Wallet className="h-4 w-4" /> Connect Port
               </button>
            </div>
