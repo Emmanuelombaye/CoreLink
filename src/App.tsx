@@ -1618,14 +1618,35 @@ export default function App() {
                 <motion.div key="academy" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
                    <h3 className="text-5xl font-black text-white tracking-tighter mb-8">Meta <span className="text-meta-emerald">Academy</span></h3>
                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                      {["Metaverse Basics", "Web 3.0 Architecture", "Yield Farming", "Initial Game Offerings (IGO)", "Advanced Staking", "NFT Ecosystems"].map((course, i) => (
-                        <TiltCard key={i} className="p-8 border-white/[0.08] flex flex-col justify-between min-h-[300px] clip-card hover:border-meta-emerald/50 transition-colors">
-                           <GraduationCap className="h-12 w-12 text-meta-emerald mb-4" />
+                      {[
+                        { title: "Metaverse Basics",           desc: "Understand virtual economies, digital land ownership, and avatar-based commerce in Web3 worlds.",         duration: "4h 20m", lessons: 12, progress: 100, color: "text-meta-emerald" },
+                        { title: "Web 3.0 Architecture",       desc: "Deep dive into decentralized protocols, IPFS, smart contract layers, and trustless infrastructure.",      duration: "6h 10m", lessons: 18, progress: 78,  color: "text-meta-blue" },
+                        { title: "Yield Farming",              desc: "Master liquidity pools, APY optimization, impermanent loss mitigation, and DeFi compounding strategies.", duration: "5h 45m", lessons: 15, progress: 55,  color: "text-meta-gold" },
+                        { title: "Initial Game Offerings",     desc: "Learn how IGOs work, how to evaluate gaming tokens, and how to participate in early-stage launches.",    duration: "3h 30m", lessons: 10, progress: 30,  color: "text-meta-violet" },
+                        { title: "Advanced Staking",           desc: "Explore validator nodes, delegated staking, lock-up periods, and maximizing staking rewards safely.",    duration: "5h 00m", lessons: 14, progress: 10,  color: "text-orange-400" },
+                        { title: "NFT Ecosystems",             desc: "From minting to royalties — understand NFT standards, marketplace dynamics, and collection strategies.",  duration: "4h 50m", lessons: 13, progress: 0,   color: "text-pink-400" },
+                      ].map((course, i) => (
+                        <TiltCard key={i} className="p-8 border-white/[0.08] flex flex-col justify-between min-h-[320px] clip-card hover:border-meta-emerald/50 transition-colors">
                            <div>
-                              <h4 className="text-2xl font-black text-white leading-tight mb-2">{course}</h4>
-                              <p className="text-sm text-slate-500 font-medium">Master the fundamentals of the decentralized web and maximize your network potential.</p>
+                              <GraduationCap className={cn("h-10 w-10 mb-4", course.color)} />
+                              <h4 className="text-xl font-black text-white leading-tight mb-2">{course.title}</h4>
+                              <p className="text-sm text-slate-500 font-medium leading-relaxed">{course.desc}</p>
                            </div>
-                           <button className="mt-8 text-xs font-black text-meta-emerald uppercase tracking-widest flex items-center gap-2">Start Course <ArrowUpRight className="h-4 w-4" /></button>
+                           <div className="mt-6 space-y-3">
+                              <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                                 <span className="text-slate-600">{course.lessons} Lessons · {course.duration}</span>
+                                 <span className={course.progress === 100 ? "text-meta-emerald" : course.progress > 0 ? "text-meta-gold" : "text-slate-600"}>
+                                    {course.progress === 100 ? "Completed" : course.progress > 0 ? `${course.progress}%` : "Not Started"}
+                                 </span>
+                              </div>
+                              <div className="h-1.5 w-full bg-white/[0.04] rounded-full overflow-hidden">
+                                 <motion.div initial={{ width: 0 }} animate={{ width: `${course.progress}%` }} transition={{ duration: 1.2, delay: i * 0.1, ease: "easeOut" }}
+                                    className={cn("h-full rounded-full", course.progress === 100 ? "bg-meta-emerald" : course.progress > 0 ? "bg-meta-gold" : "bg-transparent")} />
+                              </div>
+                              <button className={cn("mt-2 text-xs font-black uppercase tracking-widest flex items-center gap-2", course.color)}>
+                                 {course.progress === 100 ? "Review Course" : course.progress > 0 ? "Continue" : "Start Course"} <ArrowUpRight className="h-4 w-4" />
+                              </button>
+                           </div>
                         </TiltCard>
                       ))}
                    </div>
