@@ -1495,14 +1495,29 @@ export default function App() {
           ))}
         </nav>
 
-        <div className="p-6 shrink-0">
-           <TiltCard className="p-6 border-meta-emerald/20 bg-meta-emerald/[0.02]">
-              <div className="flex justify-between items-center mb-4">
+        <div className="p-6 shrink-0 border-t border-white/[0.04]">
+           {/* User Profile Card */}
+           <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] mb-4 group hover:border-meta-emerald/30 transition-colors cursor-none">
+             <div className="relative shrink-0">
+               <div className="h-10 w-10 rounded-full bg-gradient-to-br from-meta-gold via-meta-emerald to-meta-violet flex items-center justify-center text-black font-black text-sm shadow-[0_0_15px_rgba(134,255,0,0.3)]">E</div>
+               <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-meta-emerald border-2 border-black shadow-[0_0_6px_rgba(134,255,0,0.8)]" />
+             </div>
+             <div className="flex-1 min-w-0">
+               <p className="text-xs font-black text-white truncate">Emmanuel O.</p>
+               <p className="text-[9px] font-black text-meta-emerald uppercase tracking-widest">Trillionaire · #3</p>
+             </div>
+             <div className="text-right shrink-0">
+               <p className="text-[10px] font-black text-meta-gold">$84.2k</p>
+               <p className="text-[8px] font-bold text-slate-600 uppercase">Earned</p>
+             </div>
+           </div>
+           <TiltCard className="p-4 border-meta-emerald/20 bg-meta-emerald/[0.02]">
+              <div className="flex justify-between items-center mb-3">
                  <span className="text-[9px] font-black uppercase text-meta-emerald tracking-widest">Network Guard</span>
                  <ShieldCheck className="h-4 w-4 text-meta-emerald" />
               </div>
-              <p className="text-lg font-black text-white mb-2 tracking-tight leading-none">Syncing Nodes</p>
-              <div className="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+              <p className="text-sm font-black text-white mb-2 tracking-tight leading-none">Syncing Nodes</p>
+              <div className="mt-3 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                  <motion.div initial={{ width: "20%" }} animate={{ width: "85%" }} transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }} className="h-full bg-meta-emerald shadow-[0_0_15px_var(--color-meta-emerald)]" />
               </div>
            </TiltCard>
