@@ -34,7 +34,6 @@ import {
   Trophy,
   BarChart3,
   Fingerprint,
-  Languages,
   Link2,
   Eye,
   QrCode
@@ -1082,7 +1081,464 @@ function StatCard({ stat, index }: { stat: { label: string; value: string; icon:
   );
 }
 
-// --- Dashboard View ---
+// --- Modular Enhancement Components ---
+
+function HowItWorksSection() {
+  const steps = [
+    { title: "Register Account", desc: "Create your unique Web3 identity on the CoreLink protocol.", icon: Users, color: "text-meta-blue", bg: "bg-meta-blue/10" },
+    { title: "Deposit Funds", desc: "Fuel your wallet with C-USD or native crypto assets.", icon: Wallet, color: "text-meta-violet", bg: "bg-meta-violet/10" },
+    { title: "Earn Daily Returns", desc: "Watch your matrix cycles and mining yields grow 24/7.", icon: Activity, color: "text-meta-emerald", bg: "bg-meta-emerald/10" },
+    { title: "Withdraw Profits", desc: "Instant withdrawals to any global wallet or mobile money.", icon: ArrowUpRight, color: "text-meta-gold", bg: "bg-meta-gold/10" },
+  ];
+
+  return (
+    <section className="py-20">
+      <div className="text-center mb-16">
+        <h3 className="text-[10px] font-black text-meta-emerald uppercase tracking-[0.4em] mb-4">The Protocol</h3>
+        <h2 className="text-5xl font-black text-white tracking-tighter">How It <span className="text-meta-emerald">Works</span></h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {steps.map((step, i) => (
+          <TiltCard key={i} className="p-10 border-white/[0.06] flex flex-col items-center text-center group">
+            <div className={`h-16 w-16 rounded-3xl ${step.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500`}>
+              <step.icon className={`h-8 w-8 ${step.color}`} />
+            </div>
+            <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center text-[10px] font-black text-slate-500 mb-6 border border-white/10">0{i+1}</div>
+            <h4 className="text-xl font-black text-white mb-3">{step.title}</h4>
+            <p className="text-sm text-slate-500 font-medium leading-relaxed">{step.desc}</p>
+          </TiltCard>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function InvestmentPlansSection() {
+  const plans = [
+    { name: "Starter Pool", roi: "1.2% Daily", min: "$10", duration: "30 Days", color: "text-meta-blue", border: "border-meta-blue/20", bg: "bg-meta-blue/5" },
+    { name: "Pro Matrix", roi: "2.5% Daily", min: "$100", duration: "60 Days", color: "text-meta-emerald", border: "border-meta-emerald/30", bg: "bg-meta-emerald/10", featured: true },
+    { name: "Elite Vault", roi: "15% Weekly", min: "$500", duration: "90 Days", color: "text-meta-gold", border: "border-meta-gold/20", bg: "bg-meta-gold/5" },
+    { name: "Whale Node", roi: "85% Monthly", min: "$2,000", duration: "180 Days", color: "text-meta-violet", border: "border-meta-violet/20", bg: "bg-meta-violet/5" },
+  ];
+
+  return (
+    <section className="py-20">
+      <div className="text-center mb-16">
+        <h3 className="text-[10px] font-black text-meta-gold uppercase tracking-[0.4em] mb-4">Investment Yields</h3>
+        <h2 className="text-5xl font-black text-white tracking-tighter">Choose Your <span className="text-meta-gold">Plan</span></h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {plans.map((plan, i) => (
+          <TiltCard key={i} className={cn("p-10 border flex flex-col h-full", plan.border, plan.featured ? "scale-105 z-10 shadow-[0_0_50px_rgba(134,255,0,0.1)]" : "opacity-80 hover:opacity-100")}>
+            {plan.featured && <div className="bg-meta-emerald text-black text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full w-fit mb-6 mx-auto">Most Popular</div>}
+            <h4 className="text-xl font-black text-white text-center mb-2">{plan.name}</h4>
+            <div className="text-center mb-8">
+              <span className={cn("text-4xl font-black", plan.color)}>{plan.roi}</span>
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">ROI Potential</p>
+            </div>
+            <div className="space-y-4 mb-10 flex-1">
+              <div className="flex justify-between text-xs border-b border-white/5 pb-2">
+                <span className="text-slate-500 font-bold">Min Deposit</span>
+                <span className="text-white font-black">{plan.min}</span>
+              </div>
+              <div className="flex justify-between text-xs border-b border-white/5 pb-2">
+                <span className="text-slate-500 font-bold">Duration</span>
+                <span className="text-white font-black">{plan.duration}</span>
+              </div>
+              <div className="flex justify-between text-xs border-b border-white/5 pb-2">
+                <span className="text-slate-500 font-bold">Withdrawal</span>
+                <span className="text-white font-black">Anytime</span>
+              </div>
+            </div>
+            <button className={cn("w-full h-14 font-black uppercase tracking-widest text-[10px] clip-button transition-all", plan.featured ? "bg-meta-emerald text-black" : "bg-white/5 text-white border border-white/10 hover:bg-white/10")}>
+              Start Plan
+            </button>
+          </TiltCard>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ReferralWidget() {
+  const [copied, setCopied] = useState(false);
+  const link = "corelink.io/ref/emmanuel";
+
+  const copy = () => {
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <TiltCard className="p-8 border-meta-violet/20 bg-meta-violet/[0.02]">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-black text-white">Referral <span className="text-meta-violet">System</span></h3>
+        <Share2 className="h-5 w-5 text-meta-violet" />
+      </div>
+      <div className="space-y-6">
+        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+          <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">My Referral Link</p>
+          <div className="flex gap-3">
+            <input readOnly value={link} className="bg-transparent text-xs font-mono text-white flex-1 outline-none" />
+            <button onClick={copy} className="text-meta-emerald hover:text-white transition-colors cursor-none">
+              {copied ? "Copied!" : <Link2 className="h-4 w-4" />}
+            </button>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Total Referrals</p>
+            <p className="text-2xl font-black text-white mt-1">1,284</p>
+          </div>
+          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Earnings</p>
+            <p className="text-2xl font-black text-meta-emerald mt-1">$4,280</p>
+          </div>
+        </div>
+        <div className="space-y-3">
+          <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Network Breakdown</p>
+          <div className="space-y-2">
+            {[
+              { label: "Level 1 (Direct)", val: "420", pct: 100, color: "bg-meta-emerald" },
+              { label: "Level 2", val: "610", pct: 65, color: "bg-meta-violet" },
+              { label: "Level 3", val: "254", pct: 30, color: "bg-meta-blue" },
+            ].map((lvl, i) => (
+              <div key={i} className="space-y-1">
+                <div className="flex justify-between text-[10px] font-bold">
+                  <span className="text-slate-400">{lvl.label}</span>
+                  <span className="text-white">{lvl.val}</span>
+                </div>
+                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                  <motion.div initial={{ width: 0 }} animate={{ width: `${lvl.pct}%` }} className={cn("h-full", lvl.color)} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </TiltCard>
+  );
+}
+
+function EarningsAnalyticsChartWidget() {
+  const data = [
+    { name: "Mon", income: 240, profit: 180 },
+    { name: "Tue", income: 300, profit: 240 },
+    { name: "Wed", income: 280, profit: 210 },
+    { name: "Thu", income: 420, profit: 380 },
+    { name: "Fri", income: 380, profit: 320 },
+    { name: "Sat", income: 510, profit: 460 },
+    { name: "Sun", income: 480, profit: 420 },
+  ];
+
+  return (
+    <TiltCard className="p-8 border-white/[0.08]">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h3 className="text-lg font-black text-white">Earnings <span className="text-meta-emerald">Analytics</span></h3>
+          <p className="text-[10px] font-bold text-slate-600 uppercase mt-1">Daily trend performance</p>
+        </div>
+        <BarChart3 className="h-5 w-5 text-meta-emerald" />
+      </div>
+      <div className="h-64 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#86FF00" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#86FF00" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+            <XAxis dataKey="name" hide />
+            <Tooltip contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff10', borderRadius: '12px' }} />
+            <Area type="monotone" dataKey="income" stroke="#86FF00" strokeWidth={3} fill="url(#chartGlow)" />
+            <Area type="monotone" dataKey="profit" stroke="#8B5CF6" strokeWidth={2} fill="transparent" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-white/5">
+        <div className="text-center">
+          <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Growth</p>
+          <p className="text-sm font-black text-meta-emerald">+24.8%</p>
+        </div>
+        <div className="text-center border-x border-white/5">
+          <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Profit</p>
+          <p className="text-sm font-black text-white">$1,840</p>
+        </div>
+        <div className="text-center">
+          <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Velocity</p>
+          <p className="text-sm font-black text-meta-gold">High</p>
+        </div>
+      </div>
+    </TiltCard>
+  );
+}
+
+function WalletModule() {
+  const transactions = [
+    { date: "May 04, 2024", amount: "+$1,240.00", type: "Withdrawal", status: "Completed", color: "text-meta-emerald" },
+    { date: "May 03, 2024", amount: "+$500.00", type: "Deposit", status: "Completed", color: "text-meta-blue" },
+    { date: "May 02, 2024", amount: "+$84.20", type: "Bonus", status: "Completed", color: "text-meta-violet" },
+    { date: "May 01, 2024", amount: "+$12.50", type: "Referral", status: "Pending", color: "text-meta-gold" },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <TiltCard className="p-10 border-meta-emerald/20 bg-gradient-to-br from-meta-emerald/[0.05] to-transparent">
+          <p className="text-[10px] font-black text-meta-emerald uppercase tracking-[0.3em] mb-2">Primary Wallet</p>
+          <h4 className="text-5xl font-black text-white tabular-nums tracking-tighter mb-8">$84,250.00</h4>
+          <div className="flex gap-4">
+            <button className="flex-1 h-14 bg-meta-emerald text-black font-black uppercase tracking-widest text-[10px] clip-button hover:bg-white transition-colors">Deposit</button>
+            <button className="flex-1 h-14 bg-white/5 border border-white/10 text-white font-black uppercase tracking-widest text-[10px] clip-button hover:bg-white/10 transition-colors">Withdraw</button>
+          </div>
+        </TiltCard>
+        
+        <TiltCard className="p-10 border-white/[0.08] flex flex-col justify-between">
+          <div className="flex justify-between items-start">
+             <div className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center">
+                <ShieldCheck className="h-6 w-6 text-meta-gold" />
+             </div>
+             <span className="text-[10px] font-black text-meta-gold uppercase tracking-widest bg-meta-gold/10 px-3 py-1 rounded-full">Secure Port</span>
+          </div>
+          <div className="mt-8">
+             <p className="text-sm font-bold text-slate-400 leading-relaxed">Your assets are protected by L4 smart contract encryption and multi-sig verification.</p>
+          </div>
+        </TiltCard>
+      </div>
+
+      <TiltCard className="p-8 border-white/[0.08]">
+        <div className="flex items-center justify-between mb-8">
+          <h3 className="text-lg font-black text-white">Recent <span className="text-meta-blue">Transactions</span></h3>
+          <button className="text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-white transition-colors cursor-none">View Statement</button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="text-left text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-white/5">
+                <th className="pb-4">Date</th>
+                <th className="pb-4">Type</th>
+                <th className="pb-4">Status</th>
+                <th className="pb-4 text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="text-xs">
+              {transactions.map((tx, i) => (
+                <tr key={i} className="border-b border-white/[0.03] group hover:bg-white/[0.02] transition-colors">
+                  <td className="py-4 text-slate-400 font-medium">{tx.date}</td>
+                  <td className="py-4 font-black text-white">{tx.type}</td>
+                  <td className="py-4">
+                    <span className={cn("px-2 py-1 rounded-lg text-[9px] font-black uppercase", tx.status === "Completed" ? "bg-meta-emerald/10 text-meta-emerald" : "bg-meta-gold/10 text-meta-gold")}>
+                      {tx.status}
+                    </span>
+                  </td>
+                  <td className={cn("py-4 text-right font-black tabular-nums", tx.color)}>{tx.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </TiltCard>
+    </div>
+  );
+}
+
+function ActivityFeedWidget() {
+  const activities = [
+    { user: "0x8F...D2", action: "deposited $5,000", time: "2m ago", icon: ArrowUpRight, color: "text-meta-blue" },
+    { user: "0x3C...A1", action: "earned $420 bonus", time: "12m ago", icon: Zap, color: "text-meta-gold" },
+    { user: "0xE4...B9", action: "withdrew $1,200", time: "25m ago", icon: RefreshCcw, color: "text-meta-emerald" },
+    { user: "0x7D...F0", action: "joined Elite Node", time: "1h ago", icon: Users, color: "text-meta-violet" },
+  ];
+
+  return (
+    <TiltCard className="p-8 border-white/[0.08]">
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="text-lg font-black text-white">Network <span className="text-meta-gold">Activity</span></h3>
+        <div className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
+      </div>
+      <div className="space-y-6">
+        {activities.map((act, i) => (
+          <div key={i} className="flex gap-4 group">
+            <div className={cn("h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform", act.color)}>
+              <act.icon className="h-4 w-4" />
+            </div>
+            <div className="flex-1 min-w-0 border-b border-white/5 pb-4">
+              <p className="text-xs text-white">
+                <span className="font-mono text-slate-500 mr-2">{act.user}</span>
+                {act.action}
+              </p>
+              <p className="text-[10px] font-bold text-slate-600 uppercase mt-1">{act.time}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </TiltCard>
+  );
+}
+
+function LoginView({ onNavigate }: { onNavigate: (v: NavId) => void }) {
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center px-6">
+       <TiltCard className="w-full max-w-md p-12 border-white/10 shadow-2xl">
+          <div className="text-center mb-10">
+             <div className="h-16 w-16 rounded-3xl bg-gradient-to-br from-meta-gold via-meta-emerald to-meta-violet mx-auto mb-6 flex items-center justify-center shadow-2xl">
+                <Zap className="h-8 w-8 text-black fill-black" />
+             </div>
+             <h2 className="text-3xl font-black text-white tracking-tighter mb-2">Welcome <span className="text-meta-emerald">Back</span></h2>
+             <p className="text-sm font-bold text-slate-500">Access the CoreLink intelligence portal</p>
+          </div>
+          <div className="space-y-4">
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Wallet Address</p>
+                <input type="text" placeholder="0x..." className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-5 text-sm outline-none focus:border-meta-emerald/50 transition-colors" />
+             </div>
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Private Access Key</p>
+                <input type="password" placeholder="••••••••" className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-5 text-sm outline-none focus:border-meta-emerald/50 transition-colors" />
+             </div>
+             <button onClick={() => onNavigate("dashboard")} className="w-full h-14 bg-meta-emerald text-black font-black uppercase tracking-widest text-xs clip-button hover:bg-white transition-all mt-4">Initialize Portal</button>
+             <p className="text-center text-[10px] font-black text-slate-600 uppercase tracking-widest mt-6">
+                Don't have an account? <button onClick={() => onNavigate("register")} className="text-meta-emerald hover:text-white transition-colors cursor-none">Register Now</button>
+             </p>
+          </div>
+       </TiltCard>
+    </div>
+  );
+}
+
+function RegisterView({ onNavigate }: { onNavigate: (v: NavId) => void }) {
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center px-6 py-20">
+       <TiltCard className="w-full max-w-md p-12 border-white/10 shadow-2xl">
+          <div className="text-center mb-10">
+             <div className="h-16 w-16 rounded-3xl bg-gradient-to-br from-meta-blue via-meta-violet to-meta-gold mx-auto mb-6 flex items-center justify-center shadow-2xl">
+                <Users className="h-8 w-8 text-black" />
+             </div>
+             <h2 className="text-3xl font-black text-white tracking-tighter mb-2">Join the <span className="text-meta-blue">Network</span></h2>
+             <p className="text-sm font-bold text-slate-500">Initialize your node on the global matrix</p>
+          </div>
+          <div className="space-y-4">
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Wallet Address</p>
+                <input type="text" placeholder="0x..." className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-5 text-sm outline-none focus:border-meta-emerald/50 transition-colors" />
+             </div>
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Referral Code (Optional)</p>
+                <input type="text" placeholder="EMMANUEL-42" className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-5 text-sm outline-none focus:border-meta-emerald/50 transition-colors" />
+             </div>
+             <div className="space-y-1">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Create Access Key</p>
+                <input type="password" placeholder="••••••••" className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-5 text-sm outline-none focus:border-meta-emerald/50 transition-colors" />
+             </div>
+             <button onClick={() => onNavigate("dashboard")} className="w-full h-14 bg-meta-blue text-white font-black uppercase tracking-widest text-xs clip-button hover:bg-white hover:text-black transition-all mt-4 border-none">Deploy Node</button>
+             <p className="text-center text-[10px] font-black text-slate-600 uppercase tracking-widest mt-6">
+                Already registered? <button onClick={() => onNavigate("login")} className="text-meta-blue hover:text-white transition-colors cursor-none">Login Here</button>
+             </p>
+          </div>
+       </TiltCard>
+    </div>
+  );
+}
+
+function AdminPanelView() {
+  const users = [
+    { id: 1, user: "0x4A...91", country: "Nigeria", balance: "$12,400", status: "Active" },
+    { id: 2, user: "0xB8...44", country: "UAE", balance: "$8,900", status: "Active" },
+    { id: 3, user: "0x9D...12", country: "USA", balance: "$45,200", status: "Suspended" },
+    { id: 4, user: "0x1F...99", country: "Kenya", balance: "$2,100", status: "Active" },
+  ];
+
+  return (
+    <div className="space-y-12 max-w-[1600px] mx-auto pb-20">
+      <div className="flex items-center justify-between gap-10 flex-wrap">
+        <div>
+          <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Admin <span className="text-red-500">Control</span></h3>
+          <p className="text-xl text-slate-500 font-bold max-w-2xl">Manage ecosystem nodes, approvals, and global protocol parameters.</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          { label: "Total Users", val: "19,887", color: "text-white" },
+          { label: "Pending Deposits", val: "42", color: "text-meta-gold" },
+          { label: "Pending Withdrawals", val: "18", color: "text-red-400" },
+          { label: "System Uptime", val: "99.98%", color: "text-meta-emerald" },
+        ].map((s, i) => (
+          <TiltCard key={i} className="p-8 text-center border-white/10">
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{s.label}</p>
+            <p className={cn("text-3xl font-black", s.color)}>{s.val}</p>
+          </TiltCard>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <TiltCard className="lg:col-span-2 p-8 border-white/10">
+          <h4 className="text-lg font-black text-white mb-8 uppercase tracking-widest">User Management</h4>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="text-left text-[10px] font-black text-slate-600 uppercase border-b border-white/5">
+                  <th className="pb-4">Node ID</th>
+                  <th className="pb-4">Region</th>
+                  <th className="pb-4">Balance</th>
+                  <th className="pb-4">Status</th>
+                  <th className="pb-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="text-xs">
+                {users.map((u, i) => (
+                  <tr key={i} className="border-b border-white/[0.03]">
+                    <td className="py-4 font-mono text-white">{u.user}</td>
+                    <td className="py-4 text-slate-400">{u.country}</td>
+                    <td className="py-4 font-black text-white">{u.balance}</td>
+                    <td className="py-4">
+                      <span className={cn("px-2 py-0.5 rounded-lg text-[9px] font-black uppercase", u.status === "Active" ? "bg-meta-emerald/10 text-meta-emerald" : "bg-red-500/10 text-red-500")}>
+                        {u.status}
+                      </span>
+                    </td>
+                    <td className="py-4 text-right flex justify-end gap-2">
+                       <button className="h-8 px-3 bg-white/5 border border-white/10 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Edit</button>
+                       <button className="h-8 px-3 bg-red-500/10 border border-red-500/20 rounded-lg text-[9px] font-black text-red-500 uppercase tracking-widest hover:bg-red-500 hover:text-white transition-colors">Freeze</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </TiltCard>
+
+        <div className="space-y-6">
+          <TiltCard className="p-8 border-meta-gold/20 bg-meta-gold/[0.02]">
+             <h4 className="text-lg font-black text-meta-gold mb-6 uppercase tracking-widest">Queue Approvals</h4>
+             <div className="space-y-4">
+                {[
+                  { type: "Withdrawal", user: "0x8F...D2", amt: "$1,200", time: "2m ago" },
+                  { type: "Deposit", user: "0x3C...A1", amt: "$4,200", time: "12m ago" },
+                  { type: "Withdrawal", user: "0xE4...B9", amt: "$850", time: "25m ago" },
+                ].map((q, i) => (
+                  <div key={i} className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
+                     <div>
+                        <p className="text-[10px] font-black text-white">{q.type} - {q.amt}</p>
+                        <p className="text-[9px] font-bold text-slate-500 uppercase">{q.user} · {q.time}</p>
+                     </div>
+                     <div className="flex gap-2">
+                        <button className="h-7 w-7 rounded-full bg-meta-emerald/20 flex items-center justify-center text-meta-emerald hover:bg-meta-emerald hover:text-black transition-colors"><ShieldCheck className="h-4 w-4" /></button>
+                        <button className="h-7 w-7 rounded-full bg-red-500/20 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-colors"><X className="h-4 w-4" /></button>
+                     </div>
+                  </div>
+                ))}
+             </div>
+          </TiltCard>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- Dashboard View (Updated with new sections) ---
 function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue: number; conversion: number; systemLoad: number } }) {
   const [feed, setFeed] = useState(SIGNAL_FEED_POOL.slice(0, 6));
   const [cycleCount, setCycleCount] = useState({ x3: 1482, x4: 847, pool: 3291 });
@@ -1413,6 +1869,34 @@ function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue:
         </TiltCard>
       </div>
 
+      {/* New Modular Sections */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div className="xl:col-span-2 space-y-10">
+          <EarningsAnalyticsChartWidget />
+          <WalletModule />
+        </div>
+        <div className="space-y-10">
+          <ReferralWidget />
+          <ActivityFeedWidget />
+        </div>
+      </div>
+
+      <HowItWorksSection />
+      <InvestmentPlansSection />
+
+      {/* Hero CTA */}
+      <div className="py-20 text-center relative overflow-hidden rounded-[3rem] border border-white/10 bg-gradient-to-br from-meta-emerald/[0.05] via-transparent to-meta-violet/[0.05]">
+         <div className="relative z-10">
+            <h3 className="text-4xl font-black text-white tracking-tighter mb-6">Ready to Scale Your <span className="text-meta-emerald">Passive Income?</span></h3>
+            <div className="flex justify-center gap-6">
+               <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="h-14 px-12 bg-meta-emerald text-black font-black uppercase tracking-[0.2em] text-xs clip-button hover:bg-white transition-all shadow-[0_0_30px_rgba(134,255,0,0.3)]">Join & Earn Today</button>
+               <button className="h-14 px-12 bg-white/5 border border-white/10 text-white font-black uppercase tracking-[0.2em] text-xs clip-button hover:bg-white/10 transition-all">Investment Guide</button>
+            </div>
+         </div>
+         <motion.div animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full border border-meta-emerald/10 border-dashed" />
+         <motion.div animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute -top-32 -right-32 h-96 w-96 rounded-full border border-meta-violet/10 border-dashed" />
+      </div>
+
       {/* Section: Global Network Stats Banner */}
       <TiltCard className="p-10 border-white/[0.06] bg-gradient-to-r from-meta-violet/[0.05] via-transparent to-meta-emerald/[0.05] overflow-hidden relative">
         <div className="absolute inset-0 bg-gradient-to-r from-meta-violet/[0.03] to-meta-emerald/[0.03] pointer-events-none" />
@@ -1703,8 +2187,25 @@ function MiningView() {
 
 // --- Main App ---
 
+const LIVE_ALERT_POOL = [
+  { title: "Cycle Completed",     desc: "Your X3 Level 3 slot just cycled. $80 sent to your wallet.",                icon: RefreshCcw,  color: "text-meta-emerald" },
+  { title: "New Direct Referral", desc: "A new partner joined under your link from Nigeria.",                         icon: Users,       color: "text-meta-violet" },
+  { title: "Spillover Received",  desc: "You received a spillover placement in X4 Level 2 from your upline.",         icon: ArrowUpRight, color: "text-meta-blue" },
+  { title: "Royalty Bonus",       desc: "Monthly NFT royalty of $420 has been credited to your account.",             icon: Crown,       color: "text-meta-gold" },
+  { title: "Level Unlocked",      desc: "X3 Level 4 is now available. Activate for $80 to unlock higher rewards.",    icon: Zap,         color: "text-meta-gold" },
+  { title: "MPS Block Reward",    desc: "Block #1,483 mined. +0.0042 MPS added to your wallet.",                      icon: Pickaxe,     color: "text-meta-emerald" },
+];
+
+type NavId = "dashboard" | "programs" | "network" | "mining" | "assets" | "financials" | "security" | "academy" | "foundation" | "projects" | "roadmap" | "royalty" | "bi" | "leaderboard" | "admin" | "login" | "register" | "home";
+
+interface NavItem {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  id: NavId;
+}
+
 export default function App() {
-  const [activeView, setActiveView] = useState<"dashboard" | "programs" | "network" | "mining" | "assets" | "financials" | "security" | "academy" | "foundation" | "projects" | "roadmap" | "royalty" | "bi" | "leaderboard">("dashboard");
+  const [activeView, setActiveView] = useState<NavId>("dashboard");
   const [region, setRegion] = useState("Global");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -1718,15 +2219,6 @@ export default function App() {
     { id: 3, title: "New Elite Partner",   desc: "Alexander M. has achieved Meta-Elite status in your network.",              time: "4h ago",  icon: Award,       color: "text-meta-violet", fresh: false },
     { id: 4, title: "Market Volatility",   desc: "High traffic detected in UAE region. System load at 84%.",                  time: "12h ago", icon: Activity,    color: "text-red-500",     fresh: false },
   ]);
-
-  const LIVE_ALERT_POOL = [
-    { title: "Cycle Completed",     desc: "Your X3 Level 3 slot just cycled. $80 sent to your wallet.",                icon: RefreshCcw,  color: "text-meta-emerald" },
-    { title: "New Direct Referral", desc: "A new partner joined under your link from Nigeria.",                         icon: Users,       color: "text-meta-violet" },
-    { title: "Spillover Received",  desc: "You received a spillover placement in X4 Level 2 from your upline.",         icon: ArrowUpRight, color: "text-meta-blue" },
-    { title: "Royalty Bonus",       desc: "Monthly NFT royalty of $420 has been credited to your account.",             icon: Crown,       color: "text-meta-gold" },
-    { title: "Level Unlocked",      desc: "X3 Level 4 is now available. Activate for $80 to unlock higher rewards.",    icon: Zap,         color: "text-meta-gold" },
-    { title: "MPS Block Reward",    desc: "Block #1,483 mined. +0.0042 MPS added to your wallet.",                      icon: Pickaxe,     color: "text-meta-emerald" },
-  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -1750,7 +2242,7 @@ export default function App() {
     };
     window.addEventListener("mousemove", moveCursor);
     return () => window.removeEventListener("mousemove", moveCursor);
-  }, []);
+  }, [cursorX, cursorY]);
 
   // Live simulation
   useEffect(() => {
@@ -1810,8 +2302,8 @@ export default function App() {
             { icon: Trophy, label: "Global Leaderboards", id: "leaderboard" },
             { icon: Crown, label: "NFT Royalties", id: "royalty" },
             { icon: Wallet, label: "Global Wallet", id: "financials" },
-          ].map((item, i) => (
-            <button key={`core-${i}`} onClick={() => item.id && setActiveView(item.id as any)}
+          ].map((item: NavItem, i) => (
+            <button key={`core-${i}`} onClick={() => item.id && setActiveView(item.id)}
               className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
                 activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-white hover:bg-white/[0.03]")}>
               {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-meta-emerald/10 to-transparent rounded-2xl border-l-2 border-meta-emerald" />}
@@ -1837,8 +2329,8 @@ export default function App() {
             { icon: HeartHandshake, label: "Foundation", id: "foundation" },
             { icon: FileText, label: "Asset Vault", id: "assets" },
             { icon: ShieldCheck, label: "Security & Audits", id: "security" },
-          ].map((item, i) => (
-            <button key={`eco-${i}`} onClick={() => item.id && setActiveView(item.id as any)}
+          ].map((item: NavItem, i) => (
+            <button key={`eco-${i}`} onClick={() => item.id && setActiveView(item.id)}
               className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
                 activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-white hover:bg-white/[0.03]")}>
               {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-meta-emerald/10 to-transparent rounded-2xl border-l-2 border-meta-emerald" />}
@@ -1851,6 +2343,23 @@ export default function App() {
                 <motion.div initial={{ scaleX: 0 }} whileHover={{ scaleX: 1 }} transition={{ duration: 0.2 }}
                   className="absolute left-0 top-0 bottom-0 w-0.5 bg-meta-emerald/40 origin-top rounded-full" />
               )}
+            </button>
+          ))}
+          
+          <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-8">System Access</div>
+          {[
+            { icon: Shield, label: "Admin Control", id: "admin" },
+            { icon: Bot, label: "Switch to Login", id: "login" },
+          ].map((item: NavItem, i) => (
+            <button key={`sys-${i}`} onClick={() => item.id && setActiveView(item.id)}
+              className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
+                activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-white hover:bg-white/[0.03]")}>
+              {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-transparent rounded-2xl border-l-2 border-red-500" />}
+              <motion.div whileHover={{ scale: 1.2, rotate: 5 }} transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className={cn("relative z-10 shrink-0", activeView === item.id ? "text-red-500" : "text-slate-500 group-hover:text-red-500 transition-colors")}>
+                <item.icon className="h-5 w-5" />
+              </motion.div>
+              <span className="text-sm font-bold relative z-10 whitespace-nowrap">{item.label}</span>
             </button>
           ))}
         </nav>
@@ -1926,6 +2435,11 @@ export default function App() {
                  <button onClick={() => setIsLangModalOpen(!isLangModalOpen)} className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:border-meta-emerald/40 transition-all cursor-none relative group mr-4">
                     <span className="text-[10px] font-black text-white">{currentLang}</span>
                  </button>
+                 <AnimatePresence>
+                   {isLangModalOpen && (
+                     <LanguageModal current={currentLang} onSelect={setCurrentLang} onClose={() => setIsLangModalOpen(false)} />
+                   )}
+                 </AnimatePresence>
               </div>
               <div className="relative">
                  <button onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:border-meta-emerald/40 transition-all cursor-none relative group">
@@ -1940,6 +2454,11 @@ export default function App() {
               <button onClick={() => setIsWalletModalOpen(true)} className="h-12 px-8 bg-gradient-to-r from-meta-violet to-meta-blue text-white font-black text-sm flex items-center gap-2 hover:scale-105 transition-all cursor-none clip-button border-none shadow-[0_10px_30px_rgba(139,92,246,0.3)]">
                  <Wallet className="h-4 w-4" /> Connect Port
               </button>
+              <AnimatePresence>
+                {isWalletModalOpen && (
+                  <WalletConnectModal onClose={() => setIsWalletModalOpen(false)} />
+                )}
+              </AnimatePresence>
            </div>
         </header>
 
@@ -1947,7 +2466,35 @@ export default function App() {
            <AnimatePresence mode="wait">
               {activeView === "dashboard" && (
                 <motion.div key="dashboard-wrap" initial={{ opacity: 0, x: 40, filter: "blur(8px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -40, filter: "blur(8px)" }} transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}>
+                  {/* Hero Section Inject */}
+                  <div className="mb-10 p-12 rounded-[3rem] bg-gradient-to-r from-meta-blue/20 via-transparent to-meta-emerald/10 border border-white/5 relative overflow-hidden group">
+                     <div className="relative z-10 max-w-2xl">
+                        <span className="text-[10px] font-black text-meta-emerald uppercase tracking-[0.4em] mb-4 block">Ecosystem Live v4.2</span>
+                        <h2 className="text-6xl font-black text-white tracking-tighter mb-6 leading-[0.9]">Master the <span className="text-meta-emerald">Matrix.</span> Earn Without <span className="text-meta-blue">Limits.</span></h2>
+                        <p className="text-lg text-slate-400 font-medium mb-8 leading-relaxed">The world's first fully decentralized AI-powered matrix protocol. Join 19k+ members building the future of passive liquidity.</p>
+                        <div className="flex gap-4">
+                           <button onClick={() => setActiveView("programs")} className="h-14 px-10 bg-meta-emerald text-black font-black uppercase tracking-widest text-[10px] clip-button hover:bg-white transition-all shadow-[0_15px_40px_rgba(134,255,0,0.2)]">Start Investing Now</button>
+                           <button onClick={() => setActiveView("mining")} className="h-14 px-10 bg-white/5 border border-white/10 text-white font-black uppercase tracking-widest text-[10px] clip-button hover:bg-white/10 transition-all">Explore Mining</button>
+                        </div>
+                     </div>
+                     <motion.div animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }} transition={{ duration: 20, repeat: Infinity }} className="absolute -top-20 -right-20 h-96 w-96 rounded-full bg-meta-emerald/10 blur-[100px] pointer-events-none" />
+                  </div>
                   <DashboardView liveStats={liveStats} />
+                </motion.div>
+              )}
+              {activeView === "admin" && (
+                <motion.div key="admin-wrap" initial={{ opacity: 0, x: 40, filter: "blur(8px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -40, filter: "blur(8px)" }} transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}>
+                  <AdminPanelView />
+                </motion.div>
+              )}
+              {activeView === "login" && (
+                <motion.div key="login-wrap" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.4 }}>
+                  <LoginView onNavigate={setActiveView} />
+                </motion.div>
+              )}
+              {activeView === "register" && (
+                <motion.div key="register-wrap" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.4 }}>
+                  <RegisterView onNavigate={setActiveView} />
                 </motion.div>
               )}
               {activeView === "programs" && (
