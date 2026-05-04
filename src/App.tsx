@@ -1133,6 +1133,92 @@ function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue:
   );
 }
 
+// --- Mining View ---
+function MiningView() {
+  const [mined, setMined] = useState(8425.10);
+  const [hashrate, setHashrate] = useState(42.8);
+  const [countdown, setCountdown] = useState(765); // seconds
+  const [blockCount, setBlockCount] = useState(1482);
+
+  useEffect(() => {
+    const mineInterval = setInterval(() => {
+      setMined(prev => +(prev + 0.0042).toFixed(4));
+      setHashrate(prev => +(prev + (Math.random() - 0.5) * 0.4).toFixed(1));
+    }, 1200);
+    const countdownInterval = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) { setBlockCount(b => b + 1); return 765; }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => { clearInterval(mineInterval); clearInterval(countdownInterval); };
+  }, []);
+
+  const mins = String(Math.floor(countdown / 60)).padStart(2, "0");
+  const secs = String(countdown % 60).padStart(2, "0");
+
+  const MINING_STATS = [
+    { label: "Blocks Mined",    value: blockCount.toLocaleString(), color: "text-meta-gold" },
+    { label: "Daily Yield",     value: "~8.64 MPS",                 color: "text-meta-emerald" },
+    { label: "MPS Price",       value: "$2.841",                    color: "text-meta-violet" },
+    { label: "Est. Daily USD",  value: "~$24.55",                   color: "text-meta-blue" },
+  ];
+
+  return (
+    <motion.div key="mining" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-10 max-w-[1600px] mx-auto pb-20">
+      <div>
+        <h3 className="text-5xl font-black text-white tracking-tighter mb-2">MPS Coin <span className="text-meta-gold">Mining</span></h3>
+        <p className="text-xl text-slate-500 font-bold">Earn native MPS utility tokens through proof-of-network and smart contract participation.</p>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+        {MINING_STATS.map((s, i) => (
+          <TiltCard key={i} className="p-6 text-center border-white/[0.08]">
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{s.label}</p>
+            <p className={cn("text-2xl font-black tabular-nums", s.color)}>{s.value}</p>
+          </TiltCard>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <TiltCard className="lg:col-span-1 p-10 border-white/[0.08] flex flex-col items-center text-center clip-card">
+          <div className="h-32 w-32 rounded-full bg-meta-gold/10 flex items-center justify-center border-4 border-meta-gold mb-8 relative">
+            <Pickaxe className="h-12 w-12 text-meta-gold" />
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute inset-[-10px] border-t-2 border-r-2 border-meta-gold rounded-full" />
+          </div>
+          <h4 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em] mb-2">Current Hashrate</h4>
+          <p className="text-4xl font-black text-white mb-2 tabular-nums">{hashrate.toFixed(1)} <span className="text-xl text-meta-gold">GH/s</span></p>
+          <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-8">Fluctuating live</p>
+          <button className="w-full h-14 bg-meta-gold text-black font-black uppercase tracking-widest text-xs clip-button hover:bg-white transition-colors">Boost Mining Power</button>
+        </TiltCard>
+
+        <TiltCard className="lg:col-span-2 p-10 border-white/[0.08] clip-card flex flex-col justify-between">
+          <div>
+            <h4 className="text-2xl font-black text-white mb-2">Total MPS Mined</h4>
+            <p className="text-sm font-bold text-slate-400">Tokens auto-transferred to your BEP20 wallet every block.</p>
+          </div>
+          <motion.p
+            key={Math.floor(mined)}
+            initial={{ opacity: 0.6, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-7xl font-black text-meta-emerald tabular-nums drop-shadow-2xl my-10"
+          >
+            {mined.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 })} <span className="text-3xl text-white opacity-50">MPS</span>
+          </motion.p>
+          <div className="flex items-center justify-between border-t border-white/[0.05] pt-6">
+            <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-slate-500">
+              <Activity className="h-4 w-4 text-meta-emerald" />
+              Next block reward in
+              <span className="text-meta-gold text-sm font-black tabular-nums">{mins}:{secs}</span>
+            </div>
+            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Block #{blockCount.toLocaleString()}</span>
+          </div>
+        </TiltCard>
+      </div>
+    </motion.div>
+  );
+}
+
 // --- Main App ---
 
 export default function App() {
@@ -1291,39 +1377,7 @@ export default function App() {
 
               {activeView === "network" && <NetworkView />}
 
-              {activeView === "mining" && (
-                <motion.div key="mining" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
-                   <div className="flex items-center justify-between gap-10 flex-wrap mb-4">
-                      <div className="min-w-0">
-                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">MPS Coin <span className="text-meta-gold">Mining</span></h3>
-                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Earn native MPS utility tokens through proof-of-network and smart contract participation.</p>
-                      </div>
-                   </div>
-                   
-                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                      <TiltCard className="lg:col-span-1 p-10 border-white/[0.08] flex flex-col items-center text-center clip-card">
-                         <div className="h-32 w-32 rounded-full bg-meta-gold/10 flex items-center justify-center border-4 border-meta-gold mb-8 relative">
-                           <Pickaxe className="h-12 w-12 text-meta-gold" />
-                           <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute inset-[-10px] border-t-2 border-r-2 border-meta-gold rounded-full" />
-                         </div>
-                         <h4 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.3em] mb-2">Current Hashrate</h4>
-                         <p className="text-4xl font-black text-white mb-8">42.8 <span className="text-xl text-meta-gold">GH/s</span></p>
-                         <button className="w-full h-14 bg-meta-gold text-black font-black uppercase tracking-widest text-xs clip-button hover:bg-white transition-colors">Boost Mining Power</button>
-                      </TiltCard>
-
-                      <TiltCard className="lg:col-span-2 p-10 border-white/[0.08] clip-card flex flex-col justify-between">
-                         <div>
-                            <h4 className="text-2xl font-black text-white mb-2">Total MPS Mined</h4>
-                            <p className="text-sm font-bold text-slate-400">Tokens are automatically transferred to your connected BEP20 wallet.</p>
-                         </div>
-                         <p className="text-7xl font-black text-meta-emerald tabular-nums drop-shadow-2xl my-10">8,425.10 <span className="text-3xl text-white opacity-50">MPS</span></p>
-                         <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500 border-t border-white/[0.05] pt-6">
-                            <Activity className="h-4 w-4" /> Next block reward in 12m 45s
-                         </div>
-                      </TiltCard>
-                   </div>
-                </motion.div>
-              )}
+              {activeView === "mining" && <MiningView />}
 
 
               {activeView === "assets" && (
