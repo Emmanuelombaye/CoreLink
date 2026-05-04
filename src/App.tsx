@@ -110,6 +110,21 @@ const TICKER_DATA = [
 
 // --- Subcomponents ---
 
+function useCountUp(target: number, duration = 1500) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { setValue(target); clearInterval(timer); }
+      else setValue(Math.floor(start));
+    }, 16);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+  return value;
+}
+
 function TiltCard({ children, className, glowColor = "rgba(134, 255, 0, 0.15)" }: { children: React.ReactNode, className?: string, glowColor?: string }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -882,6 +897,40 @@ function ProgramsView() {
   );
 }
 
+// --- Stat Card with count-up ---
+function StatCard({ stat, index }: { stat: { label: string; value: string; icon: React.ElementType; color: string; trend: string; glow: string; sub: string }; index: number }) {
+  const raw = parseFloat(String(stat.value).replace(/[$k,%,]/g, ""));
+  const counted = useCountUp(isNaN(raw) ? 0 : raw, 1200 + index * 200);
+  const display = stat.value.includes("k") ? `$${counted.toFixed(2)}k`
+    : stat.value.includes("%") ? `${counted}%`
+    : stat.value.includes(",") ? counted.toLocaleString()
+    : stat.value;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.23, 1, 0.32, 1] }}
+    >
+      <TiltCard glowColor={stat.glow} className="p-8 group cursor-none overflow-hidden h-full">
+        <div className="flex justify-between items-start mb-6 relative z-10">
+          <div className={cn("p-3 rounded-2xl bg-white/[0.04] transition-transform duration-500 group-hover:scale-110", stat.color)}>
+            <stat.icon className="h-5 w-5" />
+          </div>
+          <span className="text-[10px] font-black text-meta-emerald px-2 py-1 rounded-lg bg-meta-emerald/5 border border-meta-emerald/10">{stat.trend}</span>
+        </div>
+        <div className="relative z-10">
+          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">{stat.label}</p>
+          <p className="text-4xl font-black tabular-nums tracking-tighter">{display}</p>
+          <p className="text-[11px] text-slate-600 font-bold mt-2">{stat.sub}</p>
+        </div>
+        <div className="absolute -bottom-8 -right-8 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-1000">
+          <stat.icon className="h-32 w-32" />
+        </div>
+      </TiltCard>
+    </motion.div>
+  );
+}
+
 // --- Dashboard View ---
 function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue: number; conversion: number; systemLoad: number } }) {
   const [feed, setFeed] = useState(SIGNAL_FEED_POOL.slice(0, 6));
@@ -920,22 +969,7 @@ function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue:
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
         {STATS.map((stat, i) => (
-          <TiltCard key={i} glowColor={stat.glow} className="p-8 group cursor-none overflow-hidden">
-            <div className="flex justify-between items-start mb-6 relative z-10">
-              <div className={cn("p-3 rounded-2xl bg-white/[0.04] transition-transform duration-500 group-hover:scale-110", stat.color)}>
-                <stat.icon className="h-5 w-5" />
-              </div>
-              <span className="text-[10px] font-black text-meta-emerald px-2 py-1 rounded-lg bg-meta-emerald/5 border border-meta-emerald/10">{stat.trend}</span>
-            </div>
-            <div className="relative z-10">
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">{stat.label}</p>
-              <p className="text-4xl font-black tabular-nums tracking-tighter">{stat.value}</p>
-              <p className="text-[11px] text-slate-600 font-bold mt-2">{stat.sub}</p>
-            </div>
-            <div className="absolute -bottom-8 -right-8 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-1000">
-              <stat.icon className="h-32 w-32" />
-            </div>
-          </TiltCard>
+          <StatCard key={i} stat={stat} index={i} />
         ))}
       </div>
 
@@ -1213,6 +1247,21 @@ function AIChat() {
 }
 
 // --- Mining View ---
+function MiningStatCard({ stat, index }: { stat: { label: string; value: string; color: string }; index: number }) {
+  const raw = parseFloat(stat.value.replace(/[^0-9.]/g, ""));
+  const counted = useCountUp(isNaN(raw) ? 0 : raw, 1000 + index * 150);
+  const display = stat.label === "Blocks Mined" ? counted.toLocaleString()
+    : stat.value;
+  return (
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1, duration: 0.5 }}>
+      <TiltCard className="p-6 text-center border-white/[0.08]">
+        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{stat.label}</p>
+        <p className={cn("text-2xl font-black tabular-nums", stat.color)}>{display}</p>
+      </TiltCard>
+    </motion.div>
+  );
+}
+
 function MiningView() {
   const [mined, setMined] = useState(8425.10);
   const [hashrate, setHashrate] = useState(42.8);
@@ -1252,10 +1301,7 @@ function MiningView() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
         {MINING_STATS.map((s, i) => (
-          <TiltCard key={i} className="p-6 text-center border-white/[0.08]">
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{s.label}</p>
-            <p className={cn("text-2xl font-black tabular-nums", s.color)}>{s.value}</p>
-          </TiltCard>
+          <MiningStatCard key={i} stat={s} index={i} />
         ))}
       </div>
 
