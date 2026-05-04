@@ -915,7 +915,7 @@ function PayoutCountdown() {
       </div>
       <p className="text-[11px] font-bold text-slate-500">Estimated payout: <span className="text-meta-gold font-black">$1,240.00</span></p>
       <div className="w-full h-1.5 bg-white/[0.04] rounded-full overflow-hidden">
-        <motion.div animate={{ width: `${((23 - time.h) / 23) * 100}%` }} className="h-full bg-meta-gold rounded-full shadow-[0_0_8px_rgba(255,193,7,0.6)]" />
+        <motion.div animate={{ width: `${((4*3600-(time.h*3600+time.m*60+time.s))/(4*3600))*100}%` }} className="h-full bg-meta-gold rounded-full shadow-[0_0_8px_rgba(255,193,7,0.6)]" />
       </div>
     </TiltCard>
   );
