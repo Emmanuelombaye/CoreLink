@@ -66,15 +66,36 @@ const SIGNAL_FEED_POOL: { user: string; country: string; flag: string; action: s
   { user: "0x5C9...B14", country: "Canada", flag: "🇨🇦", action: "Upgraded to Level 9", amount: "+$2,560", color: "text-meta-gold" },
 ];
 
-const REVENUE_DATA = [
-  { name: "Jan", value: 4200, growth: 1200 },
-  { name: "Feb", value: 5100, growth: 1500 },
-  { name: "Mar", value: 4800, growth: 1400 },
-  { name: "Apr", value: 6200, growth: 1900 },
-  { name: "May", value: 5800, growth: 1700 },
-  { name: "Jun", value: 7500, growth: 2200 },
-  { name: "Jul", value: 8900, growth: 2600 },
-];
+const REVENUE_DATA: Record<string, { name: string; value: number; growth: number }[]> = {
+  "2024": [
+    { name: "Jan", value: 4200, growth: 1200 },
+    { name: "Feb", value: 5100, growth: 1500 },
+    { name: "Mar", value: 4800, growth: 1400 },
+    { name: "Apr", value: 6200, growth: 1900 },
+    { name: "May", value: 5800, growth: 1700 },
+    { name: "Jun", value: 7500, growth: 2200 },
+    { name: "Jul", value: 8900, growth: 2600 },
+    { name: "Aug", value: 9400, growth: 2800 },
+    { name: "Sep", value: 10200, growth: 3100 },
+    { name: "Oct", value: 11800, growth: 3500 },
+    { name: "Nov", value: 13400, growth: 4000 },
+    { name: "Dec", value: 15900, growth: 4800 },
+  ],
+  "2023": [
+    { name: "Jan", value: 1800, growth: 500 },
+    { name: "Feb", value: 2100, growth: 620 },
+    { name: "Mar", value: 1950, growth: 580 },
+    { name: "Apr", value: 2600, growth: 780 },
+    { name: "May", value: 2400, growth: 710 },
+    { name: "Jun", value: 3100, growth: 920 },
+    { name: "Jul", value: 3700, growth: 1100 },
+    { name: "Aug", value: 3900, growth: 1150 },
+    { name: "Sep", value: 4200, growth: 1250 },
+    { name: "Oct", value: 4800, growth: 1420 },
+    { name: "Nov", value: 5400, growth: 1600 },
+    { name: "Dec", value: 6100, growth: 1850 },
+  ],
+};
 
 const TICKER_DATA = [
   { pair: "CORE/USD", price: "124.21", change: "+12.4%", trend: "up" },
@@ -862,6 +883,7 @@ function ProgramsView() {
 function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue: number; conversion: number; systemLoad: number } }) {
   const [feed, setFeed] = useState(SIGNAL_FEED_POOL.slice(0, 6));
   const [cycleCount, setCycleCount] = useState({ x3: 1482, x4: 847, pool: 3291 });
+  const [chartYear, setChartYear] = useState<"2023" | "2024">("2024");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -923,9 +945,13 @@ function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue:
               <p className="text-sm text-slate-500 font-bold">Multi-level attribution across global smart contracts</p>
             </div>
             <div className="flex gap-3 shrink-0">
-              <button className="h-10 px-5 rounded-2xl bg-meta-emerald text-black text-[10px] font-black uppercase tracking-widest cursor-none hover:scale-105 transition-transform flex items-center gap-2">
-                <Bot className="h-3.5 w-3.5" /> AI Forecast
-              </button>
+              {(["2023", "2024"] as const).map(y => (
+                <button key={y} onClick={() => setChartYear(y)}
+                  className={cn("h-10 px-5 rounded-2xl text-[10px] font-black uppercase tracking-widest cursor-none transition-all",
+                    chartYear === y ? "bg-meta-emerald text-black" : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white")}>
+                  {y}
+                </button>
+              ))}
               <button className="h-10 px-5 rounded-2xl bg-white/5 text-slate-300 text-[10px] font-black uppercase tracking-widest cursor-none hover:bg-white/10 transition-colors flex items-center gap-2">
                 <DownloadCloud className="h-3.5 w-3.5" /> Export
               </button>
@@ -933,7 +959,7 @@ function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue:
           </div>
           <div className="flex-1 w-full min-h-[300px] relative z-10">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={REVENUE_DATA} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <AreaChart data={REVENUE_DATA[chartYear]} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#86FF00" stopOpacity={0.4}/>
