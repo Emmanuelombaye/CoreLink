@@ -1706,23 +1706,63 @@ export default function App() {
                    <h3 className="text-5xl font-black text-white tracking-tighter mb-12">Global <span className="text-meta-violet">Roadmap</span></h3>
                    <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-white/10 before:to-transparent">
                       {[
-                        { phase: "Phase 1: Genesis", desc: "Launch of the core protocol, partner matrix, and initial intelligence hub features.", status: "Completed" },
-                        { phase: "Phase 2: Expansion", desc: "Deployment of the Royalty Program, global node infrastructure, and M-USD.", status: "Completed" },
-                        { phase: "Phase 3: Metaverse", desc: "Integration of 3D gaming NFTs and fully immersive academy experiences.", status: "In Progress" },
-                        { phase: "Phase 4: Independence", desc: "Launch of the native CoreLink Blockchain and fully decentralized governance.", status: "Upcoming" },
+                        {
+                          phase: "Phase 1: Genesis",
+                          date: "Q1 2023",
+                          status: "Completed",
+                          desc: "Launch of the core protocol, partner matrix, and initial intelligence hub features.",
+                          milestones: ["Smart contract deployment on BSC", "X3 & X4 matrix launch", "1,000 founding members onboarded", "CertiK audit passed"]
+                        },
+                        {
+                          phase: "Phase 2: Expansion",
+                          date: "Q3 2023",
+                          status: "Completed",
+                          desc: "Deployment of the Royalty Program, global node infrastructure, and C-USD stablecoin.",
+                          milestones: ["NFT Royalty Program live", "C-USD stablecoin launched", "Mobile Money integration (M-Pesa)", "10,000 active members reached"]
+                        },
+                        {
+                          phase: "Phase 3: Metaverse",
+                          date: "Q2 2024",
+                          status: "In Progress",
+                          desc: "Integration of 3D gaming NFTs, MPS coin mining, and fully immersive academy experiences.",
+                          milestones: ["MPS Coin mining engine live", "Gaming NFT beta launch", "Meta Academy v1 released", "50,000 member target"]
+                        },
+                        {
+                          phase: "Phase 4: Independence",
+                          date: "Q1 2025",
+                          status: "Upcoming",
+                          desc: "Launch of the native CoreLink Blockchain, DAO governance, and fully decentralized ecosystem.",
+                          milestones: ["CoreLink Layer-1 mainnet", "DAO governance portal", "Blastaroo Lottery launch", "100,000 member target"]
+                        },
                       ].map((item, i) => (
-                        <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#000] bg-white/[0.05] group-hover:bg-meta-violet text-slate-500 group-hover:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 transition-colors z-10">
+                        <div key={i} className="relative flex items-start justify-between md:justify-normal md:odd:flex-row-reverse group">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#000] bg-white/[0.05] group-hover:bg-meta-violet text-slate-500 group-hover:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 transition-colors z-10 mt-1">
                             <Map className="h-4 w-4" />
                           </div>
                           <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-[2rem] bg-white/[0.02] border border-white/[0.05] group-hover:border-meta-violet/30 transition-colors clip-card">
-                            <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
                               <h4 className="font-black text-white text-xl">{item.phase}</h4>
-                              <span className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full", item.status === 'Completed' ? "bg-meta-emerald/10 text-meta-emerald" : item.status === 'In Progress' ? "bg-meta-gold/10 text-meta-gold" : "bg-white/5 text-slate-500")}>
-                                {item.status}
-                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{item.date}</span>
+                                <span className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full",
+                                  item.status === "Completed" ? "bg-meta-emerald/10 text-meta-emerald" :
+                                  item.status === "In Progress" ? "bg-meta-gold/10 text-meta-gold" :
+                                  "bg-white/5 text-slate-500")}>
+                                  {item.status}
+                                </span>
+                              </div>
                             </div>
-                            <p className="text-sm text-slate-400 font-medium leading-relaxed">{item.desc}</p>
+                            <p className="text-sm text-slate-400 font-medium leading-relaxed mb-4">{item.desc}</p>
+                            <ul className="space-y-1.5">
+                              {item.milestones.map((m, j) => (
+                                <li key={j} className="flex items-center gap-2 text-[11px] font-bold text-slate-500">
+                                  <span className={cn("h-1.5 w-1.5 rounded-full shrink-0",
+                                    item.status === "Completed" ? "bg-meta-emerald" :
+                                    item.status === "In Progress" ? "bg-meta-gold" : "bg-slate-600")} />
+                                  {m}
+                                </li>
+                              ))}
+                            </ul>
                           </div>
                         </div>
                       ))}
