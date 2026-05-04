@@ -98,10 +98,14 @@ const REVENUE_DATA: Record<string, { name: string; value: number; growth: number
 };
 
 const TICKER_DATA = [
-  { pair: "CORE/USD", price: "124.21", change: "+12.4%", trend: "up" },
-  { pair: "LNK/ETH", price: "0.842", change: "-2.1%", trend: "down" },
-  { pair: "NET/SOL", price: "42.10", change: "+5.7%", trend: "up" },
-  { pair: "VAULT/BTC", price: "0.00042", change: "+8.9%", trend: "up" },
+  { pair: "CORE/USD", price: "124.21", change: "+12.4%", trend: "up",   vol: "$4.2M" },
+  { pair: "LNK/ETH",  price: "0.842",  change: "-2.1%",  trend: "down", vol: "$1.8M" },
+  { pair: "NET/SOL",  price: "42.10",  change: "+5.7%",  trend: "up",   vol: "$920K" },
+  { pair: "VAULT/BTC",price: "0.00042",change: "+8.9%",  trend: "up",   vol: "$3.1M" },
+  { pair: "MPS/USDT", price: "2.841",  change: "+18.2%", trend: "up",   vol: "$6.7M" },
+  { pair: "CUSD/USD", price: "1.001",  change: "+0.1%",  trend: "up",   vol: "$2.4M" },
+  { pair: "ELITE/BNB",price: "0.0184", change: "-1.3%",  trend: "down", vol: "$540K" },
+  { pair: "XPOOL/ETH",price: "0.291",  change: "+7.6%",  trend: "up",   vol: "$1.1M" },
 ];
 
 // --- Subcomponents ---
@@ -144,12 +148,11 @@ function MarqueeTicker() {
     <div className="h-10 border-b border-white/5 bg-black/80 backdrop-blur-md overflow-hidden flex items-center z-50">
       <div className="flex animate-[marquee_40s_linear_infinite] whitespace-nowrap gap-16 px-12">
         {[...TICKER_DATA, ...TICKER_DATA, ...TICKER_DATA].map((item, i) => (
-          <div key={i} className="flex items-center gap-4">
+          <div key={i} className="flex items-center gap-3">
              <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">{item.pair}</span>
              <span className="text-xs font-bold text-white tabular-nums">${item.price}</span>
-             <span className={cn("text-[10px] font-black", item.trend === 'up' ? "text-meta-emerald" : "text-red-500")}>
-                {item.change}
-             </span>
+             <span className={cn("text-[10px] font-black", item.trend === 'up' ? "text-meta-emerald" : "text-red-500")}>{item.change}</span>
+             <span className="text-[10px] font-bold text-slate-700">VOL {item.vol}</span>
           </div>
         ))}
       </div>
