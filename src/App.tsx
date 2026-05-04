@@ -174,6 +174,18 @@ function MarqueeTicker() {
   );
 }
 
+// --- Achievement Badges Data ---
+const BADGES = [
+  { id: 1, name: "Genesis Member",    desc: "Joined in the first 1,000",          icon: "🏆", earned: true,  color: "border-meta-gold/40 bg-meta-gold/[0.05]" },
+  { id: 2, name: "First Cycle",       desc: "Completed your first X3 cycle",      icon: "⚡", earned: true,  color: "border-meta-emerald/40 bg-meta-emerald/[0.05]" },
+  { id: 3, name: "Team Builder",      desc: "Recruited 10+ direct partners",      icon: "👥", earned: true,  color: "border-meta-violet/40 bg-meta-violet/[0.05]" },
+  { id: 4, name: "Trillionaire",      desc: "Reached Trillionaire status",        icon: "💎", earned: true,  color: "border-meta-violet/40 bg-meta-violet/[0.05]" },
+  { id: 5, name: "Global Rank #3",    desc: "Top 3 earner worldwide",             icon: "🥉", earned: true,  color: "border-meta-gold/40 bg-meta-gold/[0.05]" },
+  { id: 6, name: "Century Cycles",    desc: "100+ total matrix cycles",           icon: "🔄", earned: true,  color: "border-meta-blue/40 bg-meta-blue/[0.05]" },
+  { id: 7, name: "NFT Royalist",      desc: "Earned NFT royalties 3 months straight", icon: "👑", earned: false, color: "border-white/10 bg-white/[0.02]" },
+  { id: 8, name: "Diamond Miner",     desc: "Mine 10,000+ MPS tokens",            icon: "⛏️", earned: false, color: "border-white/10 bg-white/[0.02]" },
+];
+
 // --- Leaderboard View ---
 const LEADERBOARD_DATA = [
   { rank: 1,  name: "Alexander M.",  wallet: "0xA1B...F92", flag: "🇦🇪", country: "UAE",          level: "Trillionaire", earned: 284500, cycles: 142, referrals: 312, change: 12400,  up: true  },
@@ -897,6 +909,45 @@ function ProgramsView() {
   );
 }
 
+// --- Payout Countdown ---
+function PayoutCountdown() {
+  const [time, setTime] = useState({ h: 4, m: 22, s: 17 });
+  useEffect(() => {
+    const t = setInterval(() => {
+      setTime(prev => {
+        let { h, m, s } = prev;
+        s--;
+        if (s < 0) { s = 59; m--; }
+        if (m < 0) { m = 59; h--; }
+        if (h < 0) { h = 23; m = 59; s = 59; }
+        return { h, m, s };
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, []);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return (
+    <TiltCard className="p-8 border-meta-gold/20 bg-meta-gold/[0.03] flex flex-col items-center justify-center text-center gap-4">
+      <p className="text-[10px] font-black text-meta-gold uppercase tracking-widest">Next Auto-Payout In</p>
+      <div className="flex items-center gap-3">
+        {[{ v: pad(time.h), l: "HRS" }, { v: pad(time.m), l: "MIN" }, { v: pad(time.s), l: "SEC" }].map((t, i) => (
+          <div key={i} className="flex flex-col items-center">
+            <motion.div key={t.v} initial={{ y: -8, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+              className="text-5xl font-black text-white tabular-nums w-16 h-16 rounded-2xl bg-white/[0.05] border border-meta-gold/20 flex items-center justify-center">
+              {t.v}
+            </motion.div>
+            <span className="text-[8px] font-black text-meta-gold uppercase tracking-widest mt-1">{t.l}</span>
+          </div>
+        ))}
+      </div>
+      <p className="text-[11px] font-bold text-slate-500">Estimated payout: <span className="text-meta-gold font-black">$1,240.00</span></p>
+      <div className="w-full h-1.5 bg-white/[0.04] rounded-full overflow-hidden">
+        <motion.div animate={{ width: `${((23 - time.h) / 23) * 100}%` }} className="h-full bg-meta-gold rounded-full shadow-[0_0_8px_rgba(255,193,7,0.6)]" />
+      </div>
+    </TiltCard>
+  );
+}
+
 // --- Stat Card with count-up ---
 function StatCard({ stat, index }: { stat: { label: string; value: string; icon: React.ElementType; color: string; trend: string; glow: string; sub: string }; index: number }) {
   const raw = parseFloat(String(stat.value).replace(/[$k,%,]/g, ""));
@@ -1287,6 +1338,88 @@ function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue:
           </div>
         </div>
       </TiltCard>
+
+      {/* Section: Social Proof + Payout Countdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Social Proof */}
+        <TiltCard className="lg:col-span-2 p-8 border-white/[0.08] bg-gradient-to-r from-meta-emerald/[0.03] to-transparent">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
+            <h3 className="text-lg font-black text-white">Live <span className="text-meta-emerald">Social Proof</span></h3>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { label: "Joined last 24h",   value: "284",    icon: Users,       color: "text-meta-emerald", bg: "bg-meta-emerald/10" },
+              { label: "Cycles last 24h",   value: "1,482",  icon: RefreshCcw,  color: "text-meta-violet", bg: "bg-meta-violet/10" },
+              { label: "Paid out today",    value: "$42.8k", icon: DollarSign,  color: "text-meta-gold",   bg: "bg-meta-gold/10" },
+              { label: "New countries",     value: "7",      icon: Map,         color: "text-meta-blue",   bg: "bg-meta-blue/10" },
+            ].map((s, i) => (
+              <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.08 }}
+                className={`p-5 rounded-2xl ${s.bg} border border-white/[0.06] text-center`}>
+                <s.icon className={`h-6 w-6 mx-auto mb-2 ${s.color}`} />
+                <p className={`text-2xl font-black tabular-nums ${s.color}`}>{s.value}</p>
+                <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mt-1">{s.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </TiltCard>
+
+        {/* Payout Countdown */}
+        <PayoutCountdown />
+      </div>
+
+      {/* Section: APY Calculator + Achievement Badges */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        {/* APY / ROI Calculator */}
+        <TiltCard className="p-8 border-white/[0.08]">
+          <h3 className="text-lg font-black text-white mb-6">Earnings <span className="text-meta-gold">Calculator</span></h3>
+          <div className="space-y-4">
+            {[
+              { label: "If you activate X3 Level 4", cost: "$80",   reward: "$160",   cycles: 51,  roi: "6,320%" },
+              { label: "If you activate X3 Level 5", cost: "$160",  reward: "$320",   cycles: 33,  roi: "6,500%" },
+              { label: "If you activate X4 Level 4", cost: "$80",   reward: "$160",   cycles: 29,  roi: "5,700%" },
+            ].map((c, i) => (
+              <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }}
+                className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-meta-gold/30 transition-colors cursor-none group">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs font-black text-white">{c.label}</p>
+                  <span className="text-[9px] font-black text-meta-gold bg-meta-gold/10 px-2 py-0.5 rounded-full">{c.roi} ROI</span>
+                </div>
+                <div className="flex gap-6 text-[10px] font-bold text-slate-500">
+                  <span>Cost: <span className="text-white font-black">{c.cost}</span></span>
+                  <span>Per Cycle: <span className="text-meta-gold font-black">{c.reward}</span></span>
+                  <span>Est. Cycles: <span className="text-meta-emerald font-black">{c.cycles}</span></span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <button className="w-full mt-6 h-12 bg-meta-gold/10 border border-meta-gold/30 text-meta-gold font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-meta-gold hover:text-black transition-colors cursor-none flex items-center justify-center gap-2">
+            <Zap className="h-4 w-4" /> Activate Next Level
+          </button>
+        </TiltCard>
+
+        {/* Achievement Badges */}
+        <TiltCard className="p-8 border-white/[0.08]">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-black text-white">Achievement <span className="text-meta-violet">Badges</span></h3>
+            <span className="text-[10px] font-black text-meta-emerald bg-meta-emerald/10 px-3 py-1 rounded-full">{BADGES.filter(b => b.earned).length}/{BADGES.length} Earned</span>
+          </div>
+          <div className="grid grid-cols-4 gap-3">
+            {BADGES.map((badge, i) => (
+              <motion.div key={badge.id} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.06 }}
+                className={`p-3 rounded-2xl border ${badge.color} flex flex-col items-center gap-1.5 cursor-none group relative`}
+                style={{ opacity: badge.earned ? 1 : 0.4 }}>
+                <span className="text-2xl">{badge.icon}</span>
+                <p className="text-[8px] font-black text-white text-center leading-tight">{badge.name}</p>
+                {!badge.earned && <div className="absolute inset-0 rounded-2xl bg-black/40 flex items-center justify-center">
+                  <span className="text-[8px] font-black text-slate-500 uppercase">Locked</span>
+                </div>}
+              </motion.div>
+            ))}
+          </div>
+        </TiltCard>
+      </div>
     </motion.div>
   );
 }
