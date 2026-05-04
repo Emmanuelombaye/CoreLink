@@ -1684,17 +1684,57 @@ export default function App() {
               )}
 
               {activeView === "foundation" && (
-                <motion.div key="foundation" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1200px] mx-auto pb-20 text-center">
-                   <h3 className="text-5xl font-black text-white tracking-tighter mb-8">CoreLink <span className="text-pink-500">Foundation</span></h3>
-                   <TiltCard className="p-16 border-pink-500/20 bg-gradient-to-br from-pink-500/[0.02] to-black min-h-[500px] flex flex-col items-center justify-center clip-card">
-                      <HeartHandshake className="h-24 w-24 text-pink-500 mb-8 animate-pulse" />
-                      <h4 className="text-3xl font-black text-white mb-6 max-w-2xl">Empowering Global Communities Through Decentralized Technology</h4>
-                      <p className="text-lg text-slate-400 font-medium leading-relaxed max-w-3xl mb-12">
-                         The Foundation is our commitment to giving back. We allocate a percentage of all ecosystem royalties to fund education, clean water, and tech access in developing nations.
-                      </p>
-                      <button className="h-14 px-10 bg-pink-500 text-white font-black text-xs uppercase tracking-widest clip-button hover:bg-pink-400 transition-colors">
-                         View Impact Report
-                      </button>
+                <motion.div key="foundation" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1200px] mx-auto pb-20">
+                   <h3 className="text-5xl font-black text-white tracking-tighter mb-2">CoreLink <span className="text-pink-500">Foundation</span></h3>
+                   <p className="text-xl text-slate-500 font-bold mb-8">2% of all ecosystem royalties fund real-world impact in developing nations.</p>
+
+                   {/* Impact Stats */}
+                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                      {[
+                        { label: "Total Donated",    value: "$2.4M",  color: "text-pink-500",      icon: HeartHandshake },
+                        { label: "Beneficiaries",    value: "12,840", color: "text-meta-emerald",  icon: Users },
+                        { label: "Countries Reached",value: "18",     color: "text-meta-gold",    icon: Map },
+                        { label: "Active Projects",  value: "34",     color: "text-meta-violet",  icon: Component },
+                      ].map((s, i) => (
+                        <TiltCard key={i} className="p-6 text-center border-white/[0.08]">
+                          <s.icon className={cn("h-8 w-8 mx-auto mb-3", s.color)} />
+                          <p className={cn("text-3xl font-black tabular-nums", s.color)}>{s.value}</p>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">{s.label}</p>
+                        </TiltCard>
+                      ))}
+                   </div>
+
+                   {/* Mission Card */}
+                   <TiltCard className="p-12 border-pink-500/20 bg-gradient-to-br from-pink-500/[0.03] to-black clip-card">
+                      <div className="flex items-start gap-8 flex-wrap">
+                        <HeartHandshake className="h-16 w-16 text-pink-500 shrink-0 animate-pulse" />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-3xl font-black text-white mb-4">Empowering Global Communities Through Decentralized Technology</h4>
+                          <p className="text-base text-slate-400 font-medium leading-relaxed mb-8">
+                            The Foundation allocates 2% of all ecosystem royalties to fund education, clean water, and tech access in developing nations. Every cycle completed on CoreLink directly contributes to a better world.
+                          </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                            {[
+                              { area: "Education",    detail: "4,200 students funded across Nigeria, Ghana & Kenya",      pct: 45 },
+                              { area: "Clean Water",  detail: "38 boreholes drilled across rural East Africa",             pct: 30 },
+                              { area: "Tech Access",  detail: "6,100 devices distributed to underserved communities",      pct: 25 },
+                            ].map((p, i) => (
+                              <div key={i} className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] space-y-2">
+                                <p className="text-xs font-black text-white uppercase tracking-widest">{p.area}</p>
+                                <p className="text-[11px] text-slate-500 font-medium">{p.detail}</p>
+                                <div className="h-1.5 w-full bg-white/[0.04] rounded-full overflow-hidden">
+                                  <motion.div initial={{ width: 0 }} animate={{ width: `${p.pct}%` }} transition={{ duration: 1.2, delay: i * 0.15, ease: "easeOut" }}
+                                    className="h-full rounded-full bg-pink-500" />
+                                </div>
+                                <p className="text-[10px] font-black text-pink-500">{p.pct}% of fund</p>
+                              </div>
+                            ))}
+                          </div>
+                          <button className="h-14 px-10 bg-pink-500 text-white font-black text-xs uppercase tracking-widest clip-button hover:bg-pink-400 transition-colors">
+                            View Full Impact Report
+                          </button>
+                        </div>
+                      </div>
                    </TiltCard>
                 </motion.div>
               )}
