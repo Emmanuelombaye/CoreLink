@@ -40,7 +40,7 @@ import {
   Eye,
   QrCode
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "./lib/utils";
 import { 
   AreaChart, 
@@ -1133,6 +1133,85 @@ function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue:
   );
 }
 
+// --- AI Chat ---
+const AI_RESPONSES: Record<string, string> = {
+  default:    "I'm analyzing your network data. Your X4 Level 2 pool is 72% full — one more referral could trigger a cycle.",
+  earn:       "Your projected earnings for the next 7 days are $1,450 based on current cycle velocity and team activity.",
+  referral:   "Your top referral region is UAE. Focus outreach there — X4 pools are filling 42% faster than global average.",
+  cycle:      "You have 3 levels close to cycling: X3 L3 (1 slot left), X4 L2 (2 slots left). Prioritize direct invites now.",
+  mining:     "Your current hashrate is 42.8 GH/s. Boosting to 100 GH/s would increase daily MPS yield by ~120%.",
+  security:   "All systems nominal. 0 anomalies detected in the last 24h. 2FA is active and your last login was verified.",
+  withdraw:   "Your available balance is $4,280. Fastest withdrawal is via MetaMask BEP20 — typically confirms in under 2 minutes.",
+  level:      "Activating X3 Level 4 ($80) would unlock a $160 cycle reward. Based on your team size, ROI is expected within 48h.",
+};
+
+function getAIResponse(input: string): string {
+  const q = input.toLowerCase();
+  if (q.includes("earn") || q.includes("money") || q.includes("income")) return AI_RESPONSES.earn;
+  if (q.includes("referral") || q.includes("recruit") || q.includes("partner")) return AI_RESPONSES.referral;
+  if (q.includes("cycle") || q.includes("slot") || q.includes("matrix")) return AI_RESPONSES.cycle;
+  if (q.includes("mine") || q.includes("mps") || q.includes("hash")) return AI_RESPONSES.mining;
+  if (q.includes("security") || q.includes("safe") || q.includes("hack")) return AI_RESPONSES.security;
+  if (q.includes("withdraw") || q.includes("wallet") || q.includes("pay")) return AI_RESPONSES.withdraw;
+  if (q.includes("level") || q.includes("activate") || q.includes("unlock")) return AI_RESPONSES.level;
+  return AI_RESPONSES.default;
+}
+
+function AIChat() {
+  const [messages, setMessages] = useState([
+    { from: "ai", text: "Hello Emmanuel! Your matrix auto-pool is 94% full. I suggest following up with your latest direct referral to trigger the cycle." },
+  ]);
+  const [input, setInput] = useState("");
+  const [typing, setTyping] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+
+  const send = () => {
+    const text = input.trim();
+    if (!text) return;
+    setMessages(prev => [...prev, { from: "user", text }]);
+    setInput("");
+    setTyping(true);
+    setTimeout(() => {
+      setMessages(prev => [...prev, { from: "ai", text: getAIResponse(text) }]);
+      setTyping(false);
+    }, 1000);
+  };
+
+  return (
+    <>
+      <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar">
+        {messages.map((m, i) => (
+          <motion.div key={i} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+            className={cn("p-3 rounded-2xl text-sm max-w-[88%]",
+              m.from === "ai"
+                ? "bg-white/[0.05] text-slate-300 rounded-tl-sm self-start"
+                : "bg-meta-emerald/10 border border-meta-emerald/20 text-white rounded-tr-sm ml-auto text-right")}>
+            {m.text}
+          </motion.div>
+        ))}
+        {typing && (
+          <div className="flex gap-1 px-3 py-2 bg-white/[0.05] rounded-2xl rounded-tl-sm w-16">
+            {[0,1,2].map(i => <motion.div key={i} animate={{ y: [0,-4,0] }} transition={{ duration: 0.6, repeat: Infinity, delay: i*0.15 }} className="h-1.5 w-1.5 rounded-full bg-slate-500" />)}
+          </div>
+        )}
+        <div ref={bottomRef} />
+      </div>
+      <div className="mt-4 relative">
+        <input
+          type="text" value={input} onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && send()}
+          placeholder="Ask about earnings, cycles, mining..."
+          className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 pr-12 text-sm text-white placeholder:text-slate-600 outline-none focus:border-meta-emerald/50 transition-colors" />
+        <button onClick={send} className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 bg-meta-emerald rounded-lg flex items-center justify-center text-black cursor-none hover:bg-white transition-colors">
+          <ArrowUpRight className="h-4 w-4" />
+        </button>
+      </div>
+    </>
+  );
+}
+
 // --- Mining View ---
 function MiningView() {
   const [mined, setMined] = useState(8425.10);
@@ -1897,19 +1976,9 @@ export default function App() {
                            <p className="text-[10px] text-meta-emerald uppercase tracking-widest">Online</p>
                         </div>
                      </div>
-                     <button onClick={() => setIsAIAssistantOpen(false)} className="text-slate-500 hover:text-white transition-colors"><X className="h-5 w-5" /></button>
+                     <button onClick={() => setIsAIAssistantOpen(false)} className="text-slate-500 hover:text-white transition-colors cursor-none"><X className="h-5 w-5" /></button>
                   </div>
-                  <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
-                     <div className="p-3 bg-white/[0.05] rounded-2xl rounded-tl-sm w-[85%] text-sm text-slate-300">
-                        Hello! I noticed your matrix auto-pool is 94% full. I suggest following up with your latest direct referral to trigger the cycle.
-                     </div>
-                  </div>
-                  <div className="mt-4 relative">
-                     <input type="text" placeholder="Ask AI for optimization tips..." className="w-full h-12 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-white placeholder:text-slate-600 outline-none focus:border-meta-emerald/50 transition-colors" />
-                     <button className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 bg-meta-emerald rounded-lg flex items-center justify-center text-black">
-                        <ArrowUpRight className="h-4 w-4" />
-                     </button>
-                  </div>
+                  <AIChat />
                </motion.div>
             )}
          </AnimatePresence>
