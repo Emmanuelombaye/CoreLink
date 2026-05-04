@@ -1657,14 +1657,26 @@ export default function App() {
                 <motion.div key="projects" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
                    <h3 className="text-5xl font-black text-white tracking-tighter mb-8">Projects <span className="text-meta-blue">Hub</span></h3>
                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                      {["Core Coin & Token", "Gaming NFTs", "Decentralized DAPP", "Core Blockchain", "C-USD Stablecoin", "Blastaroo Lottery"].map((proj, i) => (
-                        <TiltCard key={i} className="p-8 border-white/[0.08] flex flex-col justify-between min-h-[300px] clip-card hover:border-meta-blue/50 transition-colors">
-                           <Component className="h-12 w-12 text-meta-blue mb-4" />
+                      {[
+                        { title: "Core Coin & Token",     desc: "The native utility token powering all transactions, governance votes, and reward distributions across the CoreLink ecosystem.",  status: "Live",        statusColor: "text-meta-emerald bg-meta-emerald/10 border-meta-emerald/20", color: "text-meta-gold",    icon: Coins },
+                        { title: "Gaming NFTs",           desc: "Play-to-earn NFT collections with on-chain ownership, tradeable in-game assets, and IGO launchpad integration.",               status: "Beta",        statusColor: "text-meta-gold bg-meta-gold/10 border-meta-gold/20",         color: "text-meta-violet", icon: Trophy },
+                        { title: "Decentralized DAPP",   desc: "A fully non-custodial Web3 application enabling peer-to-peer matrix participation without any central authority.",             status: "Live",        statusColor: "text-meta-emerald bg-meta-emerald/10 border-meta-emerald/20", color: "text-meta-blue",   icon: Component },
+                        { title: "Core Blockchain",      desc: "A proprietary Layer-1 blockchain with sub-second finality, EVM compatibility, and native smart contract support.",            status: "In Dev",      statusColor: "text-meta-blue bg-meta-blue/10 border-meta-blue/20",           color: "text-meta-emerald",icon: Network },
+                        { title: "C-USD Stablecoin",     desc: "A fully collateralized stablecoin pegged 1:1 to USD, backed by ecosystem reserves and audited monthly by CertiK.",           status: "Live",        statusColor: "text-meta-emerald bg-meta-emerald/10 border-meta-emerald/20", color: "text-meta-gold",   icon: DollarSign },
+                        { title: "Blastaroo Lottery",    desc: "A provably fair, on-chain lottery with weekly jackpots funded by 2% of all ecosystem transaction fees.",                     status: "Coming Soon", statusColor: "text-slate-400 bg-white/5 border-white/10",                    color: "text-pink-400",    icon: Zap },
+                      ].map((proj, i) => (
+                        <TiltCard key={i} className="p-8 border-white/[0.08] flex flex-col justify-between min-h-[320px] clip-card hover:border-meta-blue/50 transition-colors">
                            <div>
-                              <h4 className="text-2xl font-black text-white leading-tight mb-2">{proj}</h4>
-                              <p className="text-sm text-slate-500 font-medium">Explore the native utilities and infrastructure powering the CoreLink Elite ecosystem.</p>
+                              <div className="flex items-start justify-between mb-4">
+                                 <proj.icon className={cn("h-10 w-10", proj.color)} />
+                                 <span className={cn("text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border", proj.statusColor)}>{proj.status}</span>
+                              </div>
+                              <h4 className="text-xl font-black text-white leading-tight mb-2">{proj.title}</h4>
+                              <p className="text-sm text-slate-500 font-medium leading-relaxed">{proj.desc}</p>
                            </div>
-                           <button className="mt-8 text-xs font-black text-meta-blue uppercase tracking-widest flex items-center gap-2">Explore Protocol <ArrowUpRight className="h-4 w-4" /></button>
+                           <button className={cn("mt-8 text-xs font-black uppercase tracking-widest flex items-center gap-2", proj.color)}>
+                              Explore Protocol <ArrowUpRight className="h-4 w-4" />
+                           </button>
                         </TiltCard>
                       ))}
                    </div>
