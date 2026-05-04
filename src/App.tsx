@@ -1546,6 +1546,22 @@ export default function App() {
                   </button>
                 ))}
               </div>
+
+              {/* Live Wallet Balance */}
+              <div className="hidden lg:flex items-center gap-3 px-4 py-2 rounded-2xl bg-meta-emerald/[0.05] border border-meta-emerald/20">
+                <div className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
+                <div>
+                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Vault Balance</p>
+                  <motion.p
+                    key={Math.floor(liveStats.revenue)}
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm font-black text-meta-emerald tabular-nums"
+                  >
+                    ${liveStats.revenue.toLocaleString()}
+                  </motion.p>
+                </div>
+              </div>
               <div className="relative">
                  <button className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:border-meta-emerald/40 transition-all cursor-none relative group mr-4">
                     <Languages className="h-5 w-5 text-slate-300 group-hover:text-white transition-colors" />
