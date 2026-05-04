@@ -1416,6 +1416,18 @@ export default function App() {
       <div className="star-field" />
       <div className="perspective-grid" />
       <div className="scan-line" />
+
+      {/* Ambient Orbs */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <motion.div animate={{ x: [0, 60, -40, 0], y: [0, -80, 40, 0] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-meta-emerald/[0.06] blur-[120px]" />
+        <motion.div animate={{ x: [0, -80, 50, 0], y: [0, 60, -30, 0] }} transition={{ duration: 24, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+          className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-meta-violet/[0.07] blur-[140px]" />
+        <motion.div animate={{ x: [0, 40, -60, 0], y: [0, -40, 80, 0] }} transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 8 }}
+          className="absolute bottom-[-15%] left-[30%] w-[550px] h-[550px] rounded-full bg-meta-gold/[0.05] blur-[130px]" />
+        <motion.div animate={{ x: [0, -50, 30, 0], y: [0, 70, -50, 0] }} transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-[10%] right-[20%] w-[400px] h-[400px] rounded-full bg-meta-blue/[0.05] blur-[100px]" />
+      </div>
       
       {/* --- Sidebar --- */}
       <motion.aside animate={{ width: isSidebarOpen ? 280 : 0, opacity: isSidebarOpen ? 1 : 0 }} className="relative z-50 border-r border-white/5 bg-[#000000]/80 backdrop-blur-3xl flex flex-col overflow-hidden shrink-0 shadow-2xl">
