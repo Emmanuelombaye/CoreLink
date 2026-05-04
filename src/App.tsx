@@ -2295,14 +2295,14 @@ export default function App() {
 
         <nav className="flex-1 px-4 space-y-1.5 mt-4 overflow-y-auto overflow-x-hidden custom-scrollbar pb-10">
           <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4">Smart Contract Core</div>
-          {[
+          {([
             { icon: LayoutDashboard, label: "Intelligence Hub", id: "dashboard" },
             { icon: Hexagon, label: "Matrix Programs", id: "programs" },
             { icon: Network, label: "My Network Tree", id: "network" },
             { icon: Trophy, label: "Global Leaderboards", id: "leaderboard" },
             { icon: Crown, label: "NFT Royalties", id: "royalty" },
             { icon: Wallet, label: "Global Wallet", id: "financials" },
-          ].map((item: NavItem, i) => (
+          ] as NavItem[]).map((item, i) => (
             <button key={`core-${i}`} onClick={() => item.id && setActiveView(item.id)}
               className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
                 activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-white hover:bg-white/[0.03]")}>
@@ -2320,7 +2320,7 @@ export default function App() {
           ))}
 
           <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-8">Enterprise & Ecosystem</div>
-          {[
+          {([
             { icon: BarChart3, label: "Business Intelligence", id: "bi" },
             { icon: Pickaxe, label: "MPS Coin Mining", id: "mining" },
             { icon: Component, label: "Projects Hub", id: "projects" },
@@ -2329,7 +2329,7 @@ export default function App() {
             { icon: HeartHandshake, label: "Foundation", id: "foundation" },
             { icon: FileText, label: "Asset Vault", id: "assets" },
             { icon: ShieldCheck, label: "Security & Audits", id: "security" },
-          ].map((item: NavItem, i) => (
+          ] as NavItem[]).map((item, i) => (
             <button key={`eco-${i}`} onClick={() => item.id && setActiveView(item.id)}
               className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
                 activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-white hover:bg-white/[0.03]")}>
@@ -2347,10 +2347,10 @@ export default function App() {
           ))}
           
           <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-4 mb-2 mt-8">System Access</div>
-          {[
+          {([
             { icon: Shield, label: "Admin Control", id: "admin" },
             { icon: Bot, label: "Switch to Login", id: "login" },
-          ].map((item: NavItem, i) => (
+          ] as NavItem[]).map((item, i) => (
             <button key={`sys-${i}`} onClick={() => item.id && setActiveView(item.id)}
               className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
                 activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-white hover:bg-white/[0.03]")}>
