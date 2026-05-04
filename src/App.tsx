@@ -1451,10 +1451,19 @@ export default function App() {
             { icon: Crown, label: "NFT Royalties", id: "royalty" },
             { icon: Wallet, label: "Global Wallet", id: "financials" },
           ].map((item, i) => (
-            <button key={`core-${i}`} onClick={() => item.id && setActiveView(item.id as any)} className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group relative", activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.01]")}>
+            <button key={`core-${i}`} onClick={() => item.id && setActiveView(item.id as any)}
+              className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
+                activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-white hover:bg-white/[0.03]")}>
               {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-meta-emerald/10 to-transparent rounded-2xl border-l-2 border-meta-emerald" />}
-              <item.icon className={cn("h-5 w-5 relative z-10", activeView === item.id ? "text-meta-emerald" : "group-hover:text-meta-emerald")} />
+              <motion.div whileHover={{ scale: 1.2, rotate: 5 }} transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className={cn("relative z-10 shrink-0", activeView === item.id ? "text-meta-emerald" : "text-slate-500 group-hover:text-meta-emerald transition-colors")}>
+                <item.icon className="h-5 w-5" />
+              </motion.div>
               <span className="text-sm font-bold relative z-10 whitespace-nowrap">{item.label}</span>
+              {activeView !== item.id && (
+                <motion.div initial={{ scaleX: 0 }} whileHover={{ scaleX: 1 }} transition={{ duration: 0.2 }}
+                  className="absolute left-0 top-0 bottom-0 w-0.5 bg-meta-emerald/40 origin-top rounded-full" />
+              )}
             </button>
           ))}
 
@@ -1469,10 +1478,19 @@ export default function App() {
             { icon: FileText, label: "Asset Vault", id: "assets" },
             { icon: ShieldCheck, label: "Security & Audits", id: "security" },
           ].map((item, i) => (
-            <button key={`eco-${i}`} onClick={() => item.id && setActiveView(item.id as any)} className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all group relative", activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.01]")}>
+            <button key={`eco-${i}`} onClick={() => item.id && setActiveView(item.id as any)}
+              className={cn("w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
+                activeView === item.id ? "bg-white/[0.04] text-white" : "text-slate-500 hover:text-white hover:bg-white/[0.03]")}>
               {activeView === item.id && <motion.div layoutId="nav-bg" className="absolute inset-0 bg-gradient-to-r from-meta-emerald/10 to-transparent rounded-2xl border-l-2 border-meta-emerald" />}
-              <item.icon className={cn("h-5 w-5 relative z-10", activeView === item.id ? "text-meta-emerald" : "group-hover:text-meta-emerald")} />
+              <motion.div whileHover={{ scale: 1.2, rotate: 5 }} transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className={cn("relative z-10 shrink-0", activeView === item.id ? "text-meta-emerald" : "text-slate-500 group-hover:text-meta-emerald transition-colors")}>
+                <item.icon className="h-5 w-5" />
+              </motion.div>
               <span className="text-sm font-bold relative z-10 whitespace-nowrap">{item.label}</span>
+              {activeView !== item.id && (
+                <motion.div initial={{ scaleX: 0 }} whileHover={{ scaleX: 1 }} transition={{ duration: 0.2 }}
+                  className="absolute left-0 top-0 bottom-0 w-0.5 bg-meta-emerald/40 origin-top rounded-full" />
+              )}
             </button>
           ))}
         </nav>
