@@ -1338,17 +1338,31 @@ export default function App() {
                       </button>
                    </div>
                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
-                      {[1,2,3,4,5,6,7,8,9,10,11,12].map(i => (
-                        <TiltCard key={i} className="aspect-square p-6 flex flex-col items-center justify-center gap-5 cursor-none border-white/[0.06] group/asset">
+                      {[
+                        { name: "Brand Kit",           cat: "Design",    size: "18.2 MB", color: "text-meta-violet" },
+                        { name: "Pitch Deck",          cat: "Marketing", size: "6.4 MB",  color: "text-meta-gold" },
+                        { name: "Whitepaper v3",       cat: "Technical", size: "3.1 MB",  color: "text-meta-blue" },
+                        { name: "Smart Contract ABI", cat: "Technical", size: "0.8 MB",  color: "text-meta-emerald" },
+                        { name: "Onboarding Guide",   cat: "Training",  size: "4.7 MB",  color: "text-meta-emerald" },
+                        { name: "Logo Pack",           cat: "Design",    size: "22.5 MB", color: "text-meta-violet" },
+                        { name: "Tokenomics Chart",   cat: "Finance",   size: "1.2 MB",  color: "text-meta-gold" },
+                        { name: "Legal Framework",    cat: "Legal",     size: "2.9 MB",  color: "text-red-400" },
+                        { name: "X3 Matrix Guide",    cat: "Training",  size: "3.8 MB",  color: "text-meta-emerald" },
+                        { name: "X4 Matrix Guide",    cat: "Training",  size: "4.1 MB",  color: "text-meta-emerald" },
+                        { name: "Audit Report",        cat: "Security",  size: "1.6 MB",  color: "text-meta-gold" },
+                        { name: "Investor Report Q4", cat: "Finance",   size: "5.3 MB",  color: "text-meta-blue" },
+                      ].map((asset, i) => (
+                        <TiltCard key={i} className="p-6 flex flex-col items-center justify-center gap-3 cursor-none border-white/[0.06] group/asset">
                            <div className="relative">
-                             <FileText className="h-10 w-10 text-slate-600 group-hover/asset:text-meta-emerald transition-colors duration-500" />
+                             <FileText className={cn("h-10 w-10 transition-colors duration-500", asset.color, "opacity-60 group-hover/asset:opacity-100")} />
                              <motion.div initial={{ opacity: 0, scale: 0 }} whileHover={{ opacity: 1, scale: 1 }} className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-meta-emerald text-black flex items-center justify-center shadow-2xl">
                                 <Download className="h-3 w-3" />
                              </motion.div>
                            </div>
-                           <div className="text-center min-w-0 w-full px-2">
-                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate">Asset_{i}.pdf</p>
-                             <p className="text-[8px] font-bold text-slate-700 mt-1 uppercase">2.4 MB</p>
+                           <div className="text-center min-w-0 w-full">
+                             <p className="text-[10px] font-black text-white truncate">{asset.name}</p>
+                             <p className={cn("text-[9px] font-black uppercase tracking-widest mt-0.5", asset.color)}>{asset.cat}</p>
+                             <p className="text-[8px] font-bold text-slate-700 mt-1">{asset.size}</p>
                            </div>
                         </TiltCard>
                       ))}
