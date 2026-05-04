@@ -19,7 +19,6 @@ import {
   Shield,
   Download,
   Share2,
-  Rocket,
   GraduationCap,
   HeartHandshake,
   Component,
@@ -457,6 +456,7 @@ function NodeCard({ node, isRoot = false, onClick, selected }: { node: TreeNode;
   );
 }
 
+// @ts-ignore
 function TreeLevel({ nodes, onClick, selected }: { nodes: TreeNode[]; onClick: (n: TreeNode) => void; selected: string | null }) {
   return (
     <div className="flex justify-center gap-6 flex-wrap">
@@ -1555,18 +1555,33 @@ export default function App() {
         <div className="p-10 relative flex-1">
            <AnimatePresence mode="wait">
               {activeView === "dashboard" && (
-                <DashboardView liveStats={liveStats} />
+                <motion.div key="dashboard-wrap" initial={{ opacity: 0, x: 40, filter: "blur(8px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -40, filter: "blur(8px)" }} transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}>
+                  <DashboardView liveStats={liveStats} />
+                </motion.div>
               )}
-
-              {activeView === "programs" && <ProgramsView />}
-
-              {activeView === "network" && <NetworkView />}
-
-              {activeView === "mining" && <MiningView />}
-
-
+              {activeView === "programs" && (
+                <motion.div key="programs-wrap" initial={{ opacity: 0, x: 40, filter: "blur(8px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -40, filter: "blur(8px)" }} transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}>
+                  <ProgramsView />
+                </motion.div>
+              )}
+              {activeView === "network" && (
+                <motion.div key="network-wrap" initial={{ opacity: 0, x: 40, filter: "blur(8px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -40, filter: "blur(8px)" }} transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}>
+                  <NetworkView />
+                </motion.div>
+              )}
+              {activeView === "mining" && (
+                <motion.div key="mining-wrap" initial={{ opacity: 0, x: 40, filter: "blur(8px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -40, filter: "blur(8px)" }} transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}>
+                  <MiningView />
+                </motion.div>
+              )}
+              {activeView === "leaderboard" && (
+                <motion.div key="leaderboard-wrap" initial={{ opacity: 0, x: 40, filter: "blur(8px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -40, filter: "blur(8px)" }} transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}>
+                  <LeaderboardView />
+                </motion.div>
+              )}
               {activeView === "assets" && (
-                <motion.div key="assets" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
+                <motion.div key="assets-wrap" initial={{ opacity: 0, x: 40, filter: "blur(8px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -40, filter: "blur(8px)" }} transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}>
+                <motion.div key="assets" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
                    <div className="flex items-center justify-between gap-10 flex-wrap mb-4">
                       <div className="min-w-0">
                          <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Asset <span className="text-meta-emerald">Vault</span></h3>
@@ -1606,6 +1621,7 @@ export default function App() {
                         </TiltCard>
                       ))}
                    </div>
+                </motion.div>
                 </motion.div>
               )}
 
