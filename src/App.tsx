@@ -53,6 +53,19 @@ import {
 } from "recharts";
 
 // --- Mock Data ---
+const SIGNAL_FEED_POOL: { user: string; country: string; flag: string; action: string; amount: string; color: string }[] = [
+  { user: "0x4A2...F91", country: "Nigeria", flag: "🇳🇬", action: "Joined X3 Level 3", amount: "+$50", color: "text-meta-emerald" },
+  { user: "0xB81...C44", country: "UAE", flag: "🇦🇪", action: "Cycle Completed X4", amount: "+$500", color: "text-meta-gold" },
+  { user: "0x9D3...A12", country: "USA", flag: "🇺🇸", action: "Upgraded to Level 5", amount: "+$200", color: "text-meta-violet" },
+  { user: "0x1F7...B99", country: "Kenya", flag: "🇰🇪", action: "Spillover Received", amount: "+$25", color: "text-meta-emerald" },
+  { user: "0xC22...D55", country: "India", flag: "🇮🇳", action: "Joined X4 Level 1", amount: "+$10", color: "text-meta-blue" },
+  { user: "0x7E9...F03", country: "UK", flag: "🇬🇧", action: "NFT Royalty Paid", amount: "+$840", color: "text-meta-gold" },
+  { user: "0x3A1...E77", country: "Germany", flag: "🇩🇪", action: "Auto-Pool Cycle", amount: "+$1,200", color: "text-meta-emerald" },
+  { user: "0x6B4...C21", country: "Brazil", flag: "🇧🇷", action: "Joined X3 Level 7", amount: "+$640", color: "text-meta-violet" },
+  { user: "0x8D2...A88", country: "South Africa", flag: "🇿🇦", action: "Direct Bonus", amount: "+$100", color: "text-meta-emerald" },
+  { user: "0x5C9...B14", country: "Canada", flag: "🇨🇦", action: "Upgraded to Level 9", amount: "+$2,560", color: "text-meta-gold" },
+];
+
 const REVENUE_DATA = [
   { name: "Jan", value: 4200, growth: 1200 },
   { name: "Feb", value: 5100, growth: 1500 },
@@ -120,6 +133,974 @@ function MarqueeTicker() {
         ))}
       </div>
     </div>
+  );
+}
+
+// --- Leaderboard View ---
+const LEADERBOARD_DATA = [
+  { rank: 1,  name: "Alexander M.",  wallet: "0xA1B...F92", flag: "🇦🇪", country: "UAE",          level: "Trillionaire", earned: 284500, cycles: 142, referrals: 312, change: 12400,  up: true  },
+  { rank: 2,  name: "Priya S.",      wallet: "0xC3D...E11", flag: "🇮🇳", country: "India",        level: "Billionaire",  earned: 198200, cycles: 98,  referrals: 241, change: 8900,   up: true  },
+  { rank: 3,  name: "Emmanuel O.",   wallet: "0x9F2...B44", flag: "🇳🇬", country: "Nigeria",      level: "Trillionaire", earned: 175800, cycles: 87,  referrals: 198, change: 6200,   up: true  },
+  { rank: 4,  name: "James K.",      wallet: "0x7E1...A33", flag: "🇺🇸", country: "USA",          level: "Billionaire",  earned: 142100, cycles: 71,  referrals: 176, change: -1200,  up: false },
+  { rank: 5,  name: "Fatima A.",     wallet: "0x2D9...C88", flag: "🇸🇦", country: "Saudi Arabia", level: "Millionaire",  earned: 98400,  cycles: 54,  referrals: 134, change: 4100,   up: true  },
+  { rank: 6,  name: "Chen W.",       wallet: "0x5B3...D77", flag: "🇨🇳", country: "China",        level: "Billionaire",  earned: 87600,  cycles: 48,  referrals: 119, change: 3800,   up: true  },
+  { rank: 7,  name: "Sofia R.",      wallet: "0x8A4...E55", flag: "🇧🇷", country: "Brazil",       level: "Millionaire",  earned: 74200,  cycles: 39,  referrals: 98,  change: 2900,   up: true  },
+  { rank: 8,  name: "David N.",      wallet: "0x1C6...F22", flag: "🇰🇪", country: "Kenya",        level: "Millionaire",  earned: 61800,  cycles: 33,  referrals: 87,  change: -800,   up: false },
+  { rank: 9,  name: "Anna P.",       wallet: "0x4F7...A99", flag: "🇩🇪", country: "Germany",      level: "Millionaire",  earned: 54300,  cycles: 28,  referrals: 74,  change: 1700,   up: true  },
+  { rank: 10, name: "Marcus T.",     wallet: "0x6E8...B66", flag: "🇬🇧", country: "UK",           level: "Millionaire",  earned: 48900,  cycles: 24,  referrals: 68,  change: 2100,   up: true  },
+  { rank: 11, name: "Yuki H.",       wallet: "0x9F1...C33", flag: "🇯🇵", country: "Japan",        level: "Millionaire",  earned: 43200,  cycles: 21,  referrals: 59,  change: 1400,   up: true  },
+  { rank: 12, name: "Amara D.",      wallet: "0x3B2...A11", flag: "🇬🇭", country: "Ghana",        level: "Millionaire",  earned: 38700,  cycles: 19,  referrals: 52,  change: -600,   up: false },
+  { rank: 13, name: "Carlos M.",     wallet: "0x7C4...B88", flag: "🇲🇽", country: "Mexico",       level: "Activator",   earned: 31400,  cycles: 15,  referrals: 44,  change: 900,    up: true  },
+  { rank: 14, name: "Olga V.",       wallet: "0x2E5...D44", flag: "🇺🇦", country: "Ukraine",      level: "Activator",   earned: 27800,  cycles: 13,  referrals: 38,  change: 1100,   up: true  },
+  { rank: 15, name: "Kwame A.",      wallet: "0x8D3...F99", flag: "🇳🇬", country: "Nigeria",      level: "Activator",   earned: 24100,  cycles: 11,  referrals: 33,  change: -400,   up: false },
+  { rank: 16, name: "Lena K.",       wallet: "0x1A9...C77", flag: "🇸🇪", country: "Sweden",       level: "Activator",   earned: 21600,  cycles: 10,  referrals: 29,  change: 700,    up: true  },
+  { rank: 17, name: "Raj P.",        wallet: "0x6F2...E22", flag: "🇮🇳", country: "India",        level: "Activator",   earned: 18900,  cycles: 9,   referrals: 25,  change: 500,    up: true  },
+  { rank: 18, name: "Mei L.",        wallet: "0x4C8...A55", flag: "🇸🇬", country: "Singapore",   level: "Activator",   earned: 16200,  cycles: 8,   referrals: 22,  change: -300,   up: false },
+  { rank: 19, name: "Ibrahim S.",    wallet: "0x5D1...B33", flag: "🇹🇳", country: "Tanzania",     level: "Activator",   earned: 13800,  cycles: 7,   referrals: 18,  change: 400,    up: true  },
+  { rank: 20, name: "Elena B.",      wallet: "0x9E7...C66", flag: "🇷🇴", country: "Romania",      level: "Activator",   earned: 11400,  cycles: 5,   referrals: 15,  change: 200,    up: true  },
+];
+
+const REGION_STATS = [
+  { region: "Africa",        flag: "🇺🇳", members: 4821, volume: "$2.4M",  color: "text-meta-emerald", bar: 82 },
+  { region: "Middle East",   flag: "🌍",    members: 3214, volume: "$3.1M",  color: "text-meta-gold",   bar: 94 },
+  { region: "Asia",          flag: "🌏",    members: 5902, volume: "$4.8M",  color: "text-meta-violet", bar: 100 },
+  { region: "Europe",        flag: "🇪🇺", members: 2841, volume: "$1.9M",  color: "text-meta-blue",   bar: 64 },
+  { region: "Americas",      flag: "🇺🇸", members: 3109, volume: "$2.2M",  color: "text-orange-400",  bar: 72 },
+];
+
+function LeaderboardView() {
+  const [filter, setFilter] = useState<"all" | "Trillionaire" | "Billionaire" | "Millionaire" | "Activator">("all");
+  const [sortBy, setSortBy] = useState<"earned" | "cycles" | "referrals">("earned");
+
+  const filtered = LEADERBOARD_DATA
+    .filter(r => filter === "all" || r.level === filter)
+    .sort((a, b) => b[sortBy] - a[sortBy])
+    .map((r, i) => ({ ...r, rank: i + 1 }));
+
+  const levelColor = (level: string) =>
+    level === "Trillionaire" ? "bg-meta-violet/10 text-meta-violet border-meta-violet/20" :
+    level === "Billionaire"  ? "bg-meta-gold/10 text-meta-gold border-meta-gold/20" :
+    level === "Millionaire"  ? "bg-meta-emerald/10 text-meta-emerald border-meta-emerald/20" :
+                               "bg-white/5 text-slate-400 border-white/10";
+
+  return (
+    <motion.div key="leaderboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-8 max-w-[1600px] mx-auto pb-20">
+
+      {/* Header */}
+      <div className="flex items-start justify-between gap-6 flex-wrap">
+        <div>
+          <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Global <span className="text-meta-gold">Leaderboard</span></h3>
+          <p className="text-lg text-slate-500 font-bold">Top earners ranked across all matrix programs worldwide</p>
+        </div>
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-meta-emerald/5 border border-meta-emerald/20">
+          <span className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
+          <span className="text-[10px] font-black text-meta-emerald uppercase tracking-widest">Live Rankings</span>
+        </div>
+      </div>
+
+      {/* Top 3 Podium */}
+      <div className="grid grid-cols-3 gap-4">
+        {[LEADERBOARD_DATA[1], LEADERBOARD_DATA[0], LEADERBOARD_DATA[2]].map((p, i) => {
+          const podiumRank = i === 0 ? 2 : i === 1 ? 1 : 3;
+          const heights = ["h-32", "h-40", "h-28"];
+          const medals = ["🥈", "🥇", "🥉"];
+          const glows = ["rgba(203,213,225,0.15)", "rgba(255,193,7,0.2)", "rgba(234,88,12,0.15)"];
+          return (
+            <TiltCard key={p.rank} glowColor={glows[i]} className="p-6 flex flex-col items-center text-center border-white/[0.08] relative overflow-hidden">
+              {i === 1 && <div className="absolute inset-0 bg-gradient-to-b from-meta-gold/5 to-transparent pointer-events-none" />}
+              <span className="text-3xl mb-2">{medals[i]}</span>
+              <span className="text-4xl mb-3">{p.flag}</span>
+              <p className="text-base font-black text-white mb-1">{p.name}</p>
+              <p className="text-[10px] font-mono text-slate-600 mb-3">{p.wallet}</p>
+              <span className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border mb-4", levelColor(p.level))}>{p.level}</span>
+              <div className={cn("w-full rounded-t-2xl flex items-end justify-center pb-3", heights[i], i === 1 ? "bg-meta-gold/10 border border-meta-gold/20" : "bg-white/[0.03] border border-white/[0.06]")}>
+                <p className="text-2xl font-black text-white">${(p.earned / 1000).toFixed(1)}k</p>
+              </div>
+              <p className="text-[10px] font-black text-slate-500 mt-2 uppercase tracking-widest">{p.country} · #{podiumRank}</p>
+            </TiltCard>
+          );
+        })}
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+
+        {/* Table */}
+        <div className="xl:col-span-3 space-y-4">
+
+          {/* Filters + Sort */}
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex gap-2 flex-wrap">
+              {(["all", "Trillionaire", "Billionaire", "Millionaire", "Activator"] as const).map(f => (
+                <button key={f} onClick={() => setFilter(f)}
+                  className={cn("h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all cursor-none border",
+                    filter === f ? "bg-meta-gold text-black border-meta-gold" : "bg-white/[0.03] text-slate-500 border-white/[0.06] hover:text-white hover:border-white/20")}>
+                  {f === "all" ? "All Levels" : f}
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              {(["earned", "cycles", "referrals"] as const).map(s => (
+                <button key={s} onClick={() => setSortBy(s)}
+                  className={cn("h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all cursor-none border",
+                    sortBy === s ? "bg-white/10 text-white border-white/20" : "bg-white/[0.03] text-slate-600 border-white/[0.06] hover:text-white")}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Table */}
+          <TiltCard className="p-0 overflow-hidden border-white/[0.08]">
+            <div className="grid grid-cols-12 px-6 py-3 border-b border-white/[0.05] text-[10px] font-black uppercase tracking-widest text-slate-600">
+              <span className="col-span-1">#</span>
+              <span className="col-span-3">Member</span>
+              <span className="col-span-2">Country</span>
+              <span className="col-span-2">Level</span>
+              <span className="col-span-2 text-right">Earned</span>
+              <span className="col-span-1 text-right">Cycles</span>
+              <span className="col-span-1 text-right">+/-</span>
+            </div>
+            <div className="divide-y divide-white/[0.03]">
+              {filtered.map((row, i) => (
+                <motion.div key={row.wallet} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}
+                  className="grid grid-cols-12 px-6 py-4 hover:bg-white/[0.03] transition-colors items-center group cursor-none">
+                  <div className="col-span-1">
+                    {row.rank <= 3
+                      ? <span className="text-base">{row.rank === 1 ? "🥇" : row.rank === 2 ? "🥈" : "🥉"}</span>
+                      : <span className="text-sm font-black text-slate-600">{row.rank}</span>}
+                  </div>
+                  <div className="col-span-3 flex items-center gap-2 min-w-0">
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-meta-emerald/20 to-meta-violet/20 border border-white/10 flex items-center justify-center text-xs font-black text-white shrink-0">
+                      {row.name.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-black text-white group-hover:text-meta-emerald transition-colors truncate">{row.name}</p>
+                      <p className="text-[9px] font-mono text-slate-600 truncate">{row.wallet}</p>
+                    </div>
+                  </div>
+                  <div className="col-span-2 flex items-center gap-1.5">
+                    <span className="text-sm">{row.flag}</span>
+                    <span className="text-[11px] font-bold text-slate-400 truncate">{row.country}</span>
+                  </div>
+                  <div className="col-span-2">
+                    <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-lg border", levelColor(row.level))}>
+                      {row.level}
+                    </span>
+                  </div>
+                  <div className="col-span-2 text-right">
+                    <span className="text-sm font-black text-white tabular-nums">${row.earned.toLocaleString()}</span>
+                  </div>
+                  <div className="col-span-1 text-right">
+                    <span className="text-xs font-black text-slate-400 tabular-nums">{row.cycles}</span>
+                  </div>
+                  <div className="col-span-1 text-right">
+                    <span className={cn("text-[11px] font-black tabular-nums", row.up ? "text-meta-emerald" : "text-red-400")}>
+                      {row.up ? "+" : ""}{row.change < 0 ? "-" : ""}${Math.abs(row.change).toLocaleString()}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </TiltCard>
+        </div>
+
+        {/* Right: Region Stats */}
+        <div className="space-y-4">
+          <TiltCard className="p-6 border-white/[0.08]">
+            <h4 className="text-sm font-black text-white uppercase tracking-widest mb-6">Top Regions</h4>
+            <div className="space-y-5">
+              {REGION_STATS.map((r, i) => (
+                <div key={i} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">{r.flag}</span>
+                      <span className="text-xs font-black text-white">{r.region}</span>
+                    </div>
+                    <span className={cn("text-xs font-black", r.color)}>{r.volume}</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-white/[0.04] rounded-full overflow-hidden">
+                    <motion.div initial={{ width: 0 }} animate={{ width: `${r.bar}%` }} transition={{ duration: 1.5, delay: i * 0.1, ease: "easeOut" }}
+                      className={cn("h-full rounded-full", r.color.replace("text-", "bg-"))} />
+                  </div>
+                  <p className="text-[10px] font-bold text-slate-600">{r.members.toLocaleString()} members</p>
+                </div>
+              ))}
+            </div>
+          </TiltCard>
+
+          <TiltCard className="p-6 border-white/[0.08]">
+            <h4 className="text-sm font-black text-white uppercase tracking-widest mb-4">Your Rank</h4>
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-meta-emerald/5 border border-meta-emerald/20">
+              <span className="text-3xl">🇳🇬</span>
+              <div>
+                <p className="text-lg font-black text-white">Emmanuel O.</p>
+                <p className="text-[10px] font-black text-meta-emerald uppercase tracking-widest">Rank #3 Globally</p>
+              </div>
+            </div>
+            <div className="mt-4 space-y-2">
+              {[
+                { label: "Total Earned", value: "$175,800" },
+                { label: "Total Cycles",  value: "87" },
+                { label: "Referrals",     value: "198" },
+              ].map((s, i) => (
+                <div key={i} className="flex justify-between py-2 border-b border-white/[0.04]">
+                  <span className="text-xs font-bold text-slate-500">{s.label}</span>
+                  <span className="text-xs font-black text-white">{s.value}</span>
+                </div>
+              ))}
+            </div>
+          </TiltCard>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// --- Network View ---
+const TREE_DATA = {
+  id: "root", name: "You", wallet: "0x84291A", flag: "👤", country: "Nigeria", level: "Trillionaire", volume: "$84,250", active: true,
+  children: [
+    {
+      id: "n1", name: "Alexander M.", wallet: "0xA1B...F92", flag: "🇦🇪", country: "UAE", level: "Billionaire", volume: "$42,100", active: true,
+      children: [
+        { id: "n1a", name: "Priya S.", wallet: "0xC3D...E11", flag: "🇮🇳", country: "India", level: "Millionaire", volume: "$12,400", active: true, children: [] },
+        { id: "n1b", name: "Chen W.", wallet: "0x5B3...D77", flag: "🇨🇳", country: "China", level: "Millionaire", volume: "$9,800", active: true, children: [] },
+        { id: "n1c", name: "Sofia R.", wallet: "0x8A4...E55", flag: "🇧🇷", country: "Brazil", level: "Activator", volume: "$1,200", active: false, children: [] },
+      ],
+    },
+    {
+      id: "n2", name: "James K.", wallet: "0x7E1...A33", flag: "🇺🇸", country: "USA", level: "Billionaire", volume: "$38,600", active: true,
+      children: [
+        { id: "n2a", name: "Fatima A.", wallet: "0x2D9...C88", flag: "🇸🇦", country: "Saudi Arabia", level: "Millionaire", volume: "$11,200", active: true, children: [] },
+        { id: "n2b", name: "David N.", wallet: "0x1C6...F22", flag: "🇰🇪", country: "Kenya", level: "Activator", volume: "$2,100", active: true, children: [] },
+      ],
+    },
+    {
+      id: "n3", name: "Anna P.", wallet: "0x4F7...A99", flag: "🇩🇪", country: "Germany", level: "Millionaire", volume: "$21,800", active: true,
+      children: [
+        { id: "n3a", name: "Marcus T.", wallet: "0x6E8...B66", flag: "🇬🇧", country: "UK", level: "Activator", volume: "$3,400", active: true, children: [] },
+        { id: "n3b", name: "Yuki H.", wallet: "0x9F1...C33", flag: "🇯🇵", country: "Japan", level: "Activator", volume: "$1,800", active: false, children: [] },
+      ],
+    },
+  ],
+};
+
+type TreeNode = typeof TREE_DATA;
+
+function NodeCard({ node, isRoot = false, onClick, selected }: { node: TreeNode; isRoot?: boolean; onClick: (n: TreeNode) => void; selected: string | null }) {
+  const isSelected = selected === node.id;
+  const levelColor = node.level === "Trillionaire" ? "text-meta-violet border-meta-violet/40" : node.level === "Billionaire" ? "text-meta-gold border-meta-gold/40" : node.level === "Millionaire" ? "text-meta-emerald border-meta-emerald/40" : "text-slate-400 border-white/10";
+  const glowColor = node.level === "Trillionaire" ? "rgba(139,92,246,0.3)" : node.level === "Billionaire" ? "rgba(255,193,7,0.3)" : "rgba(134,255,0,0.2)";
+
+  return (
+    <button onClick={() => onClick(node)}
+      className={cn(
+        "flex flex-col items-center gap-2 cursor-none group transition-all duration-300",
+        isRoot ? "scale-110" : ""
+      )}>
+      <div className={cn(
+        "relative rounded-2xl border-2 p-3 transition-all duration-300 flex flex-col items-center gap-1",
+        isRoot ? "w-28" : "w-24",
+        isSelected ? "bg-white/10 scale-105" : "bg-white/[0.03] hover:bg-white/[0.06]",
+        levelColor
+      )}
+        style={isSelected ? { boxShadow: `0 0 20px ${glowColor}` } : {}}
+      >
+        {node.active && <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-meta-emerald border-2 border-black shadow-[0_0_8px_rgba(134,255,0,0.8)]" />}
+        <span className="text-2xl">{node.flag}</span>
+        <p className="text-[10px] font-black text-white truncate w-full text-center">{node.name.split(" ")[0]}</p>
+        <p className="text-[9px] font-bold text-slate-500 truncate w-full text-center">{node.wallet}</p>
+        <div className={cn("text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border mt-1", levelColor)}>
+          {node.level}
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function TreeLevel({ nodes, onClick, selected }: { nodes: TreeNode[]; onClick: (n: TreeNode) => void; selected: string | null }) {
+  return (
+    <div className="flex justify-center gap-6 flex-wrap">
+      {nodes.map(node => (
+        <div key={node.id} className="flex flex-col items-center gap-4">
+          <NodeCard node={node} onClick={onClick} selected={selected} />
+          {node.children.length > 0 && (
+            <>
+              <div className="w-px h-6 bg-white/10" />
+              <div className="flex gap-4 relative">
+                <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
+                {node.children.map(child => (
+                  <div key={child.id} className="flex flex-col items-center gap-4">
+                    <div className="w-px h-4 bg-white/10" />
+                    <NodeCard node={child} onClick={onClick} selected={selected} />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function NetworkView() {
+  const [selected, setSelected] = useState<TreeNode | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const allNodes = [TREE_DATA, ...TREE_DATA.children, ...TREE_DATA.children.flatMap(c => c.children)];
+  const totalVolume = TREE_DATA.children.reduce((s, c) => s + parseFloat(c.volume.replace(/[$,]/g, "")), 0);
+
+  return (
+    <motion.div key="network" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-8 max-w-[1600px] mx-auto pb-20">
+
+      {/* Header */}
+      <div className="flex items-start justify-between gap-6 flex-wrap">
+        <div>
+          <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Network <span className="text-meta-violet">Tree</span></h3>
+          <p className="text-lg text-slate-500 font-bold">Visual genealogy of your downline partners</p>
+        </div>
+        <div className="flex gap-3">
+          {[
+            { label: "Direct Partners", value: TREE_DATA.children.length, color: "text-meta-emerald" },
+            { label: "Total Downline", value: allNodes.length - 1, color: "text-meta-violet" },
+            { label: "Team Volume", value: `$${totalVolume.toLocaleString()}`, color: "text-meta-gold" },
+          ].map((s, i) => (
+            <div key={i} className="px-5 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-center">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{s.label}</p>
+              <p className={cn("text-xl font-black", s.color)}>{s.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {/* Tree Canvas */}
+        <TiltCard className="lg:col-span-2 p-8 border-white/[0.08] overflow-x-auto">
+          <div className="flex items-center justify-between mb-8">
+            <h4 className="text-lg font-black text-white">Genealogy Tree</h4>
+            <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest">
+              {[
+                { label: "Trillionaire", color: "bg-meta-violet" },
+                { label: "Billionaire", color: "bg-meta-gold" },
+                { label: "Millionaire", color: "bg-meta-emerald" },
+                { label: "Activator", color: "bg-slate-500" },
+              ].map((l, i) => (
+                <div key={i} className="flex items-center gap-1.5">
+                  <div className={cn("h-2 w-2 rounded-full", l.color)} />
+                  <span className="text-slate-500">{l.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center gap-6 min-w-[600px]">
+            {/* Root */}
+            <NodeCard node={TREE_DATA} isRoot onClick={(n) => setSelected(n)} selected={selected?.id ?? null} />
+            <div className="w-px h-6 bg-white/10" />
+            {/* Level 1 connector */}
+            <div className="relative w-full flex justify-center">
+              <div className="absolute top-0 left-[20%] right-[20%] h-px bg-white/10" />
+            </div>
+            {/* Level 1 */}
+            <div className="flex justify-center gap-16 w-full">
+              {TREE_DATA.children.map(child => (
+                <div key={child.id} className="flex flex-col items-center gap-4">
+                  <div className="w-px h-4 bg-white/10" />
+                  <NodeCard node={child} onClick={(n) => setSelected(n)} selected={selected?.id ?? null} />
+                  {child.children.length > 0 && (
+                    <>
+                      <div className="w-px h-4 bg-white/10" />
+                      <div className="relative">
+                        <div className="absolute top-0 left-[15%] right-[15%] h-px bg-white/10" />
+                        <div className="flex gap-4 pt-0">
+                          {child.children.map(grandchild => (
+                            <div key={grandchild.id} className="flex flex-col items-center gap-2">
+                              <div className="w-px h-4 bg-white/10" />
+                              <NodeCard node={grandchild} onClick={(n) => setSelected(n)} selected={selected?.id ?? null} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </TiltCard>
+
+        {/* Right Panel */}
+        <div className="flex flex-col gap-6">
+
+          {/* Node Detail */}
+          <TiltCard className="p-6 border-white/[0.08] flex-1">
+            {selected ? (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                <div className="flex items-center gap-4 pb-4 border-b border-white/[0.06]">
+                  <span className="text-4xl">{selected.flag}</span>
+                  <div>
+                    <p className="text-lg font-black text-white">{selected.name}</p>
+                    <p className="text-[11px] font-mono text-slate-500">{selected.wallet}</p>
+                  </div>
+                  {selected.active && <span className="ml-auto text-[9px] font-black text-meta-emerald bg-meta-emerald/10 border border-meta-emerald/20 px-2 py-1 rounded-lg uppercase tracking-widest">Active</span>}
+                </div>
+                {[
+                  { label: "Country", value: `${selected.flag} ${selected.country}` },
+                  { label: "Matrix Level", value: selected.level },
+                  { label: "Team Volume", value: selected.volume },
+                  { label: "Direct Partners", value: selected.children.length.toString() },
+                ].map((row, i) => (
+                  <div key={i} className="flex justify-between items-center py-2 border-b border-white/[0.04]">
+                    <span className="text-xs font-bold text-slate-500">{row.label}</span>
+                    <span className="text-xs font-black text-white">{row.value}</span>
+                  </div>
+                ))}
+                <button className="w-full h-10 mt-2 bg-meta-violet/10 border border-meta-violet/30 text-meta-violet font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-meta-violet hover:text-white transition-colors cursor-none flex items-center justify-center gap-2">
+                  <Eye className="h-3.5 w-3.5" /> View Full Profile
+                </button>
+              </motion.div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full py-10 text-center gap-4">
+                <Network className="h-12 w-12 text-slate-700" />
+                <p className="text-sm font-bold text-slate-600">Click any node to view partner details</p>
+              </div>
+            )}
+          </TiltCard>
+
+          {/* Referral Link */}
+          <TiltCard className="p-6 border-white/[0.08]">
+            <h4 className="text-sm font-black text-white mb-4">Your Referral Link</h4>
+            <div className="flex items-center gap-2 bg-black/50 rounded-xl p-3 border border-white/10 mb-4">
+              <span className="text-[11px] text-slate-400 truncate flex-1 font-mono">corelink.elite/ref=84291A</span>
+              <button onClick={handleCopy} className="shrink-0 cursor-none">
+                {copied
+                  ? <span className="text-[10px] font-black text-meta-emerald">Copied!</span>
+                  : <Link2 className="h-4 w-4 text-meta-emerald" />}
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-1 h-10 bg-meta-violet/10 border border-meta-violet/30 text-meta-violet font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-meta-violet hover:text-white transition-colors cursor-none flex items-center justify-center gap-1.5">
+                <Share className="h-3.5 w-3.5" /> Share
+              </button>
+              <button className="flex-1 h-10 bg-white/5 border border-white/10 text-slate-300 font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-white/10 transition-colors cursor-none flex items-center justify-center gap-1.5">
+                <QrCode className="h-3.5 w-3.5" /> QR Code
+              </button>
+            </div>
+          </TiltCard>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// --- Programs Data ---
+const X3_LEVELS = [
+  { level: 1, cost: 10,    reward: 20,    cycles: 142, partners: 2, active: true  },
+  { level: 2, cost: 20,    reward: 40,    cycles: 98,  partners: 2, active: true  },
+  { level: 3, cost: 40,    reward: 80,    cycles: 74,  partners: 1, active: true  },
+  { level: 4, cost: 80,    reward: 160,   cycles: 51,  partners: 0, active: false },
+  { level: 5, cost: 160,   reward: 320,   cycles: 33,  partners: 0, active: false },
+  { level: 6, cost: 320,   reward: 640,   cycles: 18,  partners: 0, active: false },
+  { level: 7, cost: 640,   reward: 1280,  cycles: 9,   partners: 0, active: false },
+  { level: 8, cost: 1280,  reward: 2560,  cycles: 4,   partners: 0, active: false },
+  { level: 9, cost: 2560,  reward: 5120,  cycles: 2,   partners: 0, active: false },
+  { level: 10, cost: 5120, reward: 10240, cycles: 1,   partners: 0, active: false },
+  { level: 11, cost: 10240,reward: 20480, cycles: 0,   partners: 0, active: false },
+  { level: 12, cost: 20480,reward: 40960, cycles: 0,   partners: 0, active: false },
+];
+
+const X4_LEVELS = [
+  { level: 1, cost: 10,    reward: 20,    cycles: 88,  partners: 4, active: true  },
+  { level: 2, cost: 20,    reward: 40,    cycles: 61,  partners: 3, active: true  },
+  { level: 3, cost: 40,    reward: 80,    cycles: 44,  partners: 2, active: true  },
+  { level: 4, cost: 80,    reward: 160,   cycles: 29,  partners: 1, active: false },
+  { level: 5, cost: 160,   reward: 320,   cycles: 14,  partners: 0, active: false },
+  { level: 6, cost: 320,   reward: 640,   cycles: 7,   partners: 0, active: false },
+  { level: 7, cost: 640,   reward: 1280,  cycles: 3,   partners: 0, active: false },
+  { level: 8, cost: 1280,  reward: 2560,  cycles: 1,   partners: 0, active: false },
+  { level: 9, cost: 2560,  reward: 5120,  cycles: 0,   partners: 0, active: false },
+  { level: 10, cost: 5120, reward: 10240, cycles: 0,   partners: 0, active: false },
+  { level: 11, cost: 10240,reward: 20480, cycles: 0,   partners: 0, active: false },
+  { level: 12, cost: 20480,reward: 40960, cycles: 0,   partners: 0, active: false },
+];
+
+function MatrixSlot({ filled, isCenter }: { filled: boolean; isCenter?: boolean }) {
+  return (
+    <div className={cn(
+      "rounded-full border-2 transition-all duration-300",
+      isCenter ? "h-8 w-8" : "h-5 w-5",
+      filled
+        ? "bg-meta-emerald border-meta-emerald shadow-[0_0_10px_rgba(134,255,0,0.6)]"
+        : "bg-transparent border-white/20"
+    )} />
+  );
+}
+
+function X3SlotDiagram({ partners }: { partners: number }) {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <MatrixSlot filled isCenter />
+      <div className="flex gap-3">
+        <MatrixSlot filled={partners >= 1} />
+        <MatrixSlot filled={partners >= 2} />
+      </div>
+    </div>
+  );
+}
+
+function X4SlotDiagram({ partners }: { partners: number }) {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <MatrixSlot filled isCenter />
+      <div className="flex gap-2">
+        <MatrixSlot filled={partners >= 1} />
+        <MatrixSlot filled={partners >= 2} />
+      </div>
+      <div className="flex gap-2">
+        <MatrixSlot filled={partners >= 3} />
+        <MatrixSlot filled={partners >= 4} />
+        <MatrixSlot filled={partners >= 5} />
+        <MatrixSlot filled={partners >= 6} />
+      </div>
+    </div>
+  );
+}
+
+function ProgramsView() {
+  const [activeProgram, setActiveProgram] = useState<"x3" | "x4">("x3");
+  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
+  const levels = activeProgram === "x3" ? X3_LEVELS : X4_LEVELS;
+  const selected = selectedLevel !== null ? levels[selectedLevel] : null;
+
+  const totalEarned = levels.filter(l => l.active).reduce((s, l) => s + l.cycles * l.reward, 0);
+  const activeLevels = levels.filter(l => l.active).length;
+
+  return (
+    <motion.div key="programs" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-8 max-w-[1600px] mx-auto pb-20">
+
+      {/* Header */}
+      <div className="flex items-start justify-between gap-6 flex-wrap">
+        <div>
+          <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Matrix <span className="text-meta-emerald">Programs</span></h3>
+          <p className="text-lg text-slate-500 font-bold">X3 & X4 smart contract slots — levels 1 to 12</p>
+        </div>
+        <div className="flex gap-3">
+          <div className="px-5 py-3 rounded-2xl bg-meta-emerald/5 border border-meta-emerald/20 text-center">
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Active Levels</p>
+            <p className="text-2xl font-black text-meta-emerald">{activeLevels}/12</p>
+          </div>
+          <div className="px-5 py-3 rounded-2xl bg-meta-gold/5 border border-meta-gold/20 text-center">
+            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total Earned</p>
+            <p className="text-2xl font-black text-meta-gold">${totalEarned.toLocaleString()}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Program Tabs */}
+      <div className="flex gap-3">
+        {(["x3", "x4"] as const).map(p => (
+          <button key={p} onClick={() => { setActiveProgram(p); setSelectedLevel(null); }}
+            className={cn("h-12 px-8 font-black text-sm uppercase tracking-widest transition-all clip-button cursor-none",
+              activeProgram === p
+                ? "bg-meta-emerald text-black shadow-[0_0_20px_rgba(134,255,0,0.3)]"
+                : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-white/10")}>
+            {p === "x3" ? "Power Matrix X3" : "X-Power Matrix X4"}
+          </button>
+        ))}
+      </div>
+
+      {/* Matrix description */}
+      <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center gap-6 flex-wrap">
+        <Hexagon className="h-8 w-8 text-meta-emerald shrink-0" />
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-black text-white mb-0.5">
+            {activeProgram === "x3"
+              ? "X3 — Power Matrix: 2 direct partners per slot. Cycles when both positions fill, sending reward up the chain."
+              : "X4 — X-Power Matrix: 2 direct + 4 second-level partners. Cycles when all 6 positions fill for maximum spillover."}
+          </p>
+          <p className="text-[11px] text-slate-500 font-bold">Each level doubles in cost and reward. Activate sequentially to unlock higher earnings.</p>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
+          <span className="text-[10px] font-black text-meta-emerald uppercase tracking-widest">BSC Verified</span>
+        </div>
+      </div>
+
+      {/* Level Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+        {levels.map((lvl, i) => (
+          <motion.div key={lvl.level} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}>
+            <button
+              onClick={() => setSelectedLevel(selectedLevel === i ? null : i)}
+              className={cn(
+                "w-full p-5 rounded-3xl border transition-all duration-300 cursor-none flex flex-col gap-3 relative overflow-hidden group",
+                lvl.active
+                  ? selectedLevel === i
+                    ? "bg-meta-emerald/10 border-meta-emerald shadow-[0_0_30px_rgba(134,255,0,0.2)]"
+                    : "bg-meta-emerald/[0.04] border-meta-emerald/40 hover:border-meta-emerald hover:bg-meta-emerald/10"
+                  : selectedLevel === i
+                    ? "bg-white/[0.06] border-white/20"
+                    : "bg-white/[0.02] border-white/[0.06] hover:border-white/20 hover:bg-white/[0.04]"
+              )}
+            >
+              {lvl.active && (
+                <div className="absolute top-3 right-3 h-2 w-2 rounded-full bg-meta-emerald shadow-[0_0_8px_rgba(134,255,0,0.8)] animate-pulse" />
+              )}
+              <div className="flex items-center justify-between">
+                <span className={cn("text-[10px] font-black uppercase tracking-widest", lvl.active ? "text-meta-emerald" : "text-slate-600")}>Lvl {lvl.level}</span>
+                {lvl.active && <span className="text-[9px] font-black text-meta-emerald bg-meta-emerald/10 px-1.5 py-0.5 rounded-md">ACTIVE</span>}
+              </div>
+
+              {/* Slot diagram */}
+              <div className="flex justify-center py-2">
+                {activeProgram === "x3"
+                  ? <X3SlotDiagram partners={lvl.partners} />
+                  : <X4SlotDiagram partners={lvl.partners} />}
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-bold text-slate-600">Cost</span>
+                  <span className="text-xs font-black text-white">${lvl.cost.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-bold text-slate-600">Reward</span>
+                  <span className="text-xs font-black text-meta-gold">${lvl.reward.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-bold text-slate-600">Cycles</span>
+                  <span className={cn("text-xs font-black", lvl.cycles > 0 ? "text-meta-emerald" : "text-slate-600")}>{lvl.cycles}</span>
+                </div>
+              </div>
+            </button>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Level Detail Panel */}
+      <AnimatePresence>
+        {selected && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
+            className="glass-card p-8 border-white/[0.08]">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left: slot visual */}
+              <div className="flex flex-col items-center justify-center gap-6 p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                <span className={cn("text-[10px] font-black uppercase tracking-[0.3em]", selected.active ? "text-meta-emerald" : "text-slate-500")}>
+                  {activeProgram.toUpperCase()} — Level {selected.level}
+                </span>
+                <div className="scale-150">
+                  {activeProgram === "x3"
+                    ? <X3SlotDiagram partners={selected.partners} />
+                    : <X4SlotDiagram partners={selected.partners} />}
+                </div>
+                <p className="text-[11px] text-slate-500 font-bold text-center">
+                  {activeProgram === "x3"
+                    ? `${selected.partners}/2 partners filled`
+                    : `${selected.partners}/6 partners filled`}
+                </p>
+              </div>
+
+              {/* Middle: stats */}
+              <div className="space-y-4">
+                <h4 className="text-xl font-black text-white mb-4">
+                  Level {selected.level} — <span className="text-meta-emerald">{selected.active ? "Active" : "Locked"}</span>
+                </h4>
+                {[
+                  { label: "Activation Cost", value: `$${selected.cost.toLocaleString()}`, color: "text-white" },
+                  { label: "Cycle Reward", value: `$${selected.reward.toLocaleString()}`, color: "text-meta-gold" },
+                  { label: "Total Cycles", value: selected.cycles.toString(), color: "text-meta-emerald" },
+                  { label: "Total Earned", value: `$${(selected.cycles * selected.reward).toLocaleString()}`, color: "text-meta-violet" },
+                  { label: "ROI", value: selected.cost > 0 ? `${((selected.cycles * selected.reward / selected.cost) * 100).toFixed(0)}%` : "—", color: "text-meta-blue" },
+                ].map((row, i) => (
+                  <div key={i} className="flex justify-between items-center py-3 border-b border-white/[0.04]">
+                    <span className="text-sm font-bold text-slate-500">{row.label}</span>
+                    <span className={cn("text-sm font-black", row.color)}>{row.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Right: action */}
+              <div className="flex flex-col justify-between gap-6">
+                <div className="p-5 rounded-2xl bg-meta-emerald/5 border border-meta-emerald/20">
+                  <p className="text-[10px] font-black text-meta-emerald uppercase tracking-widest mb-2">Spillover Info</p>
+                  <p className="text-sm text-slate-300 font-medium">
+                    {activeProgram === "x3"
+                      ? "When your 2 direct slots fill, the cycle completes and reward is sent to your upline's same level."
+                      : "When all 6 positions fill (2 direct + 4 second-level), cycle completes and 50% reinvests automatically."}
+                  </p>
+                </div>
+                <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Smart Contract</p>
+                  <p className="text-xs font-mono text-slate-400 break-all">0x4a2F...CoreLink_{activeProgram.toUpperCase()}_L{selected.level}</p>
+                </div>
+                {selected.active ? (
+                  <button className="w-full h-14 bg-meta-emerald text-black font-black text-xs uppercase tracking-widest clip-button hover:bg-white transition-colors flex items-center justify-center gap-2 cursor-none">
+                    <RefreshCcw className="h-4 w-4" /> Reinvest Level {selected.level}
+                  </button>
+                ) : (
+                  <button className="w-full h-14 bg-white text-black font-black text-xs uppercase tracking-widest clip-button hover:bg-meta-emerald transition-colors flex items-center justify-center gap-2 cursor-none">
+                    <Zap className="h-4 w-4" /> Activate for ${selected.cost.toLocaleString()}
+                  </button>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+// --- Dashboard View ---
+function DashboardView({ liveStats }: { liveStats: { referrals: number; revenue: number; conversion: number; systemLoad: number } }) {
+  const [feed, setFeed] = useState(SIGNAL_FEED_POOL.slice(0, 6));
+  const [cycleCount, setCycleCount] = useState({ x3: 1482, x4: 847, pool: 3291 });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newEvent = SIGNAL_FEED_POOL[Math.floor(Math.random() * SIGNAL_FEED_POOL.length)];
+      setFeed(prev => [newEvent, ...prev.slice(0, 7)]);
+      setCycleCount(prev => ({
+        x3: prev.x3 + (Math.random() > 0.7 ? 1 : 0),
+        x4: prev.x4 + (Math.random() > 0.8 ? 1 : 0),
+        pool: prev.pool + (Math.random() > 0.6 ? 1 : 0),
+      }));
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const STATS = [
+    { label: "Total Matrix Earnings", value: `$${(liveStats.revenue / 1000).toFixed(2)}k`, icon: DollarSign, color: "text-meta-gold", trend: "+12.4%", glow: "rgba(255,193,7,0.15)", sub: "All-time earnings" },
+    { label: "Spillover Bonus", value: "$4,280", icon: Activity, color: "text-meta-emerald", trend: "Active", glow: "rgba(134,255,0,0.15)", sub: "This month" },
+    { label: "Direct Referrals", value: liveStats.referrals.toLocaleString(), icon: Users, color: "text-meta-violet", trend: `+${Math.floor(liveStats.referrals * 0.065)}`, glow: "rgba(139,92,246,0.15)", sub: "Active partners" },
+    { label: "Conversion Rate", value: `${liveStats.conversion}%`, icon: BarChart3, color: "text-meta-blue", trend: "Live", glow: "rgba(0,122,255,0.15)", sub: "Visitor → Member" },
+  ];
+
+  const MATRICES = [
+    { name: "Power Matrix (X3)", fill: 85, color: "#86FF00", cycles: cycleCount.x3 },
+    { name: "X-Power Matrix (X4)", fill: 72, color: "#8B5CF6", cycles: cycleCount.x4 },
+    { name: "Global Auto-Pool", fill: 94, color: "#FFC107", cycles: cycleCount.pool },
+  ];
+
+  return (
+    <motion.div key="dashboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-10 pb-20 max-w-[1600px] mx-auto">
+
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+        {STATS.map((stat, i) => (
+          <TiltCard key={i} glowColor={stat.glow} className="p-8 group cursor-none overflow-hidden">
+            <div className="flex justify-between items-start mb-6 relative z-10">
+              <div className={cn("p-3 rounded-2xl bg-white/[0.04] transition-transform duration-500 group-hover:scale-110", stat.color)}>
+                <stat.icon className="h-5 w-5" />
+              </div>
+              <span className="text-[10px] font-black text-meta-emerald px-2 py-1 rounded-lg bg-meta-emerald/5 border border-meta-emerald/10">{stat.trend}</span>
+            </div>
+            <div className="relative z-10">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">{stat.label}</p>
+              <p className="text-4xl font-black tabular-nums tracking-tighter">{stat.value}</p>
+              <p className="text-[11px] text-slate-600 font-bold mt-2">{stat.sub}</p>
+            </div>
+            <div className="absolute -bottom-8 -right-8 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-1000">
+              <stat.icon className="h-32 w-32" />
+            </div>
+          </TiltCard>
+        ))}
+      </div>
+
+      {/* Chart + Matrix Cycles */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <TiltCard className="lg:col-span-2 p-10 flex flex-col min-h-[480px] cursor-none overflow-hidden border-white/[0.08]">
+          <div className="flex items-center justify-between mb-8 gap-6 flex-wrap relative z-10">
+            <div>
+              <h3 className="text-2xl font-black text-white tracking-tighter mb-1">Matrix Growth <span className="text-meta-emerald">v4.2</span></h3>
+              <p className="text-sm text-slate-500 font-bold">Multi-level attribution across global smart contracts</p>
+            </div>
+            <div className="flex gap-3 shrink-0">
+              <button className="h-10 px-5 rounded-2xl bg-meta-emerald text-black text-[10px] font-black uppercase tracking-widest cursor-none hover:scale-105 transition-transform flex items-center gap-2">
+                <Bot className="h-3.5 w-3.5" /> AI Forecast
+              </button>
+              <button className="h-10 px-5 rounded-2xl bg-white/5 text-slate-300 text-[10px] font-black uppercase tracking-widest cursor-none hover:bg-white/10 transition-colors flex items-center gap-2">
+                <DownloadCloud className="h-3.5 w-3.5" /> Export
+              </button>
+            </div>
+          </div>
+          <div className="flex-1 w-full min-h-[300px] relative z-10">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={REVENUE_DATA} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#86FF00" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#86FF00" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                <XAxis dataKey="name" stroke="#ffffff20" fontSize={11} tickLine={false} axisLine={false} dy={10} fontWeight="bold" />
+                <YAxis stroke="#ffffff20" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} fontWeight="bold" />
+                <Tooltip contentStyle={{ backgroundColor: '#000', border: '1px solid #86FF0020', borderRadius: '20px', padding: '16px' }} itemStyle={{ color: '#86FF00', fontWeight: '900' }} />
+                <Area type="monotone" dataKey="value" stroke="#86FF00" strokeWidth={4} fill="url(#colorValue)" animationDuration={3000} />
+                <Area type="monotone" dataKey="growth" stroke="#FFC107" strokeWidth={2} strokeDasharray="6 6" fill="transparent" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </TiltCard>
+
+        <TiltCard className="p-8 flex flex-col gap-6 cursor-none bg-gradient-to-br from-[#001A33]/30 to-black overflow-hidden">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-black text-white tracking-tight">Global Matrix Cycles</h3>
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
+              <span className="text-[10px] font-black text-meta-emerald uppercase tracking-widest">Live</span>
+            </div>
+          </div>
+          <div className="space-y-6 flex-1">
+            {MATRICES.map((matrix, i) => (
+              <div key={i} className="space-y-3 group cursor-none">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <div className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: matrix.color, boxShadow: `0 0 10px ${matrix.color}` }} />
+                    <span className="text-sm font-black text-slate-200">{matrix.name}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] font-black tabular-nums" style={{ color: matrix.color }}>{matrix.cycles.toLocaleString()} cycles</span>
+                  </div>
+                </div>
+                <div className="h-1.5 w-full bg-white/[0.04] rounded-full overflow-hidden">
+                  <motion.div initial={{ width: 0 }} animate={{ width: `${matrix.fill}%` }} transition={{ duration: 2, delay: i * 0.15, ease: "easeOut" }} className="h-full rounded-full" style={{ backgroundColor: matrix.color, boxShadow: `0 0 8px ${matrix.color}50` }} />
+                </div>
+                <div className="flex justify-between text-[10px] font-bold text-slate-600">
+                  <span>{matrix.fill}% filled</span>
+                  <span>{100 - matrix.fill}% remaining</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center justify-between gap-4 group hover:bg-white/[0.05] transition-colors">
+            <div className="flex items-center gap-3">
+              <Component className="h-5 w-5 text-meta-emerald shrink-0" />
+              <div>
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Smart Contract</p>
+                <p className="text-sm font-black text-white">Verified on BSC (BEP20)</p>
+              </div>
+            </div>
+            <ArrowUpRight className="h-4 w-4 text-slate-700 group-hover:text-meta-emerald transition-colors" />
+          </div>
+        </TiltCard>
+      </div>
+
+      {/* Live Signal Feed + AI Agent */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        {/* Live Global Signal Feed */}
+        <TiltCard className="lg:col-span-2 p-8 border-white/[0.08] clip-card flex flex-col overflow-hidden" glowColor="rgba(134,255,0,0.08)">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
+              <h3 className="text-lg font-black text-white tracking-tight">Live Global Signal Feed</h3>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-meta-emerald/5 border border-meta-emerald/20">
+              <Activity className="h-3 w-3 text-meta-emerald" />
+              <span className="text-[10px] font-black text-meta-emerald uppercase tracking-widest">Real-time</span>
+            </div>
+          </div>
+          <div className="space-y-2 overflow-hidden flex-1">
+            <AnimatePresence initial={false}>
+              {feed.map((event, i) => (
+                <motion.div
+                  key={`${event.user}-${i}-${event.action}`}
+                  initial={{ opacity: 0, x: -20, height: 0 }}
+                  animate={{ opacity: 1, x: 0, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.08] hover:bg-white/[0.04] transition-all group cursor-none"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="text-xl shrink-0">{event.flag}</span>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-black text-white font-mono">{event.user}</span>
+                        <span className="text-[10px] text-slate-600 font-bold">{event.country}</span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 font-bold truncate">{event.action}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className={cn("text-sm font-black tabular-nums", event.color)}>{event.amount}</span>
+                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-700 group-hover:text-meta-emerald transition-colors" />
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+          <div className="mt-4 pt-4 border-t border-white/[0.05] flex items-center justify-between">
+            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Showing live network events</span>
+            <button className="text-[10px] font-black text-meta-emerald uppercase tracking-widest hover:text-white transition-colors flex items-center gap-1">
+              View All <ArrowUpRight className="h-3 w-3" />
+            </button>
+          </div>
+        </TiltCard>
+
+        {/* AI Growth Agent */}
+        <TiltCard className="p-8 border-white/[0.08] clip-card flex flex-col relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-meta-emerald/5 to-transparent opacity-60 pointer-events-none" />
+          <div className="relative z-10 flex items-center justify-between mb-6 border-b border-white/10 pb-4">
+            <h3 className="text-sm font-black uppercase tracking-[0.3em] text-meta-emerald flex items-center gap-2">
+              <Bot className="h-4 w-4" /> AI Growth Agent
+            </h3>
+            <div className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
+          </div>
+          <div className="relative z-10 space-y-4 flex-1">
+            <div className="p-4 rounded-2xl bg-meta-emerald/5 border border-meta-emerald/20">
+              <p className="text-[10px] font-black text-meta-emerald uppercase tracking-widest mb-1">Earnings Prediction</p>
+              <p className="text-xl font-black text-white">+$1,450.00</p>
+              <p className="text-[11px] text-slate-500 font-bold mt-0.5">Expected in next 72 hours</p>
+            </div>
+            <div className="p-4 rounded-2xl bg-meta-gold/5 border border-meta-gold/20">
+              <p className="text-[10px] font-black text-meta-gold uppercase tracking-widest mb-1">Optimization Tip</p>
+              <p className="text-sm text-slate-300 font-medium">Focus on <span className="font-black text-white">UAE Region</span>. X4 pools filling 42% faster this week.</p>
+            </div>
+            <div className="p-4 rounded-2xl bg-red-500/5 border border-red-500/20">
+              <p className="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">System Load</p>
+              <div className="flex items-center gap-3">
+                <p className="text-xl font-black text-white">{liveStats.systemLoad}%</p>
+                <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                  <motion.div animate={{ width: `${liveStats.systemLoad}%` }} transition={{ duration: 0.8 }} className="h-full bg-red-400 rounded-full" />
+                </div>
+              </div>
+            </div>
+            <div className="p-4 rounded-2xl bg-meta-violet/5 border border-meta-violet/20">
+              <p className="text-[10px] font-black text-meta-violet uppercase tracking-widest mb-1">Risk Detection</p>
+              <p className="text-sm text-slate-300 font-medium">0 anomalies detected. Anti-bot active.</p>
+            </div>
+          </div>
+        </TiltCard>
+      </div>
+
+      {/* Quick Actions Banner */}
+      <div className="glass-card p-8 border-white/[0.06] flex items-center justify-between gap-6 flex-wrap">
+        <div>
+          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">Quick Actions</p>
+          <h3 className="text-2xl font-black text-white tracking-tighter">Grow Your Network <span className="text-meta-emerald">Now</span></h3>
+        </div>
+        <div className="flex gap-4 flex-wrap">
+          <button className="bg-meta-emerald text-black font-black uppercase tracking-widest cursor-none h-12 px-8 text-xs hover:bg-white transition-colors clip-button flex items-center gap-2">
+            <Zap className="h-4 w-4" /> Activate Elite
+          </button>
+          <button className="h-12 px-8 bg-white/5 border border-white/10 text-white font-black text-xs hover:bg-white/10 transition-all cursor-none flex items-center gap-2 clip-button">
+            <Share2 className="h-4 w-4" /> Recruit Partners
+          </button>
+          <button className="h-12 px-8 bg-meta-gold/10 border border-meta-gold/30 text-meta-gold font-black text-xs hover:bg-meta-gold hover:text-black transition-all cursor-none flex items-center gap-2 clip-button">
+            <RefreshCcw className="h-4 w-4" /> Force Cycle
+          </button>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -274,266 +1255,12 @@ export default function App() {
         <div className="p-10 relative flex-1">
            <AnimatePresence mode="wait">
               {activeView === "dashboard" && (
-                <motion.div key="dashboard" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-12 pb-20 max-w-[1600px] mx-auto">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
-                     {[
-                       { label: "Total Matrix Earnings", value: `$${(liveStats.revenue / 1000).toFixed(1)}k`, icon: DollarSign, color: "text-meta-gold", trend: "+12.4%", glow: "rgba(255, 193, 7, 0.15)" },
-                       { label: "Spillover Bonus", value: "$4,280", icon: Activity, color: "text-meta-emerald", trend: "Active", glow: "rgba(134, 255, 0, 0.15)" },
-                       { label: "Direct Referrals", value: liveStats.referrals.toLocaleString(), icon: Users, color: "text-meta-violet", trend: "+84", glow: "rgba(139, 92, 246, 0.15)" },
-                       { label: "Auto-Pool Status", value: "Cycle 12", icon: RefreshCcw, color: "text-meta-blue", trend: "Filling", glow: "rgba(0, 122, 255, 0.15)" },
-                     ].map((stat, i) => (
-                       <TiltCard key={i} glowColor={stat.glow} className="p-8 group cursor-none overflow-hidden h-full">
-                          <div className="flex justify-between items-start mb-8 relative z-10">
-                             <div className={cn("p-4 rounded-[2rem] bg-white/[0.04] transition-transform duration-500 group-hover:scale-110", stat.color)}><stat.icon className="h-6 w-6" /></div>
-                             <span className="text-[10px] font-black text-meta-emerald px-2 py-1 rounded-lg bg-meta-emerald/5 border border-meta-emerald/10">{stat.trend}</span>
-                          </div>
-                          <div className="relative z-10">
-                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2">{stat.label}</p>
-                            <p className="text-5xl font-black tabular-nums tracking-tighter">{stat.value}</p>
-                          </div>
-                          <div className="absolute -bottom-10 -right-10 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-1000">
-                             <stat.icon className="h-40 w-40" />
-                          </div>
-                       </TiltCard>
-                     ))}
-                  </div>
-
-                  <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                     <TiltCard className="lg:col-span-2 p-10 flex flex-col min-h-[550px] cursor-none overflow-hidden border-white/[0.08]">
-                        <div className="flex items-center justify-between mb-12 gap-8 flex-wrap relative z-10">
-                           <div className="min-w-0">
-                              <h3 className="text-3xl font-black text-white tracking-tighter mb-1">Matrix Growth <span className="text-meta-emerald">v4.2</span></h3>
-                              <p className="text-sm text-slate-500 font-bold max-w-md">Synchronized multi-level attribution tracking across global smart contracts.</p>
-                           </div>
-                           <div className="flex gap-3 shrink-0">
-                              <button className="h-11 px-6 rounded-2xl bg-meta-emerald text-black text-[11px] font-black uppercase tracking-widest cursor-none hover:scale-105 transition-transform shadow-2xl flex items-center gap-2">
-                                <Bot className="h-4 w-4" /> AI Forecast
-                              </button>
-                              <button className="h-11 px-6 rounded-2xl bg-white/5 text-slate-300 text-[11px] font-black uppercase tracking-widest cursor-none hover:bg-white/10 transition-colors flex items-center gap-2">
-                                <DownloadCloud className="h-4 w-4" /> Export CSV
-                              </button>
-                           </div>
-                        </div>
-                        <div className="flex-1 w-full min-h-[350px] relative z-10">
-                           <ResponsiveContainer width="100%" height="100%">
-                              <AreaChart data={REVENUE_DATA} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                 <defs>
-                                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                                       <stop offset="5%" stopColor="#86FF00" stopOpacity={0.4}/>
-                                       <stop offset="95%" stopColor="#86FF00" stopOpacity={0}/>
-                                    </linearGradient>
-                                 </defs>
-                                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
-                                 <XAxis dataKey="name" stroke="#ffffff20" fontSize={11} tickLine={false} axisLine={false} dy={10} fontWeight="bold" />
-                                 <YAxis stroke="#ffffff20" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} fontWeight="bold" />
-                                 <Tooltip contentStyle={{ backgroundColor: '#000', border: '1px solid #86FF0020', borderRadius: '20px', padding: '16px' }} itemStyle={{ color: '#86FF00', fontWeight: '900' }} />
-                                 <Area type="monotone" dataKey="value" stroke="#86FF00" strokeWidth={5} fill="url(#colorValue)" animationDuration={3000} />
-                                 <Area type="monotone" dataKey="growth" stroke="#FFC107" strokeWidth={2} strokeDasharray="6 6" fill="transparent" />
-                              </AreaChart>
-                           </ResponsiveContainer>
-                        </div>
-                     </TiltCard>
-
-                     <TiltCard className="p-10 flex flex-col space-y-10 cursor-none bg-gradient-to-br from-[#001A33]/30 to-black overflow-hidden">
-                        <div className="flex items-center justify-between relative z-10">
-                           <h3 className="text-xl font-black text-white tracking-tight">Global Matrix Cycles</h3>
-                           <div className="flex items-center gap-2">
-                             <span className="h-2 w-2 rounded-full bg-meta-emerald animate-pulse" />
-                             <span className="text-[10px] font-black text-meta-emerald uppercase tracking-widest">Active</span>
-                           </div>
-                        </div>
-                        <div className="space-y-10 flex-1 relative z-10">
-                           {[
-                              { name: "Power Matrix (X3)", value: 85, color: "#86FF00" },
-                              { name: "X-Power Matrix (X4)", value: 72, color: "#8B5CF6" },
-                              { name: "Global Auto-Pool", value: 94, color: "#FFC107" }
-                           ].map((matrix, i) => (
-                             <div key={i} className="space-y-4 group cursor-none">
-                                <div className="flex justify-between items-end gap-2">
-                                   <div className="flex items-center gap-4 min-w-0">
-                                      <div className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: matrix.color, boxShadow: `0 0 15px ${matrix.color}` }} />
-                                      <span className="text-sm font-black text-slate-200 group-hover:text-white transition-colors truncate">{matrix.name}</span>
-                                   </div>
-                                   <span className="text-xs font-black text-slate-500 tabular-nums">{matrix.value}% Filled</span>
-                                </div>
-                                <div className="h-2 w-full bg-white/[0.04] rounded-full overflow-hidden border border-white/5">
-                                   <motion.div initial={{ width: 0 }} animate={{ width: `${matrix.value}%` }} transition={{ duration: 2, delay: i * 0.1, ease: "easeOut" }} className="h-full rounded-full" style={{ backgroundColor: matrix.color, boxShadow: `0 0 10px ${matrix.color}50` }} />
-                                </div>
-                             </div>
-                           ))}
-                        </div>
-                        <div className="p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 flex items-center justify-between gap-6 relative z-10 group hover:bg-white/[0.05] transition-colors">
-                           <div className="flex items-center gap-4 min-w-0">
-                              <Component className="h-6 w-6 text-meta-emerald shrink-0" />
-                              <div className="min-w-0">
-                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Smart Contract</p>
-                                <p className="text-sm font-black text-white truncate">Verified on BSC (BEP20)</p>
-                              </div>
-                           </div>
-                           <ArrowUpRight className="h-5 w-5 text-slate-700 group-hover:text-meta-emerald transition-colors shrink-0" />
-                        </div>
-                     </TiltCard>
-                  </motion.div>
-
-                  <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }} className="grid grid-cols-1 lg:grid-cols-4 gap-10">
-                     <TiltCard className="lg:col-span-1 p-10 space-y-8 cursor-none border-white/[0.08] clip-card relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-b from-meta-emerald/10 to-transparent opacity-50" />
-                        <div className="relative z-10 flex items-center justify-between mb-4 border-b border-white/10 pb-4">
-                           <h3 className="text-sm font-black uppercase tracking-[0.3em] text-meta-emerald flex items-center gap-2">
-                              <Bot className="h-5 w-5" /> AI Growth Agent
-                           </h3>
-                        </div>
-                        <div className="relative z-10 space-y-5">
-                           <div className="p-4 rounded-2xl bg-meta-emerald/5 border border-meta-emerald/20">
-                              <p className="text-[10px] font-black text-meta-emerald uppercase tracking-widest mb-2">Earnings Prediction</p>
-                              <p className="text-xl font-black text-white">+$1,450.00 <span className="text-xs text-slate-400 font-normal tracking-normal">expected in 72h</span></p>
-                           </div>
-                           <div className="p-4 rounded-2xl bg-meta-gold/5 border border-meta-gold/20">
-                              <p className="text-[10px] font-black text-meta-gold uppercase tracking-widest mb-2">Optimization Tip</p>
-                              <p className="text-sm text-slate-300 font-medium">Focus networking efforts on <span className="font-bold text-white">UAE Region</span>. Matrix X4 pools are filling 42% faster.</p>
-                           </div>
-                           <div className="p-4 rounded-2xl bg-red-500/5 border border-red-500/20">
-                              <p className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-2">Risk Detection</p>
-                              <p className="text-sm text-slate-300 font-medium">0 anomalies detected. Anti-bot systems active.</p>
-                           </div>
-                        </div>
-                     </TiltCard>
-
-                     <div className="lg:col-span-3 glass-card p-14 bg-gradient-to-br from-[#001A33]/40 to-black overflow-hidden relative group border-white/[0.08] clip-card">
-                        <div className="relative z-20 space-y-12 max-w-xl">
-                           <div className="space-y-6">
-                              <div className="inline-block px-4 py-2 bg-meta-emerald/10 border border-meta-emerald/20 rounded-full text-meta-emerald font-black text-[10px] uppercase tracking-widest mb-4">
-                                🌌 Next-Gen Affiliate Hub
-                              </div>
-                              <h3 className="text-6xl font-black text-white tracking-tighter leading-[0.9] drop-shadow-2xl">
-                                 The Apex of <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-meta-emerald to-meta-gold">Intelligence</span>.
-                              </h3>
-                              <p className="text-slate-300 text-xl font-medium leading-relaxed">
-                                 Welcome to CoreLink Elite. We've integrated the world's most sophisticated protocols into a single, flawless interface.
-                              </p>
-                           </div>
-                           <div className="flex gap-6 flex-wrap">
-                              <button className="bg-meta-emerald text-black font-black uppercase tracking-widest cursor-none h-16 px-10 text-sm hover:bg-white transition-colors clip-button">ACTIVATE ELITE</button>
-                              <button className="h-16 px-10 bg-white/5 border border-white/10 text-white font-black hover:bg-white/10 transition-all cursor-none flex items-center gap-3 group clip-button">
-                                 <Share2 className="h-5 w-5 group-hover:text-meta-emerald transition-colors" /> RECRUIT PARTNERS
-                              </button>
-                           </div>
-                        </div>
-
-                        {/* --- Image Generation Prompts & Placeholders --- */}
-                        {/* Prompt 1: "3D Pixar-style cartoon astronaut character with neon green accents, flying with a jetpack, high-quality render, transparent background." */}
-                        <div className="absolute right-[5%] top-[10%] w-[400px] h-[400px] bg-white/[0.02] border border-dashed border-meta-emerald/30 rounded-[3rem] animate-float-slow flex flex-col items-center justify-center p-6 text-center z-10 backdrop-blur-sm">
-                           <Rocket className="h-12 w-12 text-meta-emerald/50 mb-4" />
-                           <p className="text-xs font-bold text-meta-emerald/70">Place 3D Mascot Image Here</p>
-                           <p className="text-[9px] text-slate-500 mt-2">See code comments for prompt</p>
-                        </div>
-                        
-                        {/* Prompt 2: "Floating 3D gold coins and glowing green gems, Pixar-style render, depth of field, transparent background." */}
-                        <div className="absolute right-[25%] bottom-[10%] w-[200px] h-[200px] bg-white/[0.02] border border-dashed border-meta-gold/30 rounded-full animate-float-fast flex flex-col items-center justify-center p-4 text-center z-10 backdrop-blur-sm delay-500">
-                           <Coins className="h-8 w-8 text-meta-gold/50 mb-2" />
-                           <p className="text-[10px] font-bold text-meta-gold/70">3D Coins</p>
-                        </div>
-
-                        <div className="absolute top-[-30%] right-[-15%] h-[800px] w-[800px] bg-meta-emerald/20 rounded-full blur-[120px] group-hover:scale-110 transition-transform duration-[3s] -z-10" />
-                     </div>
-                  </motion.div>
-                </motion.div>
+                <DashboardView liveStats={liveStats} />
               )}
 
-              {activeView === "programs" && (
-                <motion.div key="programs" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
-                   <div className="flex items-center justify-between gap-10 flex-wrap mb-4">
-                      <div className="min-w-0">
-                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Matrix <span className="text-meta-emerald">Programs</span></h3>
-                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Deploy smart contracts to earn through direct referrals, spillover, and global cycles.</p>
-                      </div>
-                   </div>
+              {activeView === "programs" && <ProgramsView />}
 
-                   <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                      {[
-                        { title: "Millionaire Matrix", tier: "Power Matrix (X3/X4)", features: ["Global matrix cycles", "NFT royalty tiers", "Direct bonuses"], color: "from-meta-emerald", glow: "rgba(134, 255, 0, 0.3)" },
-                        { title: "Billionaire Matrix", tier: "X-Power Auto-Pool", features: ["Global expansion pools", "Higher-tier bonuses", "Massive spillover"], color: "from-meta-gold", glow: "rgba(255, 193, 7, 0.3)" },
-                        { title: "Trillionaire Matrix", tier: "2X Advanced Structure", features: ["Advanced spillover", "Maximum yield", "Elite NFT status"], color: "from-meta-violet", glow: "rgba(139, 92, 246, 0.3)" },
-                      ].map((p, i) => (
-                        <TiltCard key={i} glowColor={p.glow} className="p-8 group border-white/[0.08] hover:border-white/20 transition-all duration-700 cursor-none flex flex-col clip-card">
-                           <div className={cn("h-48 w-full rounded-[2.5rem] bg-gradient-to-br mb-10 flex items-center justify-center relative overflow-hidden shrink-0", p.color, "to-black/90")}>
-                              <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-                              <Hexagon className="h-20 w-20 text-white/40 group-hover:scale-125 group-hover:rotate-12 group-hover:text-white transition-all duration-1000" />
-                           </div>
-                           <div className="flex justify-between items-center mb-4 relative z-10 px-2">
-                              <span className="text-[11px] font-black text-meta-emerald uppercase tracking-[0.3em]">{p.tier}</span>
-                              <Award className="h-5 w-5 text-meta-gold" />
-                           </div>
-                           <h4 className="text-3xl font-black text-white mb-6 leading-[1.1] tracking-tight break-words hyphens-auto px-2 group-hover:text-meta-emerald transition-colors">
-                              {p.title}
-                           </h4>
-                           <div className="space-y-3 px-2 mb-10 flex-1 relative z-10">
-                              {p.features.map((feat, j) => (
-                                <div key={j} className="flex items-center gap-3">
-                                   <div className="h-2 w-2 rounded-full bg-meta-emerald" />
-                                   <span className="text-sm font-bold text-slate-400">{feat}</span>
-                                </div>
-                              ))}
-                           </div>
-                           <button className="w-full h-16 bg-white text-black font-black text-xs hover:bg-meta-emerald transition-all cursor-none flex items-center justify-center gap-3 shrink-0 shadow-2xl relative z-10 overflow-hidden group/btn clip-button">
-                              <span className="relative z-10">DEPLOY SMART CONTRACT</span>
-                           </button>
-                        </TiltCard>
-                      ))}
-                   </div>
-                </motion.div>
-              )}
-
-              {activeView === "network" && (
-                <motion.div key="network" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
-                   <div className="flex items-center justify-between gap-10 flex-wrap mb-4">
-                      <div className="min-w-0 flex-1">
-                         <h3 className="text-5xl font-black text-white tracking-tighter mb-2">Genealogy <span className="text-meta-violet">Tree</span></h3>
-                         <p className="text-xl text-slate-500 font-bold max-w-2xl">Track your downline structure, spillover placements, and team volume.</p>
-                      </div>
-                      <div className="flex items-center gap-4">
-                         <button className="h-12 px-6 rounded-2xl bg-white/5 border border-white/10 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:bg-white/10">
-                            <Eye className="h-4 w-4" /> Heatmap View
-                         </button>
-                      </div>
-                   </div>
-
-                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                      <TiltCard className="lg:col-span-2 p-16 border-white/[0.08] min-h-[500px] flex flex-col items-center justify-center bg-gradient-to-b from-[#001A33]/20 to-black clip-card relative overflow-hidden">
-                         <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-                         <Network className="h-24 w-24 text-meta-violet mb-8 opacity-20" />
-                         <h4 className="text-3xl font-black text-white mb-4">Network Tree Initialization</h4>
-                         <p className="text-lg text-slate-500 max-w-md text-center mb-8">Your smart contract matrix is fully synchronized. Render engine is currently mapping your multi-level downline.</p>
-                         
-                         <div className="flex gap-4">
-                           <div className="px-6 py-4 rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] text-center min-w-[150px]">
-                              <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Direct Partners</p>
-                              <p className="text-2xl font-black text-meta-emerald">84</p>
-                           </div>
-                           <div className="px-6 py-4 rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] text-center min-w-[150px]">
-                              <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Total Team Size</p>
-                              <p className="text-2xl font-black text-meta-violet">1,284</p>
-                           </div>
-                         </div>
-                      </TiltCard>
-
-                      <TiltCard className="lg:col-span-1 p-10 border-white/[0.08] clip-card flex flex-col items-center text-center">
-                         <h4 className="text-xl font-black text-white mb-6">Viral Growth Engine</h4>
-                         <div className="p-6 bg-white/5 border border-white/10 rounded-2xl w-full mb-6">
-                            <QrCode className="h-32 w-32 mx-auto text-meta-emerald mb-4" />
-                            <p className="text-xs text-slate-400 font-bold mb-2">Your Unique Referral Link</p>
-                            <div className="flex items-center gap-2 bg-black/50 rounded-lg p-2 border border-white/10">
-                               <span className="text-[10px] text-slate-500 truncate flex-1">corelink.elite/ref=84291A</span>
-                               <Link2 className="h-4 w-4 text-meta-emerald shrink-0 cursor-pointer" />
-                            </div>
-                         </div>
-                         <button className="w-full h-14 bg-gradient-to-r from-meta-violet to-meta-blue text-white font-black uppercase tracking-widest text-xs clip-button flex items-center justify-center gap-2">
-                            <Share className="h-4 w-4" /> Share on Socials
-                         </button>
-                      </TiltCard>
-                   </div>
-                </motion.div>
-              )}
+              {activeView === "network" && <NetworkView />}
 
               {activeView === "mining" && (
                 <motion.div key="mining" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-12 max-w-[1600px] mx-auto pb-20">
@@ -841,6 +1568,8 @@ export default function App() {
                    </TiltCard>
                 </motion.div>
               )}
+
+              {activeView === "leaderboard" && <LeaderboardView />}
 
               {activeView === "roadmap" && (
                 <motion.div key="roadmap" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12 max-w-[1200px] mx-auto pb-20">
